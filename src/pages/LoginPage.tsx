@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import Logo from '../assets/parmeshwari-logo.svg';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
@@ -52,33 +51,38 @@ const LoginPage: React.FC = () => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <div className="login-logo">
-            <img src={Logo} alt="Parmeshwari Brass Industries" className="login-logo-img" />
+          <div className="login-brand">
+            <img src="/logo.svg" alt="4bitx ERP" className="login-brand-logo" />
           </div>
-          <h2 className="login-title">ERP System Login</h2>
+          <h2 className="login-title">Welcome back</h2>
+          <p className="login-subtitle">Sign in to continue to your dashboard</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label className="form-label">Username / Email</label>
+          <div className="login-field">
+            <label className="login-label" htmlFor="login-username">Username / Email</label>
             <input
+              id="login-username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username or email"
-              className="form-input"
+              className="login-input"
+              autoComplete="username"
               disabled={loading}
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Password</label>
+          <div className="login-field">
+            <label className="login-label" htmlFor="login-password">Password</label>
             <input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="form-input"
+              className="login-input"
+              autoComplete="current-password"
               disabled={loading}
             />
           </div>
@@ -86,7 +90,7 @@ const LoginPage: React.FC = () => {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
       </div>
