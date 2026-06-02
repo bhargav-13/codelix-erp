@@ -1,0 +1,6 @@
+src/ApiClient.js
+src/api/ImageManagementApi.js
+src/model/DeleteImageResponse.js
+src/model/ErrorResponse.js
+src/model/ImageListResponse.js
+src/model/ImageResponse.js

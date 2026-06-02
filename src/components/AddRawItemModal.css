@@ -1,0 +1,13 @@
+@import './AddStockItemModal.css';
+
+.add-raw-modal {
+  max-width: 520px;
+}
+
+.modal-loading-message {
+  padding: 32px;
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  color: #2D1017;
+}

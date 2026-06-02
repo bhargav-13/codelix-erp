@@ -1,0 +1,349 @@
+.invoice-card {
+  border: 2px solid rgba(125, 153, 169, 0.3);
+  border-radius: 20px;
+  padding: 32px;
+  background: #FFFFFF;
+  position: relative;
+}
+
+.invoice-card.downloading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.invoice-card .pdf-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 20px;
+  z-index: 10;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #2D1017;
+}
+
+.invoice-card .download-button {
+  background: #A5213A;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.invoice-card .download-button:hover {
+  background: #7A1829;
+}
+
+.invoice-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.invoice-card-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.invoice-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.invoice-card-id {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2D1017;
+  margin: 0;
+}
+
+.invoice-card-customer {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 26px;
+  color: #2D1017;
+  margin: 0;
+}
+
+.invoice-card-date {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #888888;
+}
+
+.invoice-card-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.invoice-card .icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-card .icon-button:hover {
+  transform: scale(1.1);
+}
+
+.invoice-card .icon-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invoice-card .icon-img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.invoice-card .loading-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #2D1017;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.invoice-card-status {
+  display: flex;
+  align-items: flex-start;
+}
+
+.invoice-card .status-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 130px;
+}
+
+.invoice-card .status-select {
+  width: 100%;
+  padding: 6px 36px 6px 16px;
+  border-radius: 40px;
+  border: 1px solid transparent;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              background-color 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.invoice-card .status-select:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(23, 52, 77, 0.13);
+  transform: translateY(-1px);
+}
+
+.invoice-card .status-select:focus-visible {
+  box-shadow: 0 6px 16px rgba(23, 52, 77, 0.18);
+  transform: translateY(-2px);
+}
+
+.invoice-card .status-dropdown-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 8px;
+  pointer-events: none;
+}
+
+.invoice-card .status-select.status-complete {
+  background: #D1FFE2;
+  color: #275B22;
+}
+
+.invoice-card .status-select.status-pending {
+  background: rgba(255, 188, 74, 0.2);
+  color: #b9770e;
+}
+
+.invoice-card-divider {
+  height: 1px;
+  background: #7D99A9;
+  margin: 24px 0;
+}
+
+.invoice-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.invoice-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-amount-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  color: #888888;
+}
+
+.invoice-amount-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #2D1017;
+}
+
+.invoice-card-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-total-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  color: #888888;
+}
+
+.invoice-total-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #2D1017;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .invoice-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .invoice-card-header {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .invoice-card-title-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .invoice-card-id {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .invoice-card-customer {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .invoice-card-date {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .invoice-card-status {
+    width: 100%;
+  }
+
+  .invoice-card .status-dropdown {
+    width: 100%;
+  }
+
+  .invoice-card .status-select {
+    width: 100%;
+    font-size: 13px;
+    padding: 6px 32px 6px 14px;
+  }
+
+  .invoice-card-divider {
+    margin: 12px 0;
+  }
+
+  .invoice-amount-label,
+  .invoice-amount-value,
+  .invoice-total-label,
+  .invoice-total-value {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .invoice-card .icon-img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .invoice-card {
+    padding: 12px;
+  }
+
+  .invoice-card-id {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .invoice-card-customer {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .invoice-card-date {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .invoice-card .status-select {
+    font-size: 12px;
+    padding: 5px 30px 5px 12px;
+  }
+
+  .invoice-amount-label,
+  .invoice-amount-value,
+  .invoice-total-label,
+  .invoice-total-value {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .invoice-card .icon-img {
+    width: 16px;
+    height: 16px;
+  }
+}

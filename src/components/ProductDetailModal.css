@@ -1,0 +1,459 @@
+/* Product Detail Modal */
+.product-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.product-detail-modal {
+  background: white;
+  border-radius: 20px;
+  max-width: 1000px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.modal-close-btn:hover {
+  background: #f5f5f5;
+  transform: scale(1.1);
+}
+
+.modal-close-btn svg {
+  color: #2D1017;
+}
+
+/* Modal Content Layout */
+.product-detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Image Section */
+.product-detail-images {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.main-image-container {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.main-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e5e5e5 100%);
+  border-radius: 16px;
+  gap: 1rem;
+}
+
+.no-image-placeholder p {
+  font-family: 'Jost', sans-serif;
+  color: #999;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Image Thumbnails */
+.image-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.75rem;
+}
+
+.thumbnail-btn {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-btn:hover {
+  transform: scale(1.05);
+  border-color: #2D1017;
+}
+
+.thumbnail-btn.active {
+  border-color: #2D1017;
+  box-shadow: 0 4px 12px rgba(23, 52, 77, 0.3);
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info Section */
+.product-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #E5E5E5;
+}
+
+.product-detail-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #2D1017;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.product-detail-category {
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  color: #8E8E8E;
+  margin: 0;
+}
+
+.product-price-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(135deg, #2D1017 0%, #2a5170 100%);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  min-width: 120px;
+}
+
+.price-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-value {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin-top: 0.25rem;
+}
+
+/* Specifications */
+.product-specs {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.specs-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2D1017;
+  margin: 0 0 1rem 0;
+}
+
+.spec-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.spec-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E5F3FF;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.spec-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.spec-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8125rem;
+  color: #8E8E8E;
+  font-weight: 400;
+}
+
+.spec-value {
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  color: #2D1017;
+  font-weight: 600;
+}
+
+/* Product Actions */
+.product-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.primary-action {
+  background: #2D1017;
+  color: white;
+  box-shadow: 0 4px 12px rgba(23, 52, 77, 0.3);
+}
+
+.primary-action:hover {
+  background: #2a5170;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(23, 52, 77, 0.4);
+}
+
+.secondary-action {
+  background: #25D366;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.secondary-action:hover {
+  background: #1ebe57;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+/* Product Note */
+.product-note {
+  background: #fff3cd;
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #ffc107;
+}
+
+.product-note p {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.875rem;
+  color: #856404;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.product-note strong {
+  font-weight: 600;
+}
+
+/* Tablet Styles */
+@media (max-width: 768px) {
+  .product-detail-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .modal-close-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .product-detail-title {
+    font-size: 1.5rem;
+  }
+
+  .product-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .product-price-badge {
+    align-self: stretch;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .image-thumbnails {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+
+  .product-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 480px) {
+  .product-detail-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .product-detail-modal {
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .product-detail-content {
+    padding: 1rem;
+  }
+
+  .modal-close-btn {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .product-detail-title {
+    font-size: 1.25rem;
+  }
+
+  .product-specs {
+    padding: 1rem;
+  }
+
+  .spec-item {
+    padding: 0.75rem;
+  }
+
+  .spec-icon {
+    font-size: 1.25rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  .action-btn {
+    padding: 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .image-thumbnails {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+/* Smooth scrolling */
+.product-detail-modal {
+  scroll-behavior: smooth;
+}
+
+.product-detail-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.product-detail-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.product-detail-modal::-webkit-scrollbar-thumb {
+  background: #2D1017;
+  border-radius: 10px;
+}
+
+.product-detail-modal::-webkit-scrollbar-thumb:hover {
+  background: #2a5170;
+}

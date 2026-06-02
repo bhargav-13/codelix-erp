@@ -1,0 +1,704 @@
+.cashflow-page {
+    padding: 20px 24px;
+    max-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.cashflow-page * {
+    box-sizing: border-box;
+}
+
+/* Header */
+.cashflow-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.cashflow-page .page-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cashflow-page .page-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 28px;
+    color: #2D1017;
+    margin: 0;
+}
+
+.cashflow-page .page-subtitle {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #8E8E8E;
+    margin: 0;
+}
+
+/* Date selector row */
+.cashflow-date-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.cashflow-date-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(45, 16, 23, 0.06);
+}
+
+.cashflow-day-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    color: #8E8E8E;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.cashflow-day-nav-btn:hover:not(:disabled) {
+    background: #f9fbfd;
+    color: #2D1017;
+}
+
+.cashflow-day-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.cashflow-date-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border-left: 1px solid rgba(125, 153, 169, 0.2);
+    border-right: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.cashflow-date-icon {
+    color: #5b9bd5;
+    flex-shrink: 0;
+}
+
+.cashflow-date-input-wrap input[type="date"] {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2D1017;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.cashflow-day-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.cashflow-day-badge.today {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-color: #bbdefb;
+}
+
+.cashflow-day-badge.closed {
+    background: #fce4ec;
+    color: #c62828;
+    border-color: #f8bbd0;
+}
+
+.cashflow-carry-forward-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #fff8e1;
+    color: #e65100;
+    border: 1px solid #ffe082;
+}
+
+/* Entry date chips */
+.cashflow-entry-dates {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.cashflow-entry-dates-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #8E8E8E;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cashflow-entry-dates-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cashflow-date-chip {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    background: #fff;
+    color: #8E8E8E;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.cashflow-date-chip:hover {
+    border-color: #5b9bd5;
+    background: #f9fbfd;
+    color: #2D1017;
+}
+
+.cashflow-date-chip.active {
+    background: #2D1017;
+    border-color: #2D1017;
+    color: #fff;
+}
+
+.cashflow-date-chip.active .cashflow-date-chip-dot {
+    background: #fff;
+}
+
+.cashflow-date-chip.pending {
+    border-color: #f59e0b;
+    color: #92400e;
+    background: #fffbeb;
+}
+
+.cashflow-date-chip.pending:hover {
+    background: #fef3c7;
+    border-color: #d97706;
+}
+
+.cashflow-date-chip-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f59e0b;
+    margin-left: 5px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Summary cards */
+.cashflow-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.cashflow-summary-card {
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: white;
+}
+
+.cashflow-summary-card .stat-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #8E8E8E;
+}
+
+.cashflow-summary-card .stat-value {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #2D1017;
+}
+
+.cashflow-summary-card .stat-value.income {
+    color: #2e7d32;
+}
+
+.cashflow-summary-card .stat-value.expense {
+    color: #c62828;
+}
+
+.cashflow-summary-card .stat-value.positive {
+    color: #2e7d32;
+}
+
+.cashflow-summary-card .stat-value.negative {
+    color: #c62828;
+}
+
+.cashflow-summary-card .stat-subtitle {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: #8E8E8E;
+    margin-top: 2px;
+}
+
+.cashflow-table-total-row {
+    border-top: 2px solid rgba(125, 153, 169, 0.2);
+    background: #f8f9fa;
+}
+
+.cashflow-table-total-label {
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8E8E8E;
+    text-align: right;
+}
+
+.cashflow-table-total-value {
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.cashflow-table-total-value.income {
+    color: #2e7d32;
+}
+
+.cashflow-table-total-value.expense {
+    color: #c62828;
+}
+
+/* Party / Payment Type Summary */
+.cashflow-party-summary-section {
+    margin-bottom: 24px;
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.cashflow-party-summary-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+    transition: background 0.15s ease;
+}
+
+.cashflow-party-summary-toggle:hover {
+    background: #f8f9fa;
+}
+
+.cashflow-party-summary-toggle-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #2D1017;
+}
+
+.cashflow-party-summary-chevron {
+    font-size: 20px;
+    color: #8E8E8E;
+    line-height: 1;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
+.cashflow-party-summary-chevron.expanded {
+    transform: rotate(0deg);
+}
+
+.cashflow-party-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 18px;
+}
+
+.cashflow-party-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 16px;
+    border: 1px solid rgba(125, 153, 169, 0.25);
+    border-radius: 10px;
+    background: #f8f9fa;
+    min-width: 160px;
+    flex: 1 1 160px;
+    max-width: 240px;
+}
+
+.cashflow-party-name {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #8E8E8E;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.cashflow-party-amounts {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cashflow-party-amount {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2D1017;
+}
+
+.cashflow-party-amount.income {
+    color: #2e7d32;
+    font-size: 12px;
+}
+
+.cashflow-party-amount.expense {
+    color: #c62828;
+    font-size: 12px;
+}
+
+.cashflow-party-amount.net {
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 2px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.cashflow-party-amount.net.positive {
+    color: #2e7d32;
+}
+
+.cashflow-party-amount.net.negative {
+    color: #c62828;
+}
+
+/* Two-column layout for income/expense */
+.cashflow-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.cashflow-column {
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.cashflow-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.cashflow-column-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #2D1017;
+}
+
+.cashflow-column-title.income {
+    color: #2e7d32;
+}
+
+.cashflow-column-title.expense {
+    color: #c62828;
+}
+
+.cashflow-add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1.5px solid #5b9bd5;
+    background: #fff;
+    color: #5b9bd5;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.cashflow-add-btn:hover {
+    background: #5b9bd5;
+    color: #fff;
+}
+
+.cashflow-add-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cashflow-add-btn:disabled:hover {
+    background: #fff;
+    color: #5b9bd5;
+}
+
+/* Table inside column */
+.cashflow-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cashflow-table thead {
+    background: #f8f9fa;
+}
+
+.cashflow-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #5b7a95;
+    border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.cashflow-table td {
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #2D1017;
+    border-bottom: 1px solid rgba(125, 153, 169, 0.08);
+}
+
+.cashflow-table tbody tr:hover {
+    background: #f9fbfd;
+}
+
+.cashflow-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.cashflow-table .carry-forward-row {
+    background: #f0f7ff;
+    font-style: italic;
+}
+
+.cashflow-table .carry-forward-row td {
+    color: #5b7a95;
+}
+
+.cashflow-table .no-data {
+    text-align: center;
+    padding: 24px 14px;
+    color: #8E8E8E;
+    font-size: 13px;
+}
+
+.cashflow-table .entry-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.cashflow-table .entry-actions button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.cashflow-table .entry-actions .delete-btn {
+    color: #c33;
+}
+
+.cashflow-table .entry-actions .edit-btn {
+    color: #5b9bd5;
+}
+
+/* Add entry form row */
+.cashflow-add-row {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px;
+    border-top: 1px solid rgba(125, 153, 169, 0.15);
+    background: #fafbfc;
+    align-items: flex-end;
+}
+
+.cashflow-add-row .form-mini-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.cashflow-add-row .form-mini-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #5b7a95;
+}
+
+.cashflow-add-row input,
+.cashflow-add-row select {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    padding: 6px 8px;
+    border: 1px solid rgba(125, 153, 169, 0.3);
+    border-radius: 6px;
+    outline: none;
+    color: #2D1017;
+    background: #fff;
+}
+
+.cashflow-add-row input:focus,
+.cashflow-add-row select:focus {
+    border-color: #5b9bd5;
+}
+
+.cashflow-add-row .add-confirm-btn {
+    padding: 6px 12px;
+    background: #2D1017;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 30px;
+}
+
+.cashflow-add-row .add-confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cashflow-add-row .add-cancel-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #999;
+    font-size: 16px;
+    padding: 2px 6px;
+    height: 30px;
+}
+
+/* Close day button */
+.cashflow-close-day-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #2D1017;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.cashflow-close-day-btn:hover {
+    background: #1e4567;
+}
+
+.cashflow-close-day-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Keyboard hint */
+.cashflow-kb-hint {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: #a7a7a7;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .cashflow-columns {
+        grid-template-columns: 1fr;
+    }
+    .cashflow-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .cashflow-page {
+        padding: 16px;
+    }
+    .cashflow-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

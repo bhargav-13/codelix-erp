@@ -1,0 +1,13 @@
+.party-modal {
+  max-width: 400px;
+}
+
+.party-modal .form-group {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 480px) {
+  .party-modal {
+    width: 95%;
+  }
+}

@@ -1,0 +1,29 @@
+.subcontracting-overview-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.subcontracting-overview-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subcontracting-overview-table th,
+.subcontracting-overview-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.subcontracting-overview-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.status-in_process {
+  background-color: #fffbe6;
+  color: #faad14;
+}

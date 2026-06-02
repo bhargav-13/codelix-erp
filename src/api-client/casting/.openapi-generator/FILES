@@ -1,0 +1,10 @@
+src/ApiClient.js
+src/api/CastingApi.js
+src/api/CastingSaleApi.js
+src/model/Casting.js
+src/model/CastingRequest.js
+src/model/CastingSale.js
+src/model/CastingSaleRequest.js
+src/model/ErrorResponse.js
+src/model/PaginatedCastingResponse.js
+src/model/PaginatedCastingSaleResponse.js

@@ -1,0 +1,94 @@
+/* Specific styles for AddCastingSellModal to match the clean grid layout */
+
+.medium-modal {
+    width: 600px;
+    max-width: 90vw;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+/* Custom Input Styling to match reference image (light gray bg, rounded) */
+.form-input {
+    background-color: #f8f9fa;
+    /* Light gray background */
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #495057;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    border-color: #8c98a4;
+    background-color: #fff;
+}
+
+.form-input.bg-gray {
+    background-color: #f1f3f5;
+    /* Slightly darker for read-only/calculated */
+    color: #868e96;
+}
+
+.form-label {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #212529;
+    margin-bottom: 8px;
+}
+
+.modal-actions.centered {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.save-button.wide,
+.cancel-button.wide {
+    min-width: 120px;
+    border-radius: 20px;
+    /* Rounded pill buttons per image */
+    padding: 10px 24px;
+    font-size: 15px;
+}
+
+.save-button {
+    background-color: #A5213A;
+    /* Light Blue */
+    color: #FFFFFF;
+    border: none;
+    font-weight: 500;
+}
+
+.cancel-button {
+    background-color: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
+.modal-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    color: #212529;
+}

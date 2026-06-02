@@ -1,0 +1,1524 @@
+openapi: 3.0.3
+info:
+  title: Inventory API
+  version: 1.0.0
+  description: OpenAPI for inventory management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Stock Inventory
+    description: Stock Inventory Management and related Endpoints
+  - name: Raw Inventory
+    description: Raw Inventory Management and related Endpoints
+  - name: Product
+    description: Product Management and related Endpoints
+  - name: Category
+    description: Category Management and related Endpoints
+  - name: Purchase
+    description: Purchase Management and related Endpoints
+  - name: Purchase Party
+    description: Purchase Party Master and related Endpoints
+
+paths:
+  /api/v1/purchase:
+    post:
+      tags:
+        - Purchase
+      operationId: addPurchase
+      summary: Add Purchase
+      description: Adds a new Purchase. Automatically saves to raw inventory if item does not exist, or returns existing inventory details if it does.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+      responses:
+        '201':
+          description: Purchase successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '404':
+          description: Product or Party not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Purchase
+      operationId: getPurchaseList
+      summary: Get all purchases with pagination
+      description: Returns a paginated list of all purchases.
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of purchases
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultPurchase'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/purchase/{purchaseId}:
+    get:
+      tags:
+        - Purchase
+      operationId: getPurchaseById
+      summary: Get purchase by ID
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Purchase found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '404':
+          description: Purchase not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/product:
+    post:
+      tags:
+        - Product
+      operationId: addProduct
+      summary: Add Product
+      description: Adds a new Product into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Product
+      operationId: getProductList
+      summary: Get all products
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/product/{productId}:
+    get:
+      tags:
+        - Product
+      operationId: getProductById
+      summary: Get product by ID
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+    put:
+      tags:
+        - Product
+      operationId: updateProduct
+      summary: Update Product
+      description: Updates an existing Product in the system.
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Product successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate product name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Product
+      operationId: deleteProduct
+      summary: Delete Product
+      description: Deletes a single Product based on its ID.
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Product successfully deleted (No content)
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/category:
+    post:
+      tags:
+        - Category
+      operationId: addCategory
+      summary: Add Category
+      description: Adds a new Category into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '201':
+          description: Category successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Category
+      operationId: getCategoryList
+      summary: Get all categories
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/category/{categoryId}:
+    get:
+      tags:
+        - Category
+      operationId: getCategoryById
+      summary: Get category by ID
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Category found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+    put:
+      tags:
+        - Category
+      operationId: updateCategory
+      summary: Update Category
+      description: Updates an existing Category in the system.
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '200':
+          description: Category successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate category name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Category
+      operationId: deleteCategory
+      summary: Delete Category
+      description: Deletes a single Category based on its ID.
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Category successfully deleted (No content)
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/stock-item/all:
+    get:
+      tags:
+        - Stock Inventory
+      operationId: getAllStockItemList
+      summary: Get all Stock items
+      description: Returns a list of all Stock items.
+      responses:
+        '200':
+          description: list of Stock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/stock-item:
+    post:
+      tags:
+        - Stock Inventory
+      operationId: addStockItem
+      summary: Add Stock Item
+      description: Adds a new Stock Item into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockItemRequest'
+      responses:
+        '201':
+          description: Stock Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/stock-item/floor/{floor}:
+    get:
+      tags:
+        - Stock Inventory
+      operationId: getStockItemList
+      summary: Get all Stock items with pagination
+      description: Returns a paginated list of all Stock items.
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: floor
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/InventoryFloor'
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [ IN_STOCK, LOW_STOCK ]
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByStockFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of Stock items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultStockItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/stock-item/{stockItemId}:
+    get:
+      tags:
+        - Stock Inventory
+      operationId: getStockItemById
+      summary: Get Stock item by ID
+      description: Returns a single Stock item based on its ID.
+      parameters:
+        - name: stockItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Stock Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItem'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Stock Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    put:
+      tags:
+        - Stock Inventory
+      operationId: updateStockItem
+      summary: Update Stock Item
+      description: Updates an existing Stock Item in the system.
+      parameters:
+        - name: stockItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockItemRequest'
+      responses:
+        '200':
+          description: Stock Item successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItem'
+        '400':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Stock Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Stock Inventory
+      operationId: deleteStockItem
+      summary: Delete Stock Item
+      description: Deletes a single Stock item based on its ID.
+      parameters:
+        - name: stockItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Stock Item successfully deleted (No content)
+        '404':
+          description: Stock Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/stock-item/{stockItemId}/status:
+    patch:
+      tags:
+        - Stock Inventory
+      operationId: updateStockItemStatus
+      summary: Update stock item order status
+      description: Updates only the status of a stock item.
+      parameters:
+        - name: stockItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/InventoryStatus'
+      responses:
+        '200':
+          description: stock item  status successfully updated
+        '404':
+          description: stock item order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/raw-item:
+    post:
+      tags:
+        - Raw Inventory
+      operationId: addRawItem
+      summary: Add Raw Item
+      description: Adds a new Raw Item into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawItemRequest'
+      responses:
+        '201':
+          description: Raw Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Raw Inventory
+      operationId: getRawItemList
+      summary: Get all Raw items with pagination
+      description: Returns a paginated list of all Raw items.
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [ IN_STOCK, LOW_STOCK ]
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByStockFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of Raw items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultRawItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/raw-item/{rawItemId}:
+    get:
+      tags:
+        - Raw Inventory
+      operationId: getRawItemById
+      summary: Get Raw item by ID
+      description: Returns a single Raw item based on its ID.
+      parameters:
+        - name: rawItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Raw Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawItem'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Raw Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    put:
+      tags:
+        - Raw Inventory
+      operationId: updateRawItem
+      summary: Update Raw Item
+      description: Updates an existing Raw Item in the system.
+      parameters:
+        - name: rawItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawItemRequest'
+      responses:
+        '200':
+          description: Raw Item successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawItem'
+        '400':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Raw Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Raw Inventory
+      operationId: deleteRawItem
+      summary: Delete Raw Item
+      description: Deletes a single Raw item based on its ID.
+      parameters:
+        - name: rawItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Raw Item successfully deleted (No content)
+        '404':
+          description: Raw Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/raw-item/{rawItemId}/status:
+    patch:
+      tags:
+        - Raw Inventory
+      operationId: updateRawItemStatus
+      summary: Update raw item order status
+      description: Updates only the status of a raw item.
+      parameters:
+        - name: rawItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/InventoryStatus'
+      responses:
+        '200':
+          description: stock item  status successfully updated
+        '404':
+          description: stock item order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/purchase/parties:
+    get:
+      operationId: getAllPurchaseParties
+      tags:
+        - Purchase Party
+      summary: Get all purchase parties
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Purchase party list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseParty'
+      security:
+        - oauth2: [ ]
+    post:
+      operationId: createPurchaseParty
+      tags:
+        - Purchase Party
+      summary: Create purchase party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPurchaseParty'
+      responses:
+        '201':
+          description: Purchase party created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseParty'
+      security:
+        - oauth2: [ ]
+  /api/v1/purchase/parties/{id}:
+    get:
+      operationId: getPurchasePartyById
+      tags:
+        - Purchase Party
+      summary: Get purchase party by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Purchase party details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseParty'
+        '404':
+          description: Not found
+      security:
+        - oauth2: [ ]
+    put:
+      operationId: updatePurchaseParty
+      tags:
+        - Purchase Party
+      summary: Update purchase party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPurchaseParty'
+      responses:
+        '200':
+          description: Purchase party updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseParty'
+        '404':
+          description: Not found
+      security:
+        - oauth2: [ ]
+    delete:
+      operationId: deletePurchaseParty
+      tags:
+        - Purchase Party
+      summary: Delete purchase party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Purchase party deleted
+        '404':
+          description: Not found
+      security:
+        - oauth2: [ ]
+
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      required: false
+      description: Page number starting from 0
+      schema:
+        type: integer
+        default: 0
+
+    sizeParam:
+      name: size
+      in: query
+      required: false
+      description: Number of items per page
+      schema:
+        type: integer
+        default: 10
+
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+
+    SortByStockFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , category, product , status ]
+
+    SortByRawFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , product , status ]
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        productId:
+          type: integer
+        productName:
+          type: string
+
+    ProductRequest:
+      type: object
+      required:
+        - productName
+      properties:
+        productName:
+          type: string
+
+    Category:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+        categoryName:
+          type: string
+
+    CategoryRequest:
+      type: object
+      required:
+        - categoryName
+      properties:
+        categoryName:
+          type: string
+
+    ImageMetadata:
+      type: object
+      required:
+        - imageName
+        - imageLocation
+      properties:
+        imageName:
+          type: string
+          description: Original filename of the image
+        imageLocation:
+          type: string
+          description: Cloudinary URL or storage location of the image
+    StockItemImages:
+      type: object
+      properties:
+        imageId:
+          type: integer
+        imageName:
+          type: string
+          description: Original filename of the image
+        imageLocation:
+          type: string
+          description: Cloudinary URL or storage location of the image
+
+    StockItem:
+      type: object
+      properties:
+        stockItemId:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+        category:
+          $ref: '#/components/schemas/Category'
+        quantityInKg:
+          type: number
+          format: double
+        quantityInPc:
+          type: number
+          format: double
+        weightPerPc:
+          type: number
+          format: double
+        pricePerKg:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+        quantityUnit:
+          $ref: '#/components/schemas/QuantityUnit'
+        status:
+          $ref: '#/components/schemas/InventoryStatus'
+        inventoryFloor:
+          $ref: '#/components/schemas/InventoryFloor'
+        lowStockAlert:
+          type: number
+          format: double
+        images:
+          type: array
+          description: Array of image metadata (name and location)
+          items:
+            $ref: '#/components/schemas/StockItemImages'
+
+    RawItem:
+      type: object
+      properties:
+        rawItemId:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+        quantityInKg:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/InventoryStatus'
+        lowStockAlert:
+          type: number
+          format: double
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    StockItemRequest:
+      type: object
+      required:
+        - productId
+        - categoryId
+        - quantityInKg
+        - quantityInPc
+        - weightPerPc
+        - pricePerKg
+        - quantityUnit
+        - lowStockAlert
+      properties:
+        productId:
+          type: integer
+        categoryId:
+          type: integer
+        quantityInKg:
+          type: number
+          format: double
+        quantityInPc:
+          type: number
+          format: double
+        weightPerPc:
+          type: number
+          format: double
+        pricePerKg:
+          type: number
+          format: double
+        quantityUnit:
+          $ref: '#/components/schemas/QuantityUnit'
+        status:
+          $ref: '#/components/schemas/InventoryStatus'
+        inventoryFloor:
+          $ref: '#/components/schemas/InventoryFloor'
+        lowStockAlert:
+          type: number
+          format: double
+        images:
+          type: array
+          description: Array of image metadata (name and location)
+          items:
+            $ref: '#/components/schemas/ImageMetadata'
+
+    RawItemRequest:
+      type: object
+      required:
+        - productId
+        - quantityInKg
+        - lowStockAlert
+      properties:
+        productId:
+          type: integer
+        quantityInKg:
+          type: number
+          format: double
+        lowStockAlert:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/InventoryStatus'
+    
+    QuantityUnit:
+      type: string
+      enum:
+        - KG
+        - GM
+
+    InventoryStatus:
+      type: string
+      enum:
+        - IN_STOCK
+        - LOW_STOCK
+    InventoryFloor:
+      type: string
+      enum:
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+    PaginatedResultStockItem:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockItem'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+
+    PaginatedResultRawItem:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawItem'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+
+    InventoryExistStatus:
+      type: string
+      enum:
+        - CREATED
+        - ALREADY_EXISTS
+
+    PurchaseInventoryType:
+      type: string
+      enum:
+        - RAW_MATERIAL
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+
+    PurchaseRequest:
+      type: object
+      required:
+        - chNo
+        - partyId
+        - productId
+        - qty
+        - rate
+        - amountDeposited
+        - inventoryType
+        - lowStockAlert
+      properties:
+        chNo:
+          type: string
+          description: Challan number
+        partyId:
+          type: integer
+          description: Party ID from party master
+        productId:
+          type: integer
+          description: Product ID from product master
+        qty:
+          type: number
+          format: double
+          description: Quantity in KG
+        rate:
+          type: number
+          format: double
+          description: Purchase rate per KG
+        amountDeposited:
+          type: number
+          format: double
+          description: Amount deposited / payment made
+        inventoryType:
+          $ref: '#/components/schemas/PurchaseInventoryType'
+        lowStockAlert:
+          type: number
+          format: double
+          description: Low stock alert threshold (required for all inventory types)
+        categoryId:
+          type: integer
+          description: Category ID - required when inventoryType is GROUND_FLOOR or FIRST_FLOOR
+        quantityInPc:
+          type: number
+          format: double
+          description: Quantity in pieces - required when inventoryType is GROUND_FLOOR or FIRST_FLOOR
+        weightPerPc:
+          type: number
+          format: double
+          description: Weight per piece in KG - required when inventoryType is GROUND_FLOOR or FIRST_FLOOR
+        quantityUnit:
+          $ref: '#/components/schemas/QuantityUnit'
+
+    PurchaseResponse:
+      type: object
+      properties:
+        purchaseId:
+          type: integer
+        chNo:
+          type: string
+        partyId:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+        qty:
+          type: number
+          format: double
+        rate:
+          type: number
+          format: double
+        total:
+          type: number
+          format: double
+        amountDeposited:
+          type: number
+          format: double
+        inventoryType:
+          $ref: '#/components/schemas/PurchaseInventoryType'
+        inventoryStatus:
+          $ref: '#/components/schemas/InventoryExistStatus'
+        rawInventory:
+          $ref: '#/components/schemas/RawItem'
+          description: Present when inventoryType is RAW_MATERIAL
+        stockInventory:
+          $ref: '#/components/schemas/StockItem'
+          description: Present when inventoryType is GROUND_FLOOR or FIRST_FLOOR
+
+    PaginatedResultPurchase:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseResponse'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+
+    NewPurchaseParty:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        officialAmount:
+          type: number
+          format: double
+        offlineAmount:
+          type: number
+          format: double
+    PurchaseParty:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        officialAmount:
+          type: number
+          format: double
+        offlineAmount:
+          type: number
+          format: double
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        detail:
+          type: object
+          additionalProperties: true

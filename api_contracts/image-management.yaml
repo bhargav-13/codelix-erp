@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: Image Management API
+  version: 1.0.0
+  description: OpenAPI for image upload and management using Cloudinary
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Image Management
+    description: Image upload, delete and management endpoints
+
+paths:
+  /api/v1/images/upload:
+    post:
+      tags:
+        - Image Management
+      operationId: uploadImage
+      summary: Upload a single image
+      description: Upload a single image file to Cloudinary
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Image file to upload
+              required:
+                - file
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '400':
+          description: Bad Request - Invalid file or upload failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/images/upload/multiple:
+    post:
+      tags:
+        - Image Management
+      operationId: uploadMultipleImages
+      summary: Upload multiple images
+      description: Upload multiple image files to Cloudinary
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Multiple image files to upload
+              required:
+                - files
+      responses:
+        '200':
+          description: Images uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageListResponse'
+        '400':
+          description: Bad Request - Invalid files or upload failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/images/{publicId}:
+    delete:
+      tags:
+        - Image Management
+      operationId: deleteImage
+      summary: Delete an image
+      description: Delete an image from Cloudinary by its public ID
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          description: Public ID of the image to delete (use underscore instead of slash)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteImageResponse'
+        '400':
+          description: Bad Request - Delete failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+components:
+  schemas:
+    ImageResponse:
+      type: object
+      properties:
+        imageName:
+          type: string
+          description: Original name of the uploaded image
+        imageLocation:
+          type: string
+          description: Secure URL of the uploaded image
+        publicId:
+          type: string
+          description: Public ID of the uploaded image in Cloudinary
+        format:
+          type: string
+          description: Format of the uploaded image
+        width:
+          type: integer
+          description: Width of the uploaded image in pixels
+        height:
+          type: integer
+          description: Height of the uploaded image in pixels
+
+    ImageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageResponse'
+        count:
+          type: integer
+          description: Total number of images uploaded
+
+    DeleteImageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Success message
+        publicId:
+          type: string
+          description: Public ID of the deleted image
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

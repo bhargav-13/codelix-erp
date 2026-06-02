@@ -1,0 +1,396 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #FFFFFF;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content > * {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.modal-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  color: #2D1017;
+  margin: 0 0 20px 0;
+  padding-top: 24px;
+  flex-shrink: 0;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+.modal-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-form::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.modal-form::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.modal-form::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+}
+
+.form-input {
+  padding: 10px 14px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  background: #F5F5F5;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #2D1017;
+}
+
+.form-input::placeholder {
+  color: #A7A7A7;
+}
+
+/* Dropdown with Add button */
+.dropdown-with-add {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.dropdown-with-add .form-input {
+  flex: 1;
+}
+
+.add-new-btn {
+  width: 36px;
+  min-width: 36px;
+  height: auto;
+  padding: 0;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  background: #A5213A;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.add-new-btn:hover {
+  background: #7A1829;
+}
+
+.add-new-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.add-new-input {
+  flex: 1;
+}
+
+.add-confirm-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2D1017;
+  color: #FFFFFF;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-confirm-btn:hover:not(:disabled) {
+  background: #2a4d6a;
+}
+
+.add-confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.price-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.price-input {
+  flex: 1;
+}
+
+.unit-select {
+  padding: 10px 14px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  background: #F5F5F5;
+  outline: none;
+  cursor: pointer;
+  min-width: 80px;
+}
+
+.form-textarea {
+  padding: 10px 14px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  background: #F5F5F5;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.form-textarea:focus {
+  border-color: #2D1017;
+}
+
+.form-textarea::placeholder {
+  color: #A7A7A7;
+}
+
+.error-message {
+  padding: 10px 14px;
+  background: #FFE5E5;
+  border: 1px solid #FF0101;
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #FF0101;
+}
+
+.info-message {
+  padding: 10px 14px;
+  background: #FDE8EC;
+  border: 1px solid #A5213A;
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #7A1829;
+}
+
+.frozen-input {
+  background: #F0F0F0 !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.save-button,
+.cancel-button {
+  padding: 10px 32px;
+  border-radius: 20px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button {
+  background: #A5213A;
+  color: #FFFFFF;
+}
+
+.save-button:hover:not(:disabled) {
+  background: #7A1829;
+}
+
+.save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: transparent;
+  color: #2D1017;
+  border: 1px solid #2D1017;
+}
+
+.cancel-button:hover {
+  background: #F5F5F5;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-group {
+    gap: 4px;
+  }
+
+  .form-label {
+    font-size: 13px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .unit-select {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .price-input-group {
+    gap: 8px;
+  }
+
+  .unit-select {
+    min-width: 70px;
+  }
+
+  .add-new-btn {
+    width: 32px;
+    min-width: 32px;
+    font-size: 18px;
+  }
+
+  .add-new-input-group {
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .add-confirm-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .save-button,
+  .cancel-button {
+    width: 100%;
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .error-message {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 16px;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .form-label {
+    font-size: 12px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .unit-select {
+    font-size: 12px;
+  }
+
+  .save-button,
+  .cancel-button {
+    font-size: 13px;
+    padding: 9px 20px;
+  }
+}

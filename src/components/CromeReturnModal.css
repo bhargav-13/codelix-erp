@@ -1,0 +1,417 @@
+/* Crome Return Modal Styles - Matched to AddOrderModal */
+
+.crome-return-modal {
+    width: min(900px, 95%);
+    /* Increased width to match Order Modal */
+    max-height: 95vh;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(32, 67, 106, 0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+.modal-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 24px;
+    color: #2D1017;
+    margin: 0 0 24px 0;
+    text-align: left;
+}
+
+/* New Layout Grids */
+.top-section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.inventory-section,
+.return-basics-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inventory-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.divider-line {
+    height: 1px;
+    background-color: rgba(23, 52, 77, 0.08);
+    margin: 0 0 24px 0;
+}
+
+.packaging-section {
+    margin-bottom: 24px;
+}
+
+.packaging-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    /* Type wider, Weight, Count */
+    gap: 20px;
+    align-items: end;
+}
+
+.packaging-grid-wrapper:has(.packaging-remove-field) {
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+}
+
+.packaging-subtitle {
+    margin: 0 !important;
+    border: none !important;
+    padding-bottom: 0 !important;
+}
+
+.packaging-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.add-packaging-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid #2D1017;
+    background: #fff;
+    color: #2D1017;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.add-packaging-btn:hover {
+    background: #2D1017;
+    color: #fff;
+}
+
+.remove-packaging-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #dc2626;
+    background: #fff;
+    color: #dc2626;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.remove-packaging-btn:hover {
+    background: #dc2626;
+    color: #fff;
+}
+
+.packaging-list-row {
+    margin-bottom: 10px;
+}
+
+.packaging-list-row:last-child {
+    margin-bottom: 0;
+}
+
+.packaging-remove-field {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/* Sections */
+.form-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-subtitle {
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2D1017;
+    margin: 0 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(23, 52, 77, 0.08);
+}
+
+/* Form Styling - Matching Order Modal */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 0;
+}
+
+.form-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: #5a738b;
+    font-weight: 500;
+}
+
+.form-input,
+.form-textarea {
+    border: 1px solid rgba(23, 52, 77, 0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    background: #f5f7fa;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    outline: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #4a8fdc;
+    background: #ffffff;
+    box-shadow: none;
+}
+
+.packaging-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Checkbox Toggle */
+.checkbox-group {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 4px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    font-weight: 500;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    background: #d1d5db;
+    border-radius: 24px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.checkbox-label input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background: #A5213A;
+    /* Blue matching typical primary color */
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+    transform: translateX(20px);
+}
+
+/* Calculation & Summary */
+.calculation-summary {
+    background: #f1f7ff;
+    border: 1px solid rgba(23, 52, 77, 0.08);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #5a738b;
+}
+
+.calc-value {
+    font-weight: 600;
+    color: #2D1017;
+}
+
+.calc-value.deduction {
+    color: #dc2626;
+}
+
+.total-row {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(23, 52, 77, 0.1);
+    margin-bottom: 0;
+}
+
+.calc-value.total {
+    font-size: 18px;
+    color: #059669;
+}
+
+.calc-row.pricing-separator {
+    margin-top: 8px;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 8px;
+}
+
+/* Actions */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: auto;
+}
+
+.save-button {
+    background: #2D1017;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    /* Pill shape like order buttons */
+    padding: 12px 32px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(23, 52, 77, 0.15);
+}
+
+.save-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(23, 52, 77, 0.2);
+}
+
+.save-button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.cancel-button {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 24px;
+    padding: 12px 24px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-button:hover {
+    background: #f8fafc;
+    color: #475569;
+    border-color: #475569;
+}
+
+.error-message {
+    margin-bottom: 16px;
+    color: #dc2626;
+    font-size: 14px;
+    text-align: center;
+    background: #fef2f2;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-section-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .packaging-grid-wrapper {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}/* Warning message styles */
+.warning-message {
+    margin-bottom: 16px;
+    color: #d97706;
+    font-size: 14px;
+    text-align: left;
+    background: #fffbeb;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+.warning-message div {
+    margin-bottom: 6px;
+}
+
+.warning-message div:last-child {
+    margin-bottom: 0;
+}
+
+/* Validation error styles */
+.form-input.invalid,
+.form-textarea.invalid {
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+.field-error-text {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 2px;
+}

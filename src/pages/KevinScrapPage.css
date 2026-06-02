@@ -1,0 +1,298 @@
+.kevin-scrap-page {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+
+.page-title-section {
+    flex: 1;
+}
+
+.page-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #2D1017;
+    margin: 0 0 4px 0;
+}
+
+.page-subtitle {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #7D99A9;
+    margin: 0;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #A5213A;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button:hover {
+    background: #7A1829;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-icon {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(125, 153, 169, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-label {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #7D99A9;
+}
+
+.stat-value {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #2D1017;
+}
+
+.order-filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.order-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #FFFFFF;
+    border: 1px solid rgba(125, 153, 169, 0.2);
+    border-radius: 8px;
+}
+
+.order-search img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.order-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    background: transparent;
+}
+
+.order-search input::placeholder {
+    color: #A7A7A7;
+}
+
+.order-status-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #FFFFFF;
+    border: 1px solid rgba(125, 153, 169, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    transition: background-color 0.2s ease;
+}
+
+.order-status-filter:hover {
+    background: #F5F5F5;
+}
+
+.order-status-filter img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.scrap-table-container {
+    background: #FFFFFF;
+    border: 1px solid rgba(125, 153, 169, 0.2);
+    border-radius: 12px;
+    overflow-x: auto;
+    margin-bottom: 24px;
+}
+
+.scrap-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scrap-table thead {
+    background: #F8F9FA;
+    border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.scrap-table th {
+    padding: 16px;
+    text-align: left;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #2D1017;
+    white-space: nowrap;
+}
+
+.scrap-table tbody tr {
+    border-bottom: 1px solid rgba(125, 153, 169, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.scrap-table tbody tr:hover {
+    background: #F8F9FA;
+}
+
+.scrap-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.scrap-table td {
+    padding: 16px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #2D1017;
+    white-space: nowrap;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+    transform: scale(1.2);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+    transform: scale(1.1);
+}
+
+.icon-img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+}
+
+.icon-button:hover .icon-img {
+    opacity: 1;
+}
+
+.no-data {
+    padding: 48px 24px;
+    text-align: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    color: #7D99A9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .kevin-scrap-page {
+        padding: 16px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .order-filters {
+        flex-direction: column;
+    }
+
+    .scrap-table-container {
+        overflow-x: scroll;
+    }
+
+    .scrap-table {
+        min-width: 800px;
+    }
+}

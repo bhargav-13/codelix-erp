@@ -1,0 +1,359 @@
+.dispatch-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 18, 31, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 16px;
+}
+
+.dispatch-modal {
+  width: min(800px, 95%);
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(32, 67, 106, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.dispatch-modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.dispatch-modal-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #2D1017;
+  margin: 0;
+  text-align: center;
+}
+
+.dispatch-modal-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 18px;
+  color: #2D1017;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dispatch-modal-close:hover {
+  background: rgba(209, 238, 255, 0.6);
+}
+
+.dispatch-modal-body {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dispatch-loading {
+  text-align: center;
+  color: #8ea3b5;
+  padding: 24px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+}
+
+.dispatch-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.dispatch-item-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dispatch-item-field label {
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2D1017;
+}
+
+.dispatch-item-input-box {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 16px;
+  height: 38px;
+  background: #f5f5f5;
+  border: 1.5px solid rgba(125, 153, 169, 0.3);
+  border-radius: 10px;
+}
+
+.dispatch-item-input-box span {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888888;
+}
+
+.dispatch-items-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dispatch-items-header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 16px;
+  height: 38px;
+  background: #f5f5f5;
+  border: 1.5px solid rgba(125, 153, 169, 0.3);
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dispatch-items-header.collapsed {
+  border-radius: 10px;
+  border-bottom: 1.5px solid rgba(125, 153, 169, 0.3);
+}
+
+.dispatch-items-header:hover {
+  background: #eeeeee;
+}
+
+.dispatch-items-header span {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888888;
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  color: #2D1017;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-icon.collapsed {
+  transform: rotate(-90deg);
+}
+
+.dispatch-items-row {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 16px;
+  height: 38px;
+  background: #f5f5f5;
+  border: 1.5px solid rgba(125, 153, 169, 0.3);
+  border-top: none;
+}
+
+.dispatch-items-row.first-row {
+  border-top: 1.5px solid rgba(125, 153, 169, 0.3);
+}
+
+.dispatch-items-row.last-row {
+  border-radius: 0 0 10px 10px;
+}
+
+.item-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888888;
+}
+
+.item-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.qty-control-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: #2D1017;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.qty-control-btn:hover {
+  color: #4a9eff;
+}
+
+.qty-display {
+  min-width: 18px;
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888888;
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: 1.5px solid #2D1017;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-container:hover .checkmark {
+  border-color: #4a9eff;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #2D1017;
+  border-color: #2D1017;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.dispatch-modal-error {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(255, 88, 88, 0.12);
+  color: #c53030;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+}
+
+.dispatch-modal-actions {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.dispatch-save-btn {
+  min-width: 160px;
+  height: 42px;
+  border-radius: 50px;
+  padding: 8px 20px;
+  background: #A5213A;
+  color: #FFFFFF;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.dispatch-save-btn:hover:not(:disabled) {
+  background: #b8dbf5;
+  transform: translateY(-1px);
+}
+
+.dispatch-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .dispatch-modal {
+    padding: 16px;
+  }
+
+  .dispatch-item-row {
+    flex-direction: column;
+  }
+
+  .dispatch-item-field label {
+    font-size: 14px;
+  }
+
+  .dispatch-item-input-box span,
+  .dispatch-items-header span,
+  .item-name,
+  .qty-display {
+    font-size: 12px;
+  }
+
+  .dispatch-modal-title {
+    font-size: 18px;
+  }
+
+  .dispatch-save-btn {
+    font-size: 14px;
+    min-width: 140px;
+    height: 38px;
+  }
+}

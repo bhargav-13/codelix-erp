@@ -1,0 +1,1023 @@
+openapi: 3.0.3
+info:
+  title: Scrap Management API
+  version: 1.0.0
+  description: OpenAPI for Scrap management - Kevin and Jayesh dashboards
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: KevinScrapContractor
+    description: Kevin Scrap Contractor Management
+  - name: KevinScrap
+    description: Kevin Scrap entry endpoints
+  - name: JayeshScrapContractor
+    description: Jayesh Scrap Contractor Management
+  - name: JayeshScrap
+    description: Jayesh Scrap entry endpoints
+
+paths:
+  # ========================
+  # Kevin Scrap Contractor
+  # ========================
+  /api/v1/kevin/scrap-contractor:
+    post:
+      tags:
+        - KevinScrapContractor
+      operationId: addKevinScrapContractor
+      summary: Add Kevin Scrap Contractor
+      description: Adds a new scrap contractor for Kevin.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KevinScrapContractorRequest'
+      responses:
+        '201':
+          description: Scrap Contractor successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KevinScrapContractor'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - KevinScrapContractor
+      operationId: getKevinScrapContractorList
+      summary: Get all Kevin scrap contractors
+      responses:
+        '200':
+          description: List of Kevin scrap contractors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KevinScrapContractor'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/kevin/scrap-contractor/{scrapContractorId}:
+    get:
+      tags:
+        - KevinScrapContractor
+      operationId: getKevinScrapContractorById
+      summary: Get Kevin scrap contractor by ID
+      parameters:
+        - name: scrapContractorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Scrap Contractor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KevinScrapContractor'
+        '404':
+          description: Scrap Contractor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  # ========================
+  # Kevin Scrap
+  # ========================
+  /api/v1/kevin/scrap:
+    post:
+      tags:
+        - KevinScrap
+      operationId: addKevinScrap
+      summary: Create a new Kevin scrap entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KevinScrapRequest'
+      responses:
+        '201':
+          description: Kevin scrap entry successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KevinScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - KevinScrap
+      operationId: getKevinScrapList
+      summary: Get all Kevin scrap entries with pagination
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of Kevin scrap entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultKevinScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/kevin/scrap/export/pdf:
+    get:
+      tags:
+        - KevinScrap
+      operationId: exportKevinScrapPdf
+      summary: Export Kevin Scrap records to PDF
+      parameters:
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF file generated
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      security:
+        - oauth2: [ ]
+  /api/v1/kevin/scrap/{scrapId}:
+    get:
+      tags:
+        - KevinScrap
+      operationId: getKevinScrapById
+      summary: Get Kevin scrap entry by ID
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Kevin scrap entry found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KevinScrap'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - KevinScrap
+      operationId: updateKevinScrap
+      summary: Update Kevin scrap entry
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KevinScrapRequest'
+      responses:
+        '200':
+          description: Kevin scrap entry successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KevinScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - KevinScrap
+      operationId: deleteKevinScrap
+      summary: Delete Kevin scrap entry
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Kevin scrap entry successfully deleted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  # ========================
+  # Jayesh Scrap Contractor
+  # ========================
+  /api/v1/jayesh/scrap-contractor:
+    post:
+      tags:
+        - JayeshScrapContractor
+      operationId: addJayeshScrapContractor
+      summary: Add Jayesh Scrap Contractor
+      description: Adds a new scrap contractor for Jayesh.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JayeshScrapContractorRequest'
+      responses:
+        '201':
+          description: Scrap Contractor successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrapContractor'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - JayeshScrapContractor
+      operationId: getJayeshScrapContractorList
+      summary: Get all Jayesh scrap contractors
+      responses:
+        '200':
+          description: List of Jayesh scrap contractors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JayeshScrapContractor'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/jayesh/scrap-contractor/{scrapContractorId}:
+    get:
+      tags:
+        - JayeshScrapContractor
+      operationId: getJayeshScrapContractorById
+      summary: Get Jayesh scrap contractor by ID
+      parameters:
+        - name: scrapContractorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Scrap Contractor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrapContractor'
+        '404':
+          description: Scrap Contractor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  # ========================
+  # Jayesh Scrap
+  # ========================
+  /api/v1/jayesh/scrap:
+    post:
+      tags:
+        - JayeshScrap
+      operationId: addJayeshScrap
+      summary: Create a new Jayesh scrap entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JayeshScrapRequest'
+      responses:
+        '201':
+          description: Jayesh scrap entry successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - JayeshScrap
+      operationId: getJayeshScrapList
+      summary: Get all Jayesh scrap entries with pagination
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of Jayesh scrap entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultJayeshScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/jayesh/scrap/export/pdf:
+    get:
+      tags:
+        - JayeshScrap
+      operationId: exportJayeshScrapPdf
+      summary: Export Jayesh Scrap records to PDF
+      parameters:
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF file generated
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      security:
+        - oauth2: [ ]
+  /api/v1/jayesh/scrap/{scrapId}/withdraw:
+    patch:
+      tags:
+        - JayeshScrap
+      operationId: withdrawJayeshScrap
+      summary: Record a withdrawal amount and calculate pending amount (totalAmount - withdrawAmount)
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JayeshScrapWithdrawRequest'
+      responses:
+        '200':
+          description: Withdrawal calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrap'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/jayesh/scrap/{scrapId}:
+    get:
+      tags:
+        - JayeshScrap
+      operationId: getJayeshScrapById
+      summary: Get Jayesh scrap entry by ID
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Jayesh scrap entry found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrap'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - JayeshScrap
+      operationId: updateJayeshScrap
+      summary: Update Jayesh scrap entry
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JayeshScrapRequest'
+      responses:
+        '200':
+          description: Jayesh scrap entry successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JayeshScrap'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - JayeshScrap
+      operationId: deleteJayeshScrap
+      summary: Delete Jayesh scrap entry
+      parameters:
+        - name: scrapId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Jayesh scrap entry successfully deleted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scrap entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      description: Page number starting from 0
+      required: false
+      schema:
+        type: integer
+        default: 0
+
+    sizeParam:
+      name: size
+      in: query
+      description: Number of items (records) per page
+      required: false
+      schema:
+        type: integer
+        default: 10
+
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+
+    SortByFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt, createdAt, orderDate ]
+  schemas:
+    # ========================
+    # Kevin Schemas
+    # ========================
+    KevinScrapContractorRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    KevinScrapContractor:
+      type: object
+      properties:
+        scrapContractorId:
+          type: integer
+        name:
+          type: string
+
+    KevinScrapRequest:
+      type: object
+      required:
+        - scrapContractorId
+        - challanNo
+        - orderDate
+        - item
+        - elementValue
+        - elementType
+        - totalWeight
+        - outWeight
+        - netWeight
+      properties:
+        scrapContractorId:
+          type: integer
+          description: ID of the Kevin scrap contractor
+        challanNo:
+          type: string
+          description: Challan number
+        orderDate:
+          type: string
+          format: date
+        item:
+          type: string
+          description: Item name
+        elementValue:
+          type: number
+          format: double
+          description: Element value
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        totalWeight:
+          type: number
+          format: double
+          description: Total weight
+        outWeight:
+          type: number
+          format: double
+          description: Out weight
+        netWeight:
+          type: number
+          format: double
+          description: Net weight
+
+    KevinScrap:
+      type: object
+      properties:
+        scrapId:
+          type: integer
+        contractor:
+          $ref: '#/components/schemas/KevinScrapContractor'
+        challanNo:
+          type: string
+        orderDate:
+          type: string
+          format: date
+        item:
+          type: string
+        elementValue:
+          type: number
+          format: double
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        totalWeight:
+          type: number
+          format: double
+        outWeight:
+          type: number
+          format: double
+        netWeight:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    PaginatedResultKevinScrap:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KevinScrap'
+        empty:
+          type: boolean
+          description: Indicates if the current page is empty
+        last:
+          type: boolean
+          description: Indicates if the current page is the last page
+        first:
+          type: boolean
+          description: Indicates if the current page is the first page
+        totalPages:
+          type: integer
+          description: Total number of pages available
+        totalElements:
+          type: integer
+          description: Total number of elements
+        size:
+          type: integer
+          description: Number of items per page
+
+    # ========================
+    # Jayesh Schemas
+    # ========================
+    JayeshScrapContractorRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    JayeshScrapContractor:
+      type: object
+      properties:
+        scrapContractorId:
+          type: integer
+        name:
+          type: string
+
+    JayeshScrapRequest:
+      type: object
+      required:
+        - scrapContractorId
+        - challanNo
+        - orderDate
+        - item
+        - elementValue
+        - elementType
+        - totalWeight
+        - outWeight
+        - netWeight
+        - rate
+      properties:
+        scrapContractorId:
+          type: integer
+          description: ID of the Jayesh scrap contractor
+        challanNo:
+          type: string
+          description: Challan number
+        orderDate:
+          type: string
+          format: date
+        item:
+          type: string
+          description: Item name
+        elementValue:
+          type: number
+          format: double
+          description: Element value
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        totalWeight:
+          type: number
+          format: double
+          description: Total weight
+        outWeight:
+          type: number
+          format: double
+          description: Out weight
+        netWeight:
+          type: number
+          format: double
+          description: Net weight
+        rate:
+          type: number
+          format: double
+          description: Rate for the scrap item
+
+    JayeshScrapWithdrawRequest:
+      type: object
+      required:
+        - withdrawAmount
+        - withdrawDate
+      properties:
+        withdrawAmount:
+          type: number
+          format: double
+          description: Amount withdrawn for this transaction
+        withdrawDate:
+          type: string
+          format: date
+          description: Date of this withdrawal transaction
+
+    JayeshScrapWithdrawal:
+      type: object
+      properties:
+        withdrawalId:
+          type: integer
+        withdrawAmount:
+          type: number
+          format: double
+          description: Amount withdrawn in this transaction
+        withdrawDate:
+          type: string
+          format: date
+          description: Date of this withdrawal transaction
+
+    JayeshScrap:
+      type: object
+      properties:
+        scrapId:
+          type: integer
+        contractor:
+          $ref: '#/components/schemas/JayeshScrapContractor'
+        challanNo:
+          type: string
+        orderDate:
+          type: string
+          format: date
+        item:
+          type: string
+        elementValue:
+          type: number
+          format: double
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        totalWeight:
+          type: number
+          format: double
+        outWeight:
+          type: number
+          format: double
+        netWeight:
+          type: number
+          format: double
+        rate:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+          description: Calculated as netWeight * rate
+        withdrawals:
+          type: array
+          items:
+            $ref: '#/components/schemas/JayeshScrapWithdrawal'
+          description: List of all withdrawal transactions
+        pendingAmount:
+          type: number
+          format: double
+          description: Calculated as totalAmount - sum of all withdrawals
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    PaginatedResultJayeshScrap:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JayeshScrap'
+        empty:
+          type: boolean
+          description: Indicates if the current page is empty
+        last:
+          type: boolean
+          description: Indicates if the current page is the last page
+        first:
+          type: boolean
+          description: Indicates if the current page is the first page
+        totalPages:
+          type: integer
+          description: Total number of pages available
+        totalElements:
+          type: integer
+          description: Total number of elements
+        size:
+          type: integer
+          description: Number of items per page
+
+    # ========================
+    # Shared Schemas
+    # ========================
+    ElementType:
+      type: string
+      enum:
+        - FOAM
+        - BAG
+        - PETI
+        - DRUM
+        - OTHER
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        detail:
+          type: object
+          additionalProperties: true

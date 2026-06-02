@@ -1,0 +1,279 @@
+.subcontract-page {
+  padding: 20px 24px;
+  max-width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 40px;
+}
+
+.page-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 28px;
+  color: #2D1017;
+  margin: 0;
+}
+
+.page-subtitle {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #8E8E8E;
+  margin: 0;
+}
+
+.subcontract-filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.subcontract-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #F5F5F5;
+  border-radius: 8px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+}
+
+.subcontract-search img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.5;
+}
+
+.subcontract-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  outline: none;
+}
+
+.subcontract-search input::placeholder {
+  color: #A7A7A7;
+}
+
+.subcontract-search-by select {
+  padding: 10px 16px;
+  background: #F5F5F5;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  outline: none;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.subcontract-table-container {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid rgba(125, 153, 169, 0.2);
+  overflow: hidden;
+}
+
+.subcontract-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subcontract-table thead {
+  background: #F8FAFC;
+}
+
+.subcontract-table th {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.subcontract-table td {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(125, 153, 169, 0.1);
+}
+
+.subcontract-table tbody tr:hover {
+  background: #F8FAFC;
+}
+
+.subcontract-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #A5213A;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #FFFFFF;
+}
+
+.action-button:hover:not(:disabled) {
+  background: #7A1829;
+}
+
+.action-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.action-button img {
+  width: 16px;
+  height: 16px;
+}
+
+.action-button.downloading {
+  background: #e8f4fc;
+}
+
+.download-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #2D1017;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  color: #8E8E8E;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .subcontract-page {
+    padding: 12px 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .subcontract-filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .subcontract-search {
+    width: 100%;
+  }
+
+  .subcontract-search-by select {
+    width: 100%;
+  }
+
+  .subcontract-table-container {
+    overflow-x: auto;
+  }
+
+  .subcontract-table {
+    min-width: 600px;
+  }
+
+  .subcontract-table th,
+  .subcontract-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .action-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .action-button span {
+    display: none;
+  }
+
+  .action-button img {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subcontract-page {
+    padding: 8px 12px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .subcontract-table th,
+  .subcontract-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .action-button {
+    padding: 6px 10px;
+  }
+}

@@ -1,0 +1,334 @@
+.subcontract-view-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.subcontract-view-modal {
+  background: #FFFFFF;
+  border-radius: 16px;
+  max-width: 95vw;
+  width: 1200px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.subcontract-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.subcontract-view-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subcontract-view-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  color: #2D1017;
+  margin: 0;
+}
+
+.subcontract-view-date-range {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #8E8E8E;
+  margin: 0;
+}
+
+.subcontract-view-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #2D1017;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.subcontract-view-close:hover {
+  color: #8E8E8E;
+}
+
+.subcontract-view-date-filters {
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+  background: #F8FAFC;
+}
+
+.date-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-filter-group label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #2D1017;
+}
+
+.date-filter-group input {
+  padding: 8px 12px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #2D1017;
+  background: #FFFFFF;
+  outline: none;
+}
+
+.date-filter-group input:focus {
+  border-color: #2D1017;
+}
+
+.subcontract-view-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px 24px;
+}
+
+.subcontract-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid rgba(125, 153, 169, 0.2);
+  border-radius: 8px;
+}
+
+.subcontract-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+.subcontract-detail-table thead {
+  background: #F8FAFC;
+  position: sticky;
+  top: 0;
+}
+
+.subcontract-detail-table th {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  color: #2D1017;
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(125, 153, 169, 0.2);
+  white-space: nowrap;
+}
+
+.subcontract-detail-table td {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #2D1017;
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(125, 153, 169, 0.1);
+  white-space: nowrap;
+}
+
+.subcontract-detail-table tbody tr:hover {
+  background: #F8FAFC;
+}
+
+.subcontract-detail-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.used-cell {
+  color: #E53935;
+  font-weight: 500;
+}
+
+.net-weight-cell {
+  color: #E53935;
+  font-weight: 500;
+}
+
+.subcontract-view-totals {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(125, 153, 169, 0.2);
+}
+
+.total-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total-paid {
+  margin-bottom: 16px;
+}
+
+.total-paid .total-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #2D1017;
+}
+
+.total-paid .total-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #2D1017;
+}
+
+.totals-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.total-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #8E8E8E;
+}
+
+.total-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2D1017;
+}
+
+.total-value.highlight-red {
+  color: #E53935;
+}
+
+.error-message {
+  text-align: center;
+  padding: 24px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #E53935;
+  background: #FFEBEE;
+  border-radius: 8px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  color: #8E8E8E;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .subcontract-view-modal-overlay {
+    padding: 10px;
+  }
+
+  .subcontract-view-modal {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .subcontract-view-header {
+    padding: 16px;
+  }
+
+  .subcontract-view-title {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .subcontract-view-date-range {
+    font-size: 12px;
+  }
+
+  .subcontract-view-date-filters {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .date-filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .date-filter-group input {
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .subcontract-view-content {
+    padding: 12px 16px 16px;
+  }
+
+  .subcontract-detail-table th,
+  .subcontract-detail-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  .totals-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .total-label,
+  .total-value {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subcontract-view-modal {
+    border-radius: 0;
+    height: 100%;
+    max-height: 100vh;
+  }
+
+  .subcontract-view-header {
+    padding: 12px;
+  }
+
+  .subcontract-view-title {
+    font-size: 16px;
+  }
+
+  .subcontract-view-date-filters {
+    padding: 10px 12px;
+  }
+
+  .subcontract-view-content {
+    padding: 10px 12px 12px;
+  }
+
+  .subcontract-detail-table th,
+  .subcontract-detail-table td {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,865 @@
+openapi: 3.0.3
+info:
+  title: Order Management API
+  version: 1.0.0
+  description: OpenAPI for order management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Orders
+    description: All operations for managing customer orders.
+  - name: Party
+    description: All operations for managing party.
+
+paths:
+  # ------------------------------------------------------------
+  # ORDER CRUD
+  # ------------------------------------------------------------
+  /api/v1/orders:
+    post:
+      tags:
+        - Orders
+      operationId: createOrder
+      summary: Create a new order (with products & billing details)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '201':
+          description: Order successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+  /api/v1/orders/floor/{floor}:
+    get:
+      tags:
+        - Orders
+      operationId: getOrderList
+      summary: Get paginated list of orders
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: floor
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/OrderFloor'
+        - name: status
+          in: query
+          required: false
+          description: Filter by order status
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          description: Search by customer name or mobile number
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultOrder'
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+  /api/v1/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      operationId: getOrderById
+      summary: Get order by ID
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+      security:
+        - oauth2: [ ]
+
+    put:
+      tags:
+        - Orders
+      operationId: updateOrder
+      summary: Update order details, billing, and product list
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Orders
+      operationId: deleteOrder
+      summary: Delete an order and all associated products.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Order successfully deleted
+        '404':
+          description: Order not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+  /api/v1/orders/{orderId}/status:
+    patch:
+      tags:
+        - Orders
+      operationId: updateOrderStatus
+      summary: Update only the status of an order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - orderStatus
+              properties:
+                orderStatus:
+                  $ref: '#/components/schemas/OrderStatus'
+      responses:
+        '200':
+          description: Status updated
+        '404':
+          description: Order not found
+        '400':
+          description: Invalid status
+      security:
+        - oauth2: [ ]
+
+  /api/v1/orders/{orderId}/dispatch:
+    put:
+      tags:
+        - Orders
+      operationId: dispatchOrder
+      summary: Dispatch order and deduct quantities from inventory
+      description: Deducts specified quantities from stock inventory for each item and marks the order as DISPATCHED
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchRequest'
+      responses:
+        '200':
+          description: Order dispatched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Insufficient inventory quantity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Order not found
+      security:
+        - oauth2: [ ]
+
+  /api/v1/orders/{orderId}/revoke-dispatch:
+    put:
+      tags:
+        - Orders
+      operationId: revokeDispatch
+      summary: Revoke a dispatched order — restores stock and deletes the order
+      description: Only valid when order is in DISPATCHED status. Restores deducted inventory quantities and permanently deletes the order.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchRequest'
+      responses:
+        '204':
+          description: Dispatch revoked and order deleted successfully
+        '400':
+          description: Order is not in DISPATCHED status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/parties:
+    get:
+      operationId: getAllParties
+      tags:
+        - Party
+      summary: Get all parties
+      parameters:
+        - $ref: '#/components/parameters/searchParam'
+      responses:
+        '200':
+          description: Party list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderParty'
+      security:
+        - oauth2: [ ]
+    post:
+      operationId: createParty
+      tags:
+        - Party
+      summary: Create party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOrderParty'
+      responses:
+        '201':
+          description: Party created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderParty'
+      security:
+        - oauth2: [ ]
+  /api/v1/parties/{id}:
+    get:
+      operationId: getPartyById
+      tags:
+        - Party
+      summary: Get party by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Party details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderParty'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+    put:
+      operationId: updateParty
+      tags:
+        - Party
+      summary: Update party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOrderParty'
+      responses:
+        '200':
+          description: Party updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderParty'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+    delete:
+      operationId: deleteParty
+      tags:
+        - Party
+      summary: Delete party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Party deleted
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+  /api/v1/order/getByParty:
+    get:
+      tags:
+        - Party
+      operationId: getOrderListByParty
+      summary: Get all  orders By party
+      description: Returns list of all orders.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderByPartyResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/order/getByParty/{partyName}:
+    get:
+      tags:
+        - Party
+      operationId: getOrderByPartyName
+      summary: Get orders by party name
+      description: Returns list of all orders.
+      parameters:
+        - name: partyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: orders by party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderByPartyResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/order/getByParty/{partyName}/pdf:
+    get:
+      tags:
+        - Party
+      operationId: getOrderByPartyNamePdf
+      summary: Get order by party name as pdf
+      description: Returns list of all orders.
+      parameters:
+        - name: partyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+# ------------------------------------------------------------
+# COMPONENTS
+# ------------------------------------------------------------
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: Page number starting from 0
+
+    sizeParam:
+      name: size
+      in: query
+      schema:
+        type: integer
+        default: 10
+      description: Number of items per page
+
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+
+    SortByFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , orderDate , expectedDeliveryDate , orderStatus ]
+
+    searchParam:
+      name: search
+      in: query
+      description: Search text to filter results by name or relevant fields
+      schema:
+        type: string
+
+  schemas:
+
+    # ------------------------------------------------------------
+    # Order Request
+    # ------------------------------------------------------------
+    OrderRequest:
+      type: object
+      required:
+        - partyId
+        - customerName
+        - orderDate
+        - expectedDeliveryDate
+      properties:
+        partyId:
+          type: integer
+        customerMobileNo:
+          type: string
+          nullable: true
+        customerEmail:
+          type: string
+          nullable: true
+        orderDate:
+          type: string
+          format: date
+        expectedDeliveryDate:
+          type: string
+          format: date
+        paymentDate:
+          type: string
+          format: date
+        totalItems:
+          type: integer
+          nullable: true
+        orderFloor:
+          $ref: '#/components/schemas/OrderFloor'
+        # Billing fields
+        offlineBillPercent:
+          type: number
+          format: double
+        offlineTotal:
+          type: number
+          format: double
+          nullable: true
+        officialBillAmount:
+          type: number
+          format: double
+        gst:
+          type: number
+          format: double
+        grandTotal:
+          type: number
+          format: double
+        productsTotal:
+          type: number
+          format: double
+
+        transport:
+          type: string
+          nullable: true
+
+        # Product list
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProductRequest'
+
+    # Product request
+    OrderProductRequest:
+      type: object
+      required:
+        - itemId
+        - marketRate
+        - rateDifference
+        - totalAmount
+        - orderFloor
+      properties:
+        itemId:
+          type: integer
+          format: int64
+          description: Reference to stock_item.item_id from inventory
+        quantityKg:
+          type: number
+          format: double
+        quantityPc:
+          type: number
+          format: double
+        marketRate:
+          type: number
+          format: double
+        rateDifference:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+
+    # ------------------------------------------------------------
+    # Order Response
+    # ------------------------------------------------------------
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        party:
+          $ref: '#/components/schemas/OrderParty'
+        customerMobileNo:
+          type: string
+          nullable: true
+        customerEmail:
+          type: string
+          nullable: true
+        orderDate:
+          type: string
+          format: date
+        expectedDeliveryDate:
+          type: string
+          format: date
+        paymentDate:
+          type: string
+          format: date
+        totalItems:
+          type: integer
+          nullable: true
+        orderStatus:
+          $ref: '#/components/schemas/OrderStatus'
+        orderFloor:
+          $ref: '#/components/schemas/OrderFloor'
+        offlineBillPercent:
+          type: number
+        offlineTotal:
+          type: number
+          nullable: true
+        officialBillAmount:
+          type: number
+        gst:
+          type: number
+        grandTotal:
+          type: number
+        productsTotal:
+          type: number
+        transport:
+          type: string
+          nullable: true
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+
+    # Product response
+    OrderProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+        itemId:
+          type: integer
+          format: int64
+          description: Reference to stock_item.item_id from inventory
+        productName:
+          type: string
+          description: Product name for display purposes
+        quantityKg:
+          type: number
+          format: double
+        quantityPc:
+          type: number
+          format: double
+        marketRate:
+          type: number
+          format: double
+        rateDifference:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+
+    OrderStatus:
+      type: string
+      enum:
+        - PENDING
+        - COMPLETED
+        - DISPATCHED
+        - REVOKED
+
+    # Dispatch request schemas
+    DispatchRequest:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DispatchItem'
+
+    DispatchItem:
+      type: object
+      required:
+        - itemId
+      properties:
+        itemId:
+          type: integer
+          format: int64
+          description: Reference to stock_item.item_id from inventory
+        quantityKg:
+          type: number
+          format: double
+          description: Quantity to deduct from inventory in KG
+        quantityPc:
+          type: number
+          format: double
+          description: Quantity to deduct from inventory in pieces
+
+    OrderFloor:
+      type: string
+      enum:
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        detail:
+          type: object
+          additionalProperties: true
+
+    PaginatedResultOrder:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+    NewOrderParty:
+      required:
+        - name
+        - amount
+      type: object
+      properties:
+        name:
+          type: string
+        officialAmount:
+          type: number
+          format: double
+        offlineAmount:
+          type: number
+          format: double
+    OrderParty:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        officialAmount:
+          type: number
+          format: double
+        offlineAmount:
+          type: number
+          format: double
+    OrderByPartyResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderByParty'
+    OrderByParty:
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: date
+        officialInvoiceId:
+          type: integer
+        offlineInvoiceId:
+          type: integer
+        officialTotalAmount:
+          type: number
+          format: double
+        offlineTotalAmount:
+          type: number
+          format: double
+  
+  responses:
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

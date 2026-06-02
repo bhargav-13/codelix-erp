@@ -1,0 +1,740 @@
+openapi: 3.0.3
+info:
+  title: Forging API
+  version: 1.0.0
+  description: OpenAPI for Forging Management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+tags:
+  - name: ForgingInward
+    description: Forging Inward Management
+  - name: ForgingOutward
+    description: Forging Outward Management
+  - name: ForgingReport
+    description: Merged Forging PDF Report
+  - name: ForgingItem
+    description: Forging Inward Item Management (for TAIYAR MAAL type)
+
+paths:
+  /api/v1/forging-inward:
+    post:
+      tags:
+        - ForgingInward
+      operationId: createForgingInward
+      summary: Create Forging Inward record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingInwardRequest'
+      responses:
+        '201':
+          description: Forging Inward created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingInward'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - ForgingInward
+      operationId: searchForgingInwards
+      summary: List/Search Forging Inward records
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of Forging Inward records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedForgingInwardResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/forging-inward/{inwardId}/items:
+    post:
+      tags:
+        - ForgingItem
+      operationId: createForgingItem
+      summary: Add an item to a forging inward (for TAIYAR MAAL type)
+      parameters:
+        - name: inwardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingItemRequest'
+      responses:
+        '201':
+          description: Forging item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingItem'
+        '404':
+          description: Inward record not found
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - ForgingItem
+      operationId: getForgingItemsByInward
+      summary: Get the item for a given forging inward record
+      parameters:
+        - name: inwardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Forging item for this inward
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingItem'
+        '404':
+          description: Inward record not found
+      security:
+        - oauth2: [ ]
+
+  /api/v1/forging-inward/{inwardId}/items/{itemId}:
+    put:
+      tags:
+        - ForgingItem
+      operationId: updateForgingItem
+      summary: Update a forging item
+      parameters:
+        - name: inwardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingItemRequest'
+      responses:
+        '200':
+          description: Updated forging item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingItem'
+        '404':
+          description: Item or inward not found
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - ForgingItem
+      operationId: deleteForgingItem
+      summary: Delete a forging item
+      parameters:
+        - name: inwardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Item not found
+      security:
+        - oauth2: [ ]
+
+  /api/v1/forgings/pdf:
+    get:
+      tags:
+        - ForgingReport
+      operationId: downloadMergedForgingPdf
+      summary: Download Merged Forging PDF report
+      description: Generates a merged PDF report of forging inward and outward records with optional party name and date range filtering
+      parameters:
+        - name: partyName
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      security:
+        - oauth2: [ ]
+
+  /api/v1/forging-inward/{id}:
+    get:
+      tags:
+        - ForgingInward
+      operationId: getForgingInwardById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Forging Inward details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingInward'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - ForgingInward
+      operationId: updateForgingInward
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingInwardRequest'
+      responses:
+        '200':
+          description: Updated Forging Inward
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingInward'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - ForgingInward
+      operationId: deleteForgingInward
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+      security:
+        - oauth2: [ ]
+
+  /api/v1/forging-outward:
+    post:
+      tags:
+        - ForgingOutward
+      operationId: createForgingOutward
+      summary: Create Forging Outward record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingOutwardRequest'
+      responses:
+        '201':
+          description: Forging Outward created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingOutward'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - ForgingOutward
+      operationId: searchForgingOutwards
+      summary: List/Search Forging Outward records
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of Forging Outward records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedForgingOutwardResponse'
+      security:
+        - oauth2: [ ]
+
+
+  /api/v1/forging-outward/{id}:
+    get:
+      tags:
+        - ForgingOutward
+      operationId: getForgingOutwardById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Forging Outward details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingOutward'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - ForgingOutward
+      operationId: updateForgingOutward
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgingOutwardRequest'
+      responses:
+        '200':
+          description: Updated Forging Outward
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgingOutward'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - ForgingOutward
+      operationId: deleteForgingOutward
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+      security:
+        - oauth2: [ ]
+  /api/v1/forging-parties:
+    get:
+      operationId: getAllParties
+      tags:
+        - Party
+      summary: Get all parties
+      responses:
+        '200':
+          description: Party list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Party'
+      security:
+        - oauth2: [ ]
+    post:
+      operationId: createParty
+      tags:
+        - Party
+      summary: Create party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewForgingParty'
+      responses:
+        '201':
+          description: Party created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+      security:
+        - oauth2: [ ]
+  /api/v1/forging-parties/{id}:
+    get:
+      operationId: getPartyById
+      tags:
+        - Party
+      summary: Get party by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Party details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+    put:
+      operationId: updateParty
+      tags:
+        - Party
+      summary: Update party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewForgingParty'
+      responses:
+        '200':
+          description: Party updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+    delete:
+      operationId: deleteParty
+      tags:
+        - Party
+      summary: Delete party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Party deleted
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - oauth2: [ ]
+
+components:
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 0
+    sizeParam:
+      name: size
+      in: query
+      schema:
+        type: integer
+        default: 10
+
+  schemas:
+    InwardWeightUnit:
+      type: string
+      enum:
+        - CHHOL
+        - KG
+        - TAIYAR MAAL
+    OutwardWeightUnit:
+      type: string
+      enum:
+        - WIRE
+
+    ForgingInward:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        party:
+          $ref: '#/components/schemas/Party'
+        challanNo:
+          type: string
+        date:
+          type: string
+          format: date
+        weight:
+          type: number
+          format: double
+        weightUnit:
+          $ref: '#/components/schemas/InwardWeightUnit'
+        image:
+          type: string
+        item:
+          $ref: '#/components/schemas/ForgingItem'
+
+    ForgingInwardRequest:
+      type: object
+      properties:
+        partyId:
+          type: number
+          format: double
+        challanNo:
+          type: string
+        date:
+          type: string
+          format: date
+        weight:
+          type: number
+          format: double
+        weightUnit:
+          $ref: '#/components/schemas/InwardWeightUnit'
+        image:
+          type: string
+
+    ForgingOutward:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        party:
+          $ref: '#/components/schemas/Party'
+        challanNo:
+          type: string
+        date:
+          type: string
+          format: date
+        weight:
+          type: number
+          format: double
+        weightUnit:
+          $ref: '#/components/schemas/OutwardWeightUnit'
+        image:
+          type: string
+
+    ForgingItemRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    ForgingItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        inwardId:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    ForgingOutwardRequest:
+      type: object
+      properties:
+        partyId:
+          type: number
+          format: double
+        challanNo:
+          type: string
+        date:
+          type: string
+          format: date
+        weight:
+          type: number
+          format: double
+        weightUnit:
+          $ref: '#/components/schemas/OutwardWeightUnit'
+        image:
+          type: string
+
+    PaginatedForgingInwardResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForgingInward'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+
+    PaginatedForgingOutwardResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForgingOutward'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+    NewForgingParty:
+      required:
+        - name
+      type: object
+      properties:
+        partyName:
+          type: string
+    Party:
+      type: object
+      properties:
+        partyId:
+          type: number
+          format: double
+        partyName:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  responses:
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

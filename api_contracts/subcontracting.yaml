@@ -1,0 +1,1909 @@
+openapi: 3.0.3
+info:
+  title: Subcontracting Management API
+  version: 1.0.0
+  description: OpenAPI for Subcontracting management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Contractor
+    description: Contractor Management and related Endpoints
+  - name: SubItem
+    description: SubItem Management and related Endpoints
+  - name: Party
+    description: Party related endpoint
+  - name: Subcontracting
+    description: Subcontracting order and return related endpoints
+  - name: Subcontract
+    description: Subcontract related endpoints
+  - name: Crome
+    description: Crome related endpoint
+
+paths:
+  /api/v1/contractor:
+    post:
+      tags:
+        - Contractor
+      operationId: addContractor
+      summary: Add Contractor
+      description: Adds a new contractor into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+      responses:
+        '201':
+          description: Contractor successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Contractor
+      operationId: getContractorList
+      summary: Get all contractors
+      responses:
+        '200':
+          description: List of contractors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contractor'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/contractor/{contractorId}:
+    get:
+      tags:
+        - Contractor
+      operationId: getContractorById
+      summary: Get contractor by ID
+      parameters:
+        - name: contractorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Contractor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+        '404':
+          description: Contractor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/subitem:
+    post:
+      tags:
+        - SubItem
+      operationId: addSubItem
+      summary: Add SubItem
+      description: Adds a new subcontracted item into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubItemRequest'
+      responses:
+        '201':
+          description: SubItem successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - SubItem
+      operationId: getSubItemList
+      summary: Get all subitems
+      responses:
+        '200':
+          description: List of subitems
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubItem'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/subitem/{subItemId}:
+    get:
+      tags:
+        - SubItem
+      operationId: getSubItemById
+      summary: Get subitem by ID
+      parameters:
+        - name: subItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SubItem found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubItem'
+        '404':
+          description: SubItem not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+  /api/v1/party:
+    post:
+      tags:
+        - Party
+      operationId: addParty
+      summary: Add Party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyRequest'
+      responses:
+        '201':
+          description: SubItem successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Party
+      operationId: getPartyList
+      summary: Get all parties
+      responses:
+        '200':
+          description: List of parties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Party'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+
+  /api/v1/party/{partyId}:
+    get:
+      tags:
+        - Party
+      operationId: getPartyById
+      summary: Get party by ID
+      parameters:
+        - name: partyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SubItem found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '404':
+          description: SubItem not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting:
+    post:
+      tags:
+        - Subcontracting
+      operationId: addSubcontracting
+      summary: Create a new subcontracting order
+      description: Adds a new subcontracting record into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubOrderRequest'
+      responses:
+        '201':
+          description: Subcontracting record successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontracting'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - Subcontracting
+      operationId: getSubcontractingList
+      summary: Get all subcontracting orders with pagination
+      description: Returns a paginated list of all subcontracting orders.
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [ IN_PROCESS, COMPLETED, REJECTED ]
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of subcontracting orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultSubcontract'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  
+  /api/v1/subcontracting/{subcontractingId}:
+    put:
+      tags:
+        - Subcontracting
+      operationId: updateSubcontracting
+      summary: Update subcontracting order
+      description: Updates subcontracting order fields (not return fields).
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubOrderRequest'
+      responses:
+        '200':
+          description: Subcontracting order successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontracting'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - Subcontracting
+      operationId: getSubcontractingById
+      summary: Get subcontracting order by ID
+      description: Returns a single subcontracting order based on its ID.
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subcontracting order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontracting'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - Subcontracting
+      operationId: deleteSubcontracting
+      summary: Delete subcontracting order
+      description: Deletes a subcontracting order based on its ID.
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Subcontracting order successfully deleted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  
+  /api/v1/subcontracting/{subcontractingId}/return:
+    post:
+      tags:
+        - Subcontracting
+      operationId: returnSubcontracting
+      summary: Return Subcontracting Order
+      description: Return subcontracting record into the system.
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubReturnRequest'
+      responses:
+        '201':
+          description: Subcontracting record successfully returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontracting'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/{subcontractingId}/status:
+    patch:
+      tags:
+        - Subcontracting
+      operationId: updateSubcontractingStatus
+      summary: Update subcontracting order status
+      description: Updates only the status of a subcontracting order.
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/subcontractingStatus'
+      responses:
+        '200':
+          description: Subcontracting order status successfully updated
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/getBySubcontract:
+    get:
+      tags:
+        - Subcontract
+      operationId: getSubcontractingListBySubcontract
+      summary: Get all subcontracting orders By Subcontract
+      description: Returns list of all subcontracting orders.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: list of subcontracting orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubcontractingBySubcontractInfo'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/getBySubcontract/{contractorName}:
+    get:
+      tags:
+        - Subcontract
+      operationId: getSubcontractByCustomerName
+      summary: Get Subcontract by customer name
+      description: Returns list of all subcontracting orders.
+      parameters:
+        - name: contractorName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: list of subcontracting orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractingBySubcontractList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/getBySubcontract/{contractorName}/pdf:
+    get:
+      tags:
+        - Subcontract
+      operationId: getSubcontractByCustomerNamePdf
+      summary: Get Subcontract by customer name as pdf
+      description: Returns list of all subcontracting orders.
+      parameters:
+        - name: contractorName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/{subcontractingId}/crome-info:
+    get:
+      tags:
+        - Crome
+      operationId: getSubcontractingCromeInfo
+      summary: Get subcontracting info for creating crome
+      description: |
+        Returns the subcontracting details needed for creating a crome order.
+        Includes available stock (net stock after returns and existing cromes),
+        contractor info, item info, and packaging details from return.
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subcontracting info for crome
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractingCromeInfo'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting-return/{returnId}/available-crome:
+    get:
+      tags:
+        - Crome
+      operationId: getSubReturnCromeInfo
+      summary: Get available crome stock for a specific subcontracting return
+      description: |
+        Returns the available stock for crome from a specific SubcontractingReturn.
+        Includes net return stock, stock already sent to crome, and remaining available stock.
+      parameters:
+        - name: returnId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Available crome info for the subcontracting return
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubReturnCromeInfo'
+        '404':
+          description: SubcontractingReturn not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/subcontracting/{subcontractingId}/cromes:
+    get:
+      tags:
+        - Crome
+      operationId: getCromesBySubcontractingId
+      summary: Get all cromes for a subcontracting order
+      description: Returns all crome orders created from a specific subcontracting order
+      parameters:
+        - name: subcontractingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of cromes for the subcontracting order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Crome'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/crome:
+    post:
+      tags:
+        - Crome
+      operationId: addCrome
+      summary: Create a new crome from subcontracting order
+      description: |
+        Creates a new crome order linked to a subcontracting order.
+        - Auto-fetches contractor and item from the subcontracting order
+        - Validates that sentStock doesn't exceed available stock
+        - Multiple cromes can be created from one subcontracting order
+        - Gross weight = sentStock + (packagingWeight * packagingCount)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CromeRequest'
+      responses:
+        '201':
+          description: Crome record successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crome'
+        '400':
+          description: Bad Request - Invalid stock allocation (exceeds available)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - Crome
+      operationId: getCromeList
+      summary: Get all crome orders with pagination
+      description: Returns a paginated list of all crome.
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [ IN_PROCESS, COMPLETED, REJECTED ]
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of crome
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultCrome'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/crome/{cromeId}:
+    put:
+      tags:
+        - Crome
+      operationId: updateCrome
+      summary: Update Crome order
+      parameters:
+        - name: cromeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CromeRequest'
+      responses:
+        '200':
+          description: Crome successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crome'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - Crome
+      operationId: getCromeById
+      summary: Get crome by ID
+      description: Returns a single crome.
+      parameters:
+        - name: cromeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: crome order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crome'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - Crome
+      operationId: deleteCrome
+      summary: Delete crome
+      description: Deletes a crome based on its ID.
+      parameters:
+        - name: cromeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: crome successfully deleted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/crome/{cromeId}/return:
+    post:
+      tags:
+        - Crome
+      operationId: returnCrome
+      summary: Return Crome
+      description: Return Crome into the system.
+      parameters:
+        - name: cromeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CromeReturnRequest'
+      responses:
+        '201':
+          description: crome record successfully returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crome'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+  /api/v1/crome/{cromeId}/status:
+    patch:
+      tags:
+        - Crome
+      operationId: updateCromeStatus
+      summary: Update Crome status
+      description: Updates only the status of a crome.
+      parameters:
+        - name: cromeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/subcontractingStatus'
+      responses:
+        '200':
+          description: Subcontracting order status successfully updated
+        '404':
+          description: Subcontracting order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/crome/report/pdf:
+    get:
+      tags:
+        - Crome
+      operationId: getCromeReportPdf
+      summary: Get Crome report as PDF
+      description: Returns PDF report of all crome orders within date range. Optionally filter by party name.
+      parameters:
+        - name: partyName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Optional party name filter
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/crome/report:
+    get:
+      tags:
+        - Crome
+      operationId: getCromeReport
+      summary: Get Crome report data
+      description: Returns list of crome orders within date range. Optionally filter by party name.
+      parameters:
+        - name: partyName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Optional party name filter
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Crome report data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CromeReportList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      description: Page number starting from 0
+      required: false
+      schema:
+        type: integer
+        default: 0
+
+    sizeParam:
+      name: size
+      in: query
+      description: Number of items (records) per page
+      required: false
+      schema:
+        type: integer
+        default: 10
+
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+
+    SortByFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , status , orderDate ]
+  schemas:
+    Contractor:
+      type: object
+      properties:
+        contractorId:
+          type: integer
+        name:
+          type: string
+
+    ContractorRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    PackagingDetail:
+      type: object
+      required:
+        - packagingType
+        - packagingWeight
+        - packagingCount
+      properties:
+        packagingType:
+          $ref: '#/components/schemas/PackagingType'
+        packagingWeight:
+          type: number
+          format: double
+          description: Weight per packaging unit in KG
+        packagingCount:
+          type: integer
+          description: Number of packaging units
+
+    SubItem:
+      type: object
+      properties:
+        subItemId:
+          type: integer
+        name:
+          type: string
+
+    SubItemRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Party:
+      type: object
+      properties:
+        partyId:
+          type: integer
+        name:
+          type: string
+
+    PartyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    CromeRequest:
+      type: object
+      required:
+        - subcontractingReturnId
+        - partyId
+        - cromeDate
+        - sentStock
+        - packagings
+      properties:
+        subcontractingReturnId:
+          type: integer
+          description: ID of the SubcontractingReturn this crome is for
+        partyId:
+          type: integer
+          description: ID of the party to send the crome to
+        cromeDate:
+          type: string
+          format: date
+          description: Date of crome creation
+        sentStock:
+          type: number
+          format: double
+          description: Net stock (in KG) to send for crome (without packaging weight)
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        cromeAmount:
+          type: number
+          format: double
+          nullable: true
+          description: Amount to be paid for the crome job
+        remark:
+          type: string
+          nullable: true
+          description: Optional remark for the crome order
+    Crome:
+      type: object
+      properties:
+        cromeId:
+          type: integer
+        subcontractingId:
+          type: integer
+          description: ID of the parent subcontracting order
+        subcontractingReturnId:
+          type: integer
+          nullable: true
+          description: ID of the linked SubcontractingReturn (if applicable)
+        contractorName:
+          type: string
+          description: Name of the contractor (auto-fetched from subcontracting)
+        partyName:
+          type: string
+          description: Name of the party crome is sent to
+        cromeDate:
+          type: string
+          format: date
+        itemName:
+          type: string
+          description: Name of the item (auto-fetched from subcontracting)
+        sentStock:
+          type: number
+          format: double
+          description: Net stock sent for crome (without packaging)
+        grossWeight:
+          type: number
+          format: double
+          description: Gross weight including packaging (sentStock + packagingWeight * packagingCount)
+        unit:
+          $ref: '#/components/schemas/unit'
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        status:
+          $ref: '#/components/schemas/subcontractingStatus'
+        cromeAmount:
+          type: number
+          format: double
+          nullable: true
+          description: Amount to be paid for the crome job
+        remark:
+          type: string
+          nullable: true
+        cromeReturn:
+          $ref: '#/components/schemas/CromeReturn'
+          description: Return details (if returned)
+    SubOrderRequest:
+      type: object
+      required:
+        - contractorId
+        - itemId
+        - orderDate
+        - sentStock
+        - jobWorkPay
+        - price
+        - unit
+      properties:
+        contractorId:
+          type: number
+          format: double
+        itemId:
+          type: number
+          format: double
+        orderDate:
+          type: string
+          format: date
+        sentStock:
+          type: number
+          format: double
+        jobWorkPay:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        unit:
+          $ref: "#/components/schemas/unit"
+        remark:
+          type: string
+          nullable: true
+    SubReturnRequest:
+      type: object
+      required:
+        - returnDate
+        - packagings
+      properties:
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+          description: Gross stock returned by contractor
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        returnRemark:
+          type: string
+          nullable: true
+    SubcontractingCromeInfo:
+      type: object
+      description: Information about a subcontracting order for creating crome
+      properties:
+        subcontractingId:
+          type: integer
+        contractorId:
+          type: integer
+        contractorName:
+          type: string
+        itemId:
+          type: integer
+        itemName:
+          type: string
+        orderDate:
+          type: string
+          format: date
+        originalSentStock:
+          type: number
+          format: double
+          description: Original stock sent to contractor
+        returnedStock:
+          type: number
+          format: double
+          description: Stock returned by contractor (gross)
+        returnPackagingType:
+          $ref: '#/components/schemas/PackagingType'
+        returnPackagingWeight:
+          type: number
+          format: double
+          description: Weight per packaging unit from return (e.g., 1.2 kg per peti)
+        returnPackagingCount:
+          type: integer
+          description: Number of packaging units from return
+        netReturnedStock:
+          type: number
+          format: double
+          description: Net returned stock after deducting packaging (returnedStock - packagingWeight * packagingCount)
+        stockAlreadyInCrome:
+          type: number
+          format: double
+          description: Stock already allocated to existing cromes
+        availableStockForCrome:
+          type: number
+          format: double
+          description: Available stock for new crome (netReturnedStock - stockAlreadyInCrome)
+        unit:
+          $ref: '#/components/schemas/unit'
+        price:
+          type: number
+          format: double
+        jobWorkPay:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/subcontractingStatus'
+    SubReturnCromeInfo:
+      type: object
+      description: Available crome stock info for a specific subcontracting return
+      properties:
+        returnId:
+          type: integer
+          description: ID of the subcontracting return
+        netReturnStock:
+          type: number
+          format: double
+          description: Net return stock for this return (after deducting packaging)
+        stockAlreadyInCrome:
+          type: number
+          format: double
+          description: Stock from this return already sent to crome
+        availableStockForCrome:
+          type: number
+          format: double
+          description: Available stock for new crome (netReturnStock - stockAlreadyInCrome)
+    CromeReturnRequest:
+      type: object
+      required:
+        - returnDate
+        - packagings
+      properties:
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+          description: Gross stock returned from crome
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        rate:
+          type: number
+          format: double
+          description: Rate for the returned crome item
+        returnRemark:
+          type: string
+          nullable: true
+        addToInventory:
+          type: boolean
+          description: Whether to add the returned item to inventory
+        inventoryItemName:
+          type: string
+          description: Name of the item to add to inventory (e.g. "Item Name from crome")
+        inventoryFloor:
+          $ref: '#/components/schemas/InventoryFloor'
+        inventoryPricePerKg:
+          type: number
+          format: double
+          description: Price per KG for the inventory item
+        inventoryQuantityPc:
+          type: number
+          format: double
+          description: Quantity in Pieces for the inventory item
+    CromeReturn:
+      type: object
+      description: Return details for a crome order
+      properties:
+        cromeReturnId:
+          type: integer
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+          description: Gross stock returned
+        netReturnStock:
+          type: number
+          format: double
+          description: Net stock after deducting packaging (returnStock - packagingWeight * packagingCount)
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        rate:
+          type: number
+          format: double
+        amount:
+          type: number
+          format: double
+        returnRemark:
+          type: string
+          nullable: true
+    SubReturn:
+      type: object
+      properties:
+        returnId:
+          type: integer
+          description: Unique identifier for this return entry
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+          description: Gross stock returned by contractor
+        packagings:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingDetail'
+        netReturnStock:
+          type: number
+          format: double
+          description: Net stock after deducting packaging (returnStock - packagingWeight * packagingCount)
+        returnRemark:
+          type: string
+          nullable: true
+    Subcontracting:
+      type: object
+      properties:
+        subcontractingId:
+          type: integer
+        contractor:
+          $ref: '#/components/schemas/Contractor'
+        item:
+          $ref: '#/components/schemas/SubItem'
+        orderDate:
+          type: string
+          format: date
+        sentStock:
+          type: number
+          format: double
+        jobWorkPay:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        subReturns:
+          type: array
+          description: List of return entries (contractor can return stock in multiple batches)
+          items:
+            $ref: "#/components/schemas/SubReturn"
+        totalReturnStock:
+          type: number
+          format: double
+          description: Total gross stock returned (sum of all returns)
+        totalNetReturnStock:
+          type: number
+          format: double
+          description: Total net stock after deducting packaging from all returns
+        usedStock:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+        unit:
+          $ref: "#/components/schemas/unit"
+        status:
+          $ref: "#/components/schemas/subcontractingStatus"
+        remark:
+          type: string
+          nullable: true
+        cromeCount:
+          type: integer
+          description: Number of crome orders created from this subcontracting
+        availableStockForCrome:
+          type: number
+          format: double
+          description: Available net stock for creating new cromes
+        canCreateCrome:
+          type: boolean
+          description: Whether crome can be created (true if has return and available stock > 0)
+    SubcontractingBySubcontractInfo:
+      type: object
+      properties:
+        contractorName:
+          type: string
+        lastUpdatedAt:
+          type: string
+          format: date
+        itemName:
+          type: string
+    SubcontractingBySubcontractList:
+      type: object
+      properties:
+        contractorName:
+          type: string
+        subcontractList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubcontractingBySubcontract'
+        totalPaidRs:
+          type: number
+          format: double
+        totalJobPaidAmount:
+          type: number
+          format: double
+        totalSentStock:
+          type: number
+          format: double
+        totalReturnStock:
+          type: number
+          format: double
+        totalUsed:
+          type: number
+          format: double
+    SubcontractingBySubcontract:
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: date
+        price:
+          type: number
+          format: double
+        jobWorkPay:
+          type: number
+          format: double
+        itemName:
+          type: string
+        sentStock:
+          type: number
+          format: double
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+        returnElement:
+          type: number
+          format: double
+        packagingType:
+          type: string
+          description: Comma-separated packaging types
+        usedStock:
+          type: number
+          format: double
+        netWeight:
+          type: number
+          format: double
+        totalJobPay:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+    subcontractingStatus:
+      type: string
+      enum:
+        - IN_PROCESS
+        - COMPLETED
+        - REJECTED
+    unit:
+      type: string
+      enum:
+        - KG
+        - PC
+    PackagingType:
+      type: string
+      enum:
+        - BAG
+        - FOAM
+        - PETI
+        - DRUM
+    QuantityUnit:
+      type: string
+      enum:
+        - KG
+        - GM
+    InventoryStatus:
+      type: string
+      enum:
+        - IN_STOCK
+        - LOW_STOCK
+    InventoryFloor:
+      type: string
+      enum:
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        detail:
+          type: object
+          additionalProperties: true
+    PaginatedResultSubcontract:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subcontracting'
+        empty:
+          type: boolean
+          description: Indicates if the current page is empty
+        last:
+          type: boolean
+          description: Indicates if the current page is the last page
+        first:
+          type: boolean
+          description: Indicates if the current page is the first page
+        totalPages:
+          type: integer
+          description: Total number of pages available
+        totalElements:
+          type: integer
+          description: Total number of elements
+        size:
+          type: integer
+          description: Number of items per page
+    PaginatedResultCrome:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Crome'
+        empty:
+          type: boolean
+          description: Indicates if the current page is empty
+        last:
+          type: boolean
+          description: Indicates if the current page is the last page
+        first:
+          type: boolean
+          description: Indicates if the current page is the first page
+        totalPages:
+          type: integer
+          description: Total number of pages available
+        totalElements:
+          type: integer
+          description: Total number of elements
+        size:
+          type: integer
+          description: Number of items per page
+    CromeReportList:
+      type: object
+      description: Crome report data for PDF generation
+      properties:
+        partyName:
+          type: string
+        cromeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CromeReportItem'
+        totalSentStock:
+          type: number
+          format: double
+          description: Total stock sent for crome
+        totalGrossWeight:
+          type: number
+          format: double
+          description: Total gross weight including packaging
+        totalReturnStock:
+          type: number
+          format: double
+          description: Total stock returned from crome
+        totalNetReturnStock:
+          type: number
+          format: double
+          description: Total net stock after return deductions
+    CromeReportItem:
+      type: object
+      description: Individual crome item for report
+      properties:
+        cromeId:
+          type: integer
+        cromeDate:
+          type: string
+          format: date
+        contractorName:
+          type: string
+        itemName:
+          type: string
+        sentStock:
+          type: number
+          format: double
+        grossWeight:
+          type: number
+          format: double
+        packagingType:
+          type: string
+          description: Comma-separated packaging types
+        packagingCount:
+          type: integer
+        status:
+          $ref: '#/components/schemas/subcontractingStatus'
+        returnDate:
+          type: string
+          format: date
+        returnStock:
+          type: number
+          format: double
+        netReturnStock:
+          type: number
+          format: double
+        rate:
+          type: number
+          format: double
+        amount:
+          type: number
+          format: double
+        remark:
+          type: string

@@ -1,0 +1,246 @@
+.wh-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 30, 51, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1100;
+}
+
+.wh-modal {
+    width: min(600px, 100%);
+    max-height: 90vh;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 30px 60px rgba(23, 52, 77, 0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.wh-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(23, 52, 77, 0.08);
+}
+
+.wh-subtitle {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: #8ea3b5;
+    margin: 0;
+}
+
+.wh-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2D1017;
+    margin: 4px 0 0;
+}
+
+.wh-close {
+    border: none;
+    background: rgba(209, 238, 255, 0.6);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #2D1017;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+}
+
+.wh-close:hover {
+    background: #c2e5ff;
+}
+
+/* Info Grid */
+.wh-info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(23, 52, 77, 0.08);
+}
+
+.wh-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 100px;
+}
+
+.wh-info-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: #8ea3b5;
+}
+
+.wh-info-value {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2D1017;
+}
+
+/* Summary Cards */
+.wh-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(23, 52, 77, 0.08);
+}
+
+.wh-summary-card {
+    background: #f5f8fb;
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(23, 52, 77, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wh-summary-card.highlight-pending {
+    background: linear-gradient(120deg, #fff3e0, #fff8f0);
+    border-color: rgba(230, 81, 0, 0.15);
+}
+
+.wh-summary-card.highlight-pending .wh-summary-value {
+    color: #E65100;
+}
+
+.wh-summary-card.highlight-clear {
+    background: linear-gradient(120deg, #e8f5e9, #f1f8f1);
+    border-color: rgba(46, 125, 50, 0.15);
+}
+
+.wh-summary-card.highlight-clear .wh-summary-value {
+    color: #2E7D32;
+}
+
+.wh-summary-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: #8ea3b5;
+}
+
+.wh-summary-value {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2D1017;
+}
+
+/* Body */
+.wh-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 28px 24px;
+}
+
+.wh-section-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2D1017;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.wh-empty {
+    text-align: center;
+    padding: 32px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #8ea3b5;
+}
+
+/* Withdrawal Table */
+.wh-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba(23, 52, 77, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.wh-table th {
+    padding: 10px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #8ea3b5;
+    text-align: left;
+    background: #f8f9fa;
+    border-bottom: 1px solid rgba(23, 52, 77, 0.08);
+}
+
+.wh-table td {
+    padding: 10px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: #2D1017;
+    border-bottom: 1px solid rgba(23, 52, 77, 0.05);
+}
+
+.wh-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.wh-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.wh-table tfoot {
+    border-top: 2px solid rgba(23, 52, 77, 0.1);
+}
+
+.wh-table tfoot td {
+    padding: 12px 16px;
+    background: #f5f8fb;
+    border-bottom: none;
+}
+
+.wh-total-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2D1017;
+    text-align: right;
+}
+
+.wh-total-value {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2D1017;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wh-modal {
+        border-radius: 20px;
+    }
+
+    .wh-header,
+    .wh-info-grid,
+    .wh-body {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .wh-summary {
+        grid-template-columns: 1fr;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}

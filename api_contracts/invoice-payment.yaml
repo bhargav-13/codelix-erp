@@ -1,0 +1,818 @@
+openapi: 3.0.3
+info:
+  title: Invoice & Payment API
+  version: 1.0.0
+  description: OpenAPI for Invoice And Payment management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Invoices
+    description: Operations for managing invoices.
+  - name: Payments
+    description: Operations for managing payments.
+
+paths:
+  # ------------------------------------------------------------
+  # INVOICE CRUD
+  # ------------------------------------------------------------
+
+  /api/v1/invoices/floor/{floor}/mode/{mode}:
+    get:
+      tags:
+        - Invoices
+      operationId: getInvoiceList
+      summary: Get paginated list of invoices
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: status
+          in: query
+          required: false
+          description: Filter by invoice status
+          schema:
+            type: string
+        - name: floor
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FloorEnum'
+        - name: mode
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/BillingType'
+        - name: search
+          in: query
+          required: false
+          description: Filter by Order id and customer name
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByInvoiceFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultInvoice'
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+  /api/v1/invoices/{invoiceId}:
+    get:
+      tags:
+        - Invoices
+      operationId: getInvoiceById
+      summary: Get invoice by ID
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Invoice found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '404':
+          description: Invoice not found
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Invoices
+      operationId: deleteInvoice
+      summary: Delete an invoice
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Invoice successfully deleted
+        '404':
+          description: Invoice not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+  /api/v1/invoices/{invoiceId}/status:
+    patch:
+      tags:
+        - Invoices
+      operationId: updateInvoiceStatus
+      summary: Update invoice status
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - invoiceStatus
+              properties:
+                invoiceStatus:
+                  $ref: '#/components/schemas/InvoiceStatus'
+      responses:
+        '200':
+          description: Status updated
+        '404':
+          description: Invoice not found
+        '400':
+          description: Invalid status
+      security:
+        - oauth2: [ ]
+  /api/invoices/{invoiceId}/pdf:
+    get:
+      tags:
+        - Invoices
+      summary: Download invoice PDF
+      description: Generates and downloads the invoice as a PDF file
+      operationId: downloadInvoicePdf
+      parameters:
+        - name: invoiceId
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Invoice not found
+      security:
+        - oauth2: [ ]
+
+  # ------------------------------------------------------------
+  # PAYMENT CRUD
+  # ------------------------------------------------------------
+  /api/v1/payments/order/{orderId}/mode/{mode}:
+    get:
+      tags:
+        - Payments
+      operationId: getPaymentByOrderAndMode
+      summary: Get payment by main order ID and billing mode
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: mode
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/BillingType'
+      responses:
+        '200':
+          description: Payment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+      security:
+        - oauth2: [ ]
+
+  /api/v1/payments/{paymentId}/receive:
+    post:
+      tags:
+        - Payments
+      operationId: receivePayment
+      summary: Update received payment details
+      description: |
+        Updates received amount and received dates for a payment.
+        Existing received amount is incremented with new received amount.
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReceiveRequest'
+
+      responses:
+        '200':
+          description: Payment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+        '400':
+          description: Invalid request
+      security:
+        - oauth2: [ ]
+  /api/v1/payments/{paymentId}:
+    get:
+      tags:
+        - Payments
+      operationId: getPaymentById
+      summary: Get payment by ID
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Payment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - Payments
+      operationId: deletePayment
+      summary: Delete payment by ID
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Payment deleted successfully
+        '404':
+          description: Payment not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+  /api/v1/payments/floor/{floor}:
+    get:
+      tags:
+        - Payments
+      operationId: getPaymentsByFloor
+      summary: Get paginated list of payments by floor
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: floor
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FloorEnum'
+        - name: status
+          in: query
+          required: false
+          description: Filter by payment status
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          description: Filter by Order id and customer name
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SortByPaymentFields'
+        - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Paginated list of payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultPayment'
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+  /api/v1/payments/{paymentId}/status:
+    patch:
+      tags:
+        - Payments
+      operationId: updatePaymentStatus
+      summary: Update payment status
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paymentStatus
+              properties:
+                paymentStatus:
+                  $ref: '#/components/schemas/PaymentStatus'
+      responses:
+        '200':
+          description: Payment status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+        '400':
+          description: Invalid status
+      security:
+        - oauth2: [ ]
+
+  /api/v1/payments/{paymentId}/reminder:
+    post:
+      tags:
+        - Payments
+      operationId: sendManualReminder
+      summary: Send manual payment reminder
+      description: Triggers a payment reminder via WhatsApp and Email for the specified payment.
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Reminder sent successfully
+        '404':
+          description: Payment not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+  /api/v1/payments/party-ledger/{partyId}:
+    get:
+      tags:
+        - Payments
+      operationId: getPartyLedger
+      summary: Get comprehensive party ledger with order details
+      parameters:
+        - name: partyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Party ledger details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyLedgerResponse'
+        '404':
+          description: Party not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+  /api/v1/payments/party-ledger/{partyId}/pdf:
+    get:
+      tags:
+        - Payments
+      operationId: getPartyLedgerPdf
+      summary: Get comprehensive party ledger as PDF
+      parameters:
+        - name: partyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Party not found
+        '500':
+          description: Internal Server Error
+      security:
+        - oauth2: [ ]
+
+
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: Page number starting from 0
+
+    sizeParam:
+      name: size
+      in: query
+      schema:
+        type: integer
+        default: 10
+      description: Number of items per page
+
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+
+    SortByFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt ]
+
+    searchParam:
+      name: search
+      in: query
+      description: Search text to filter results by name or relevant fields
+      schema:
+        type: string
+
+    SortByInvoiceFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , orderId , invoiceStatus, mode ]
+
+    SortByPaymentFields:
+      name: sortByFields
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [ lastUpdatedAt , createdAt , orderId , lastReminder , dueDate , paymentStatus , mode ]
+  schemas:
+    PartyLedgerResponse:
+      type: object
+      properties:
+        partyId:
+          type: integer
+          format: int64
+        partyName:
+          type: string
+        totalOfficialAmount:
+          type: number
+          format: double
+        totalOfflineAmount:
+          type: number
+          format: double
+        totalReceivedAmount:
+          type: number
+          format: double
+        totalRemainingAmount:
+          type: number
+          format: double
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyLedgerOrder'
+
+    PartyLedgerOrder:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        orderDate:
+          type: string
+          format: date
+        billSummary:
+          $ref: '#/components/schemas/BillSummary'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProductReplica'
+        paymentSummary:
+          $ref: '#/components/schemas/PaymentSummary'
+    BillSummary:
+      type: object
+      properties:
+        billPercentage:
+          type: number
+          format: double
+        gstAmount:
+          type: number
+          format: double
+        amountWithoutGst:
+          type: number
+          format: double
+        billTotalAmount:
+          type: number
+          format: double
+    PaymentSummary:
+      type: object
+      properties:
+        official:
+          $ref: '#/components/schemas/PaymentSide'
+        offline:
+          $ref: '#/components/schemas/PaymentSide'
+    PaymentSide:
+      type: object
+      properties:
+        totalAmount:
+          type: number
+          format: double
+        receivedAmount:
+          type: number
+          format: double
+        receivedDate:
+          type: string
+          format: date
+        dueAmount:
+          type: number
+          format: double
+    OrderReplica:
+      type: object
+      properties:
+        id:
+          type: integer
+        customerName:
+          type: string
+        customerMobileNo:
+          type: string
+          nullable: true
+        customerEmail:
+          type: string
+          nullable: true
+        orderDate:
+          type: string
+          format: date
+        expectedDeliveryDate:
+          type: string
+          format: date
+        paymentDate:
+          type: string
+          format: date
+        totalItems:
+          type: integer
+          nullable: true
+        orderStatus:
+          $ref: '#/components/schemas/OrderStatus'
+        orderFloor:
+          $ref: '#/components/schemas/OrderFloor'
+        offlineBillPercent:
+          type: number
+        offlineTotal:
+          type: number
+          nullable: true
+        officialBillAmount:
+          type: number
+        gst:
+          type: number
+        grandTotal:
+          type: number
+        productsTotal:
+          type: number
+
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProductReplica'
+
+    # Product response
+    OrderProductReplica:
+      type: object
+      properties:
+        id:
+          type: integer
+        productName:
+          type: string
+        quantityKg:
+          type: number
+          format: double
+        quantityPc:
+          type: number
+          format: double
+        marketRate:
+          type: number
+          format: double
+        rateDifference:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+    InvoiceStatus:
+      type: string
+      enum:
+        - PENDING
+        - COMPLETED
+    OrderStatus:
+      type: string
+      enum:
+        - PENDING
+        - COMPLETED
+        - DISPATCHED
+    OrderFloor:
+      type: string
+      enum:
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+    FloorEnum:
+      type: string
+      enum:
+        - GROUND_FLOOR
+        - FIRST_FLOOR
+    BillingType:
+      type: string
+      enum:
+        - OFFICIAL
+        - OFFLINE
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+        order:
+          $ref: '#/components/schemas/OrderReplica'
+        invoiceStatus:
+          $ref: '#/components/schemas/InvoiceStatus'
+        floorEnum:
+          $ref: '#/components/schemas/FloorEnum'
+        mode:
+          $ref: '#/components/schemas/BillingType'
+
+    PaginatedResultInvoice:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+        page:
+          type: integer
+
+    PaymentReceiveRequest:
+      type: object
+      required:
+        - newReceivedAmount
+        - newReceivedDate
+      properties:
+        newReceivedAmount:
+          type: number
+          format: double
+          example: 120000
+        newReceivedDate:
+          type: string
+          format: date
+          example: 2025-12-05
+
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        orderId:
+          type: integer
+          format: int64
+        customerName:
+          type: string
+        floor:
+          $ref: '#/components/schemas/FloorEnum'
+        mode:
+          $ref: '#/components/schemas/BillingType'
+        totalAmount:
+          type: number
+          format: double
+        receivedAmount:
+          type: number
+          format: double
+        lastReceivedDate:
+          type: string
+          format: date
+        dueDate:
+          type: string
+          format: date
+        paymentStatus:
+          $ref: '#/components/schemas/PaymentStatus'
+        lastReminder:
+          type: string
+          format: date
+          nullable: true
+    PaymentStatus:
+      type: string
+      enum:
+        - OVERDUE
+        - DUE_SOON
+        - UPCOMING
+    PaginatedResultPayment:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+        page:
+          type: integer
+

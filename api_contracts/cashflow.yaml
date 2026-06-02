@@ -1,0 +1,617 @@
+openapi: 3.0.3
+info:
+  title: Cashflow API
+  version: 1.0.0
+  description: Daily income and expense cashflow management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+
+tags:
+  - name: Cashflow Income
+    description: Daily income entries
+  - name: Cashflow Expense
+    description: Daily expense entries
+  - name: Cashflow Summary
+    description: Daily summary and day-close operations
+  - name: Cashflow Payment Type
+    description: User-managed payment types (Cash, UPI, Cheque, etc.)
+  - name: Cashflow Party
+    description: User-managed parties for cashflow entries
+
+paths:
+
+  # ─────────────────────────────
+  # INCOME
+  # ─────────────────────────────
+  /api/v1/cashflow/income:
+    post:
+      tags:
+        - Cashflow Income
+      operationId: addIncome
+      summary: Add an income entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowEntryRequest'
+      responses:
+        '201':
+          description: Income entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowEntryResponse'
+        '404':
+          description: Party or payment type not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Cashflow Income
+      operationId: getIncomeList
+      summary: Get paginated income entries
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '200':
+          description: Paginated income list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCashflowEntry'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/cashflow/income/{id}:
+    put:
+      tags:
+        - Cashflow Income
+      operationId: updateIncome
+      summary: Update an income entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowEntryRequest'
+      responses:
+        '200':
+          description: Income entry updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowEntryResponse'
+        '404':
+          description: Income entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Cashflow Income
+      operationId: deleteIncome
+      summary: Delete an income entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Income entry deleted
+        '404':
+          description: Income entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  # ─────────────────────────────
+  # EXPENSE
+  # ─────────────────────────────
+  /api/v1/cashflow/expense:
+    post:
+      tags:
+        - Cashflow Expense
+      operationId: addExpense
+      summary: Add an expense entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowEntryRequest'
+      responses:
+        '201':
+          description: Expense entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowEntryResponse'
+        '404':
+          description: Party or payment type not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Cashflow Expense
+      operationId: getExpenseList
+      summary: Get paginated expense entries
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '200':
+          description: Paginated expense list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCashflowEntry'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/cashflow/expense/{id}:
+    put:
+      tags:
+        - Cashflow Expense
+      operationId: updateExpense
+      summary: Update an expense entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowEntryRequest'
+      responses:
+        '200':
+          description: Expense entry updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowEntryResponse'
+        '404':
+          description: Expense entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    delete:
+      tags:
+        - Cashflow Expense
+      operationId: deleteExpense
+      summary: Delete an expense entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Expense entry deleted
+        '404':
+          description: Expense entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  # ─────────────────────────────
+  # SUMMARY & CLOSE DAY
+  # ─────────────────────────────
+  /api/v1/cashflow/summary:
+    get:
+      tags:
+        - Cashflow Summary
+      operationId: getDailySummary
+      summary: Get daily summary with totals and carry-forward preview
+      parameters:
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '200':
+          description: Daily cashflow summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailySummaryResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/cashflow/close-day:
+    post:
+      tags:
+        - Cashflow Summary
+      operationId: closeDay
+      summary: Close a day and carry forward the balance to the next day
+      parameters:
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '200':
+          description: Day closed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloseDayResponse'
+        '409':
+          description: Day already closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  # ─────────────────────────────
+  # PAYMENT TYPES
+  # ─────────────────────────────
+  /api/v1/cashflow/payment-types:
+    post:
+      tags:
+        - Cashflow Payment Type
+      operationId: addPaymentType
+      summary: Add a new payment type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowNameRequest'
+      responses:
+        '201':
+          description: Payment type created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowPaymentType'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Cashflow Payment Type
+      operationId: getPaymentTypes
+      summary: Get all payment types
+      responses:
+        '200':
+          description: List of payment types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CashflowPaymentType'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/cashflow/payment-types/{id}:
+    delete:
+      tags:
+        - Cashflow Payment Type
+      operationId: deletePaymentType
+      summary: Delete a payment type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Payment type deleted
+        '404':
+          description: Payment type not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+  # ─────────────────────────────
+  # CASHFLOW PARTIES
+  # ─────────────────────────────
+  /api/v1/cashflow/parties:
+    post:
+      tags:
+        - Cashflow Party
+      operationId: addCashflowParty
+      summary: Add a new cashflow party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashflowNameRequest'
+      responses:
+        '201':
+          description: Party created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowParty'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Cashflow Party
+      operationId: getCashflowParties
+      summary: Get all cashflow parties
+      responses:
+        '200':
+          description: List of cashflow parties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CashflowParty'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/cashflow/parties/{id}:
+    delete:
+      tags:
+        - Cashflow Party
+      operationId: deleteCashflowParty
+      summary: Delete a cashflow party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Party deleted
+        '404':
+          description: Party not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+components:
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+
+    sizeParam:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+
+    dateParam:
+      name: date
+      in: query
+      required: false
+      description: Filter by date (yyyy-MM-dd)
+      schema:
+        type: string
+        format: date
+
+  schemas:
+
+    CashflowNameRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    CashflowParty:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    CashflowPaymentType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    CashflowEntryRequest:
+      type: object
+      required:
+        - date
+        - amount
+      properties:
+        date:
+          type: string
+          format: date
+          description: Entry date (yyyy-MM-dd)
+        amount:
+          type: number
+          format: double
+        partyId:
+          type: integer
+          format: int64
+          description: Optional party reference
+        paymentTypeId:
+          type: integer
+          format: int64
+          description: Optional payment type reference
+        note:
+          type: string
+          description: Optional note or description
+
+    CashflowEntryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        amount:
+          type: number
+          format: double
+        party:
+          $ref: '#/components/schemas/CashflowParty'
+        paymentType:
+          $ref: '#/components/schemas/CashflowPaymentType'
+        note:
+          type: string
+        carryForward:
+          type: boolean
+          description: True if this entry was auto-created as a carry-forward from previous day
+
+    PaginatedCashflowEntry:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowEntryResponse'
+        empty:
+          type: boolean
+        last:
+          type: boolean
+        first:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+
+    DailySummaryResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        totalIncome:
+          type: number
+          format: double
+        totalExpense:
+          type: number
+          format: double
+        netBalance:
+          type: number
+          format: double
+          description: Positive means income surplus, negative means expense surplus
+        dayClosed:
+          type: boolean
+          description: Whether close-day has been called for this date
+        carryForwardAmount:
+          type: number
+          format: double
+          description: Amount that will/was carried to next day. Null if balance is zero.
+        carryForwardType:
+          type: string
+          description: INCOME if surplus, EXPENSE if deficit, null if zero
+        incomes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowEntryResponse'
+        expenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowEntryResponse'
+
+    CloseDayResponse:
+      type: object
+      properties:
+        closedDate:
+          type: string
+          format: date
+        nextDate:
+          type: string
+          format: date
+        totalIncome:
+          type: number
+          format: double
+        totalExpense:
+          type: number
+          format: double
+        netBalance:
+          type: number
+          format: double
+        carryForwardAmount:
+          type: number
+          format: double
+        carryForwardType:
+          type: string
+          description: INCOME, EXPENSE, or null (when balance is zero)
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string

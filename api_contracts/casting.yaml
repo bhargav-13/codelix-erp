@@ -1,0 +1,457 @@
+openapi: 3.0.3
+info:
+  title: Casting API
+  version: 1.0.0
+  description: OpenAPI for Casting Management
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://parmeshwari-erp.duckdns.org
+    description: Production Server
+tags:
+  - name: Casting
+    description: Casting Process Management
+  - name: CastingSale
+    description: Casting Sale Management
+
+paths:
+  /api/v1/casting:
+    post:
+      tags:
+        - Casting
+      operationId: createCasting
+      summary: Add separate Casting (Input)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastingRequest'
+      responses:
+        '201':
+          description: Casting created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Casting'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - oauth2: [ ]
+
+    get:
+      tags:
+        - Casting
+      operationId: searchCastings
+      summary: List/Search Castings
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of Castings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCastingResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/casting/pdf:
+    get:
+      tags:
+        - Casting
+      operationId: downloadCastingPdf
+      summary: Download Casting Statement PDF
+      description: Generates a statement-style PDF of all casting records with optional date range filtering
+      parameters:
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      security:
+        - oauth2: [ ]
+
+  /api/v1/casting/{id}:
+    get:
+      tags:
+        - Casting
+      operationId: getCastingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Casting details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Casting'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - Casting
+      operationId: updateCasting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastingRequest'
+      responses:
+        '200':
+          description: Updated Casting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Casting'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - Casting
+      operationId: deleteCasting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+      security:
+        - oauth2: [ ]
+
+  /api/v1/casting-sale:
+    post:
+      tags:
+        - CastingSale
+      operationId: createCastingSale
+      summary: Add Casting Sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastingSaleRequest'
+      responses:
+        '201':
+          description: Sale created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastingSale'
+      security:
+        - oauth2: [ ]
+    get:
+      tags:
+        - CastingSale
+      operationId: searchCastingSales
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/sizeParam'
+      responses:
+        '200':
+          description: List of Sales
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCastingSaleResponse'
+      security:
+        - oauth2: [ ]
+
+  /api/v1/casting-sale/pdf:
+    get:
+      tags:
+        - CastingSale
+      operationId: downloadCastingSalePdf
+      summary: Download Casting Sale Statement PDF
+      description: Generates a statement-style PDF of all casting sale records with optional date range filtering
+      parameters:
+        - name: fromDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: PDF generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      security:
+        - oauth2: [ ]
+
+  /api/v1/casting-sale/{id}:
+    get:
+      tags:
+        - CastingSale
+      operationId: getCastingSaleById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Sale details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastingSale'
+      security:
+        - oauth2: [ ]
+    put:
+      tags:
+        - CastingSale
+      operationId: updateCastingSale
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastingSaleRequest'
+      responses:
+        '200':
+          description: Updated Sale
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastingSale'
+      security:
+        - oauth2: [ ]
+    delete:
+      tags:
+        - CastingSale
+      operationId: deleteCastingSale
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+      security:
+        - oauth2: [ ]
+
+components:
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 0
+    sizeParam:
+      name: size
+      in: query
+      schema:
+        type: integer
+        default: 10
+
+  schemas:
+    Casting:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        mellWeight:
+          type: number
+          format: double
+
+    CastingRequest:
+      type: object
+      required:
+        - date
+      properties:
+        date:
+          type: string
+          format: date
+        mellWeight:
+          type: number
+          format: double
+
+    CastingSale:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        brassWeight:
+          type: number
+          format: double
+        kadiWeight:
+          type: number
+          format: double
+        kadiRate:
+          type: number
+          format: double
+        kadiAmount:
+          type: number
+          format: double
+        lokhandWeight:
+          type: number
+          format: double
+        lokhandRate:
+          type: number
+          format: double
+        lokhandAmount:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+
+    CastingSaleRequest:
+      type: object
+      required:
+        - date
+      properties:
+        date:
+          type: string
+          format: date
+        brassWeight:
+          type: number
+          format: double
+        kadiWeight:
+          type: number
+          format: double
+        kadiRate:
+          type: number
+          format: double
+        kadiAmount:
+          type: number
+          format: double
+        lokhandWeight:
+          type: number
+          format: double
+        lokhandRate:
+          type: number
+          format: double
+        lokhandAmount:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+
+    PaginatedCastingResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Casting'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+
+    PaginatedCastingSaleResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CastingSale'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+  securitySchemes:
+    oauth2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

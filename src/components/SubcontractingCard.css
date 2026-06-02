@@ -1,0 +1,567 @@
+.subcontracting-card {
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  background: #FFFFFF;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-order-id {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2D1017;
+  margin: 0;
+}
+
+.card-contractor {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #888888;
+  margin: 0;
+}
+
+/* New Crome Card Styles */
+.card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.card-sub-id {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #888888;
+}
+
+.card-info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.card-info-row .info-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #888888;
+}
+
+.card-info-row .info-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2D1017;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button:hover {
+  transform: scale(1.1);
+}
+
+.icon-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Icon Images */
+.icon-img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* Loading Icon - Spinner */
+.loading-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #2D1017;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.card-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.card-date {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #888888;
+}
+
+.card-body {
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.material-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: #2D1017;
+  margin: 0;
+  text-align: center;
+}
+
+.stock-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.stock-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.stock-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #888888;
+}
+
+.stock-values {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stock-value {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  color: #2D1017;
+}
+
+.stock-pieces,
+.stock-total {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #888888;
+}
+
+.subcontracting-card .processes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subcontracting-card .processes-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #888888;
+}
+
+.subcontracting-card .process-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.subcontracting-card .status-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 155px;
+}
+
+.subcontracting-card .status-select {
+  width: 100%;
+  padding: 0 42px 0 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  height: 40px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  box-shadow: 0 8px 18px rgba(23, 52, 77, 0.08);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              background-color 0.2s ease;
+}
+
+.subcontracting-card .status-select:hover:not(:disabled) {
+  box-shadow: 0 10px 22px rgba(23, 52, 77, 0.15);
+  transform: translateY(-2px);
+}
+
+.subcontracting-card .status-select:focus-visible {
+  box-shadow: 0 12px 26px rgba(23, 52, 77, 0.18);
+  transform: translateY(-2px);
+}
+
+.subcontracting-card .status-dropdown-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 9px;
+  pointer-events: none;
+}
+
+.subcontracting-card .status-select.status-completed {
+  background: #D1FFE2;
+  color: #275B22;
+}
+
+.subcontracting-card .status-select.status-in-process {
+  background: #ffe8d6;
+  color: #7a3c00;
+}
+
+.subcontracting-card .status-select.status-rejected {
+  background: #FFD1D1;
+  color: #8B0000;
+}
+
+.subcontracting-card .return-record-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 22px;
+  background: #A5213A;
+  border: none;
+  border-radius: 999px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  height: 40px;
+  box-shadow: 0 8px 18px rgba(23, 52, 77, 0.08);
+}
+
+.subcontracting-card .return-record-button:hover {
+  background: #b9e1ff;
+  transform: translateY(-1px);
+}
+
+.subcontracting-card .crome-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 25px;
+  gap: 16px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid #2D1017;
+  border-radius: 10px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.subcontracting-card .crome-button:hover {
+  background: rgba(23, 52, 77, 0.05);
+  transform: translateY(-1px);
+}
+
+.subcontracting-card .crome-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: transparent;
+  transform: none;
+}
+
+.subcontracting-card .crome-button:disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+.subcontracting-card .return-crome-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(125, 153, 169, 0.2);
+}
+
+.subcontracting-card .return-crome-btn {
+  height: 30px;
+  padding: 4px 14px;
+  font-size: 12px;
+  border-radius: 6px;
+  gap: 8px;
+}
+
+/* Return Icon */
+.subcontracting-card .return-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.remark-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.remark-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  color: #2D1017;
+}
+
+.remark-text {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #888888;
+  margin: 0;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .subcontracting-card {
+    padding: 12px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-header-left {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-title-group {
+    width: 100%;
+  }
+
+  .card-order-id {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .card-contractor {
+    font-size: 13px;
+  }
+
+  .card-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .card-dates {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .card-date {
+    font-size: 11px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .stock-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stock-item {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stock-label {
+    font-size: 12px;
+    min-width: 80px;
+  }
+
+  .stock-values {
+    align-items: flex-end;
+  }
+
+  .stock-value {
+    font-size: 14px;
+    text-align: right;
+  }
+
+  .stock-pieces,
+  .stock-total {
+    font-size: 12px;
+    text-align: right;
+  }
+
+  .process-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .status-dropdown {
+    width: 100%;
+  }
+
+  .status-select {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .return-record-button,
+  .crome-button {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .icon-button {
+    font-size: 20px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subcontracting-card {
+    padding: 10px;
+  }
+
+  .card-order-id {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .card-contractor {
+    font-size: 12px;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .stock-label {
+    font-size: 11px;
+    min-width: 70px;
+  }
+
+  .stock-value {
+    font-size: 13px;
+  }
+
+  .stock-pieces,
+  .stock-total {
+    font-size: 11px;
+  }
+
+  .status-select,
+  .return-record-button,
+  .crome-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .remark-label,
+  .remark-text {
+    font-size: 12px;
+  }
+}

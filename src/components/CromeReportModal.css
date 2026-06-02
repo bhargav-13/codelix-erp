@@ -1,0 +1,81 @@
+/* Reuse variables or similar styles from options */
+.report-modal {
+    width: min(500px, 95%);
+    background: #ffffff;
+    border-radius: 20px;
+    /* Matching other modals */
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.date-row {
+    display: flex;
+    gap: 16px;
+}
+
+.date-row .form-group {
+    flex: 1;
+}
+
+/* Ensure reusable classes from global or imported CSS work, 
+   otherwise defining basic ones here to be safe match */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    font-weight: 500;
+}
+
+.form-input {
+    padding: 10px 14px;
+    border: 1px solid rgba(23, 52, 77, 0.15);
+    border-radius: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    border-color: #4a8fdc;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.save-button {
+    background: #2D1017;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-family: 'Jost', sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.save-button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.cancel-button {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-family: 'Jost', sans-serif;
+    cursor: pointer;
+}

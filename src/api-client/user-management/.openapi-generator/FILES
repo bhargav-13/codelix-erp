@@ -1,0 +1,12 @@
+src/ApiClient.js
+src/api/AuthenticationApi.js
+src/api/UserManagementApi.js
+src/model/AuthResponse.js
+src/model/ErrorResponse.js
+src/model/PaginatedResultUser.js
+src/model/RefreshTokenRequest.js
+src/model/SignInRequest.js
+src/model/UpdateUserGroupRequest.js
+src/model/User.js
+src/model/UserGroup.js
+src/model/UserRegistrationRequest.js

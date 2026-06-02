@@ -1,0 +1,196 @@
+.modal-content.small-modal {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 650px;
+  width: 100%;
+}
+
+.modal-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: #2D1017;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.error-message {
+  background: #FFE5E5;
+  color: #8B0000;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+}
+
+.form-input {
+  padding: 10px 14px;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2D1017;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #2D1017;
+}
+
+.form-input::placeholder {
+  color: #A7A7A7;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.save-button,
+.cancel-button {
+  flex: 1;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.save-button {
+  background: #A5213A;
+  color: #FFFFFF;
+}
+
+.save-button:hover:not(:disabled) {
+  background: #7A1829;
+}
+
+.save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: #FFFFFF;
+  color: #2D1017;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+}
+
+.cancel-button:hover {
+  background: #F5F5F5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .modal-content.small-modal {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .modal-title {
+    font-size: 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .save-button,
+  .cancel-button {
+    width: 100%;
+  }
+}
+
+/* Dropdown with Add button - adapted from AddSubcontractingModal.css */
+.dropdown-with-add {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.dropdown-with-add .form-input {
+  flex: 1;
+}
+
+.add-new-btn {
+  width: 36px;
+  min-width: 36px;
+  height: auto;
+  padding: 0;
+  border: 1px solid rgba(125, 153, 169, 0.3);
+  border-radius: 8px;
+  background: #A5213A;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.add-new-btn:hover {
+  background: #7A1829;
+}
+
+.add-new-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.add-new-input {
+  flex: 1;
+}
+
+.add-confirm-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2D1017;
+  color: #FFFFFF;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-confirm-btn:hover:not(:disabled) {
+  background: #2a4d6a;
+}
+
+.add-confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
