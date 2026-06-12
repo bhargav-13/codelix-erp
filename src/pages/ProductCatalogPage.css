@@ -178,6 +178,13 @@
   background: linear-gradient(135deg, #f0f0f0 0%, #e5e5e5 100%);
 }
 
+.product-image-placeholder-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  opacity: 0.6;
+}
+
 .image-count-badge {
   position: absolute;
   top: 0.75rem;

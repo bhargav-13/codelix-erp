@@ -58,7 +58,7 @@ const ProductCatalogPage: React.FC = () => {
     <div className="product-catalog">
       <div className="catalog-header">
         <div className="catalog-brand">
-          <h1 className="catalog-title">Parmeshwari Brass Industries</h1>
+          <h1 className="catalog-title">Codelix IT Solutions Pvt Limited</h1>
           <p className="catalog-subtitle">Product Catalog</p>
         </div>
       </div>
@@ -125,10 +125,7 @@ const ProductCatalogPage: React.FC = () => {
                   />
                 ) : (
                   <div className="product-image-placeholder">
-                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                      <rect width="64" height="64" rx="8" fill="#E5E5E5"/>
-                      <path d="M32 28c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#999"/>
-                    </svg>
+                    <img src="/logo.svg" alt="4bitx" className="product-image-placeholder-logo" />
                   </div>
                 )}
                 {item.images && item.images.length > 1 && (
@@ -180,7 +177,7 @@ const ProductCatalogPage: React.FC = () => {
       )}
 
       <div className="catalog-footer">
-        <p>&copy; 2025 Parmeshwari Brass Industries. All rights reserved.</p>
+        <p>&copy; 2025 Codelix IT Solutions Pvt Limited. All rights reserved.</p>
       </div>
 
       {selectedProduct && (
