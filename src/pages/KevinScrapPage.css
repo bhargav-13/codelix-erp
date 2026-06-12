@@ -134,6 +134,24 @@
     color: #A7A7A7;
 }
 
+.item-filter-select {
+    padding: 10px 16px;
+    background: #FFFFFF;
+    border: 1px solid rgba(125, 153, 169, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #2D1017;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.item-filter-select:hover,
+.item-filter-select:focus {
+    border-color: #A5213A;
+}
+
 .order-status-filter {
     display: flex;
     align-items: center;

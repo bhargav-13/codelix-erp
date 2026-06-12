@@ -38,7 +38,7 @@
 .invoice-page .mode-toggle {
   display: flex;
   gap: 0;
-  border: 1px solid #2D1017;
+  border: 1px solid #A5213A;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -57,7 +57,7 @@
 }
 
 .invoice-page .mode-btn:first-child {
-  border-right: 1px solid #2D1017;
+  border-right: 1px solid #A5213A;
 }
 
 .invoice-page .mode-btn:hover:not(.active) {
@@ -65,7 +65,7 @@
 }
 
 .invoice-page .mode-btn.active {
-  background: #2D1017;
+  background: #A5213A;
   color: #FFFFFF;
 }
 

@@ -87,8 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   ];
 
   const scrapSubItems = [
-    { path: '/scrap/jayesh', label: 'Jayesh' },
-    { path: '/scrap/kevin', label: 'Kevin' },
+    { path: '/scrap/jayesh', label: 'Scrap Cash' },
+    // { path: '/scrap/kevin', label: 'Kevin' },
   ];
 
   const subcontractingSubItems = [

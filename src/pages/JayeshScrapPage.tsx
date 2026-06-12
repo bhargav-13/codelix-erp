@@ -187,8 +187,8 @@ const JayeshScrapPage: React.FC = () => {
         <div className="jayesh-scrap-page">
             <div className="page-header">
                 <div className="page-title-section">
-                    <h1 className="page-title">Jayesh Scrap Management</h1>
-                    <p className="page-subtitle">Track scrap materials and processing for Jayesh.</p>
+                    <h1 className="page-title">Scrap Cash Management</h1>
+                    <p className="page-subtitle">Track scrap materials and processing for Scrap Cash.</p>
                 </div>
 
                 <button type="button" className="add-button" onClick={() => setIsModalOpen(true)}>
@@ -380,7 +380,7 @@ const JayeshScrapPage: React.FC = () => {
             {isDownloadPopupOpen && (
                 <div className="modal-overlay" onClick={() => setIsDownloadPopupOpen(false)}>
                     <div className="modal-content small-modal" onClick={(e) => e.stopPropagation()}>
-                        <h2 className="modal-title">Download Jayesh Scrap PDF</h2>
+                        <h2 className="modal-title">Download Scrap Cash PDF</h2>
                         <p className="download-hint-text">
                             Filter by date range — leave blank to download the full report.
                         </p>

@@ -149,7 +149,7 @@ const ElectricPage: React.FC = () => {
             <div style={{
                 display: 'flex', width: '100%', borderRadius: '10px',
                 overflow: 'hidden', marginBottom: '24px',
-                border: '1.5px solid #b4d5ef', background: '#fff',
+                border: '1.5px solid #A5213A', background: '#fff',
             }}>
                 {(['OUTWARDS', 'CREDIT'] as ElectricTab[]).map(tab => (
                     <button
@@ -161,8 +161,8 @@ const ElectricPage: React.FC = () => {
                             cursor: 'pointer', fontFamily: "'Jost', sans-serif",
                             fontSize: '16px',
                             fontWeight: activeTab === tab ? 600 : 500,
-                            color: activeTab === tab ? '#fff' : '#17344D',
-                            backgroundColor: activeTab === tab ? '#5b9bd5' : '#fff',
+                            color: activeTab === tab ? '#fff' : '#2D1017',
+                            backgroundColor: activeTab === tab ? '#A5213A' : '#fff',
                             transition: 'all 0.25s ease', letterSpacing: '0.3px',
                         }}
                     >
