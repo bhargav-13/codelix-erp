@@ -87,12 +87,13 @@
 }
 
 .save-button {
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
 }
 
 .save-button:hover:not(:disabled) {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .save-button:disabled {
@@ -147,10 +148,10 @@
   min-width: 36px;
   height: auto;
   padding: 0;
-  border: 1px solid rgba(125, 153, 169, 0.3);
+  border: 2px solid #A5213A;
   border-radius: 8px;
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
@@ -161,7 +162,7 @@
 }
 
 .add-new-btn:hover {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .add-new-input-group {

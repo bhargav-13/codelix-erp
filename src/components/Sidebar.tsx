@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   ];
 
   return (
-    <div className={`sidebar ${isOpen ? 'mobile-open' : ''}`}>
+    <div className={`sidebar ${isOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
       <div className="sidebar-header">
         <div className="logo">
           <img src="/logo.svg" alt="4bitx ERP" className="logo-img" />

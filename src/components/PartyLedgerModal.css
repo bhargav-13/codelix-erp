@@ -142,21 +142,21 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: #A5213A;
+  background: rgba(165, 33, 58, 0.08);
   border-radius: 8px;
-  border: none;
+  border: 2px solid #A5213A;
   cursor: pointer;
   font-family: 'Jost', sans-serif;
   font-weight: 500;
   font-size: 13px;
-  color: #FFFFFF;
+  color: #A5213A;
   transition: background 0.2s ease;
   white-space: nowrap;
   margin-left: auto;
 }
 
 .ledger-download-btn:hover:not(:disabled) {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .ledger-download-btn:disabled {

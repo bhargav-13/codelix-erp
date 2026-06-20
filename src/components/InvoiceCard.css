@@ -28,13 +28,14 @@
 }
 
 .invoice-card .download-button {
-  background: #A5213A;
+  background: rgba(165, 33, 58, 0.08);
+  border: 2px solid #A5213A;
   border-radius: 6px;
   padding: 4px;
 }
 
 .invoice-card .download-button:hover {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .invoice-card-header {

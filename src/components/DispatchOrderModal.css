@@ -307,12 +307,12 @@
   height: 42px;
   border-radius: 50px;
   padding: 8px 20px;
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
   font-family: 'Jost', sans-serif;
   font-size: 16px;
   font-weight: 400;
-  border: none;
+  border: 2px solid #A5213A;
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease;
 }

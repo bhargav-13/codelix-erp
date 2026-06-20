@@ -39,21 +39,21 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    background: #A5213A;
-    border: none;
+    background: rgba(165, 33, 58, 0.08);
+    border: 2px solid #A5213A;
     border-radius: 8px;
     font-family: 'Jost', sans-serif;
     font-weight: 500;
     font-size: 14px;
-    color: #FFFFFF;
+    color: #A5213A;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .add-button:hover {
-    background: #7A1829;
+    background: rgba(165, 33, 58, 0.15);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(165, 33, 58, 0.15);
 }
 
 .add-icon {

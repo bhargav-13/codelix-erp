@@ -47,9 +47,9 @@
 
 .refresh-btn {
   padding: 8px 16px;
-  background-color: #A5213A;
-  color: white;
-  border: none;
+  background-color: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -58,7 +58,7 @@
 }
 
 .refresh-btn:hover {
-  background-color: #7A1829;
+  background-color: rgba(165, 33, 58, 0.15);
 }
 
 /* Tab Navigation */
@@ -542,9 +542,9 @@
 
 .dashboard-error button {
   padding: 10px 24px;
-  background-color: #A5213A;
-  color: white;
-  border: none;
+  background-color: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -552,7 +552,7 @@
 }
 
 .dashboard-error button:hover {
-  background-color: #7A1829;
+  background-color: rgba(165, 33, 58, 0.15);
 }
 
 /* Responsive Design - Tablet */

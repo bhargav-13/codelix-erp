@@ -198,12 +198,13 @@
 }
 
 .save-button {
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
 }
 
 .save-button:hover:not(:disabled) {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .save-button:disabled {
@@ -262,9 +263,9 @@
 .upload-button {
   align-self: flex-start;
   padding: 10px 24px;
-  background: #A5213A;
-  color: #FFFFFF;
-  border: none;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
   border-radius: 8px;
   font-family: 'Jost', sans-serif;
   font-weight: 400;
@@ -274,7 +275,7 @@
 }
 
 .upload-button:hover:not(:disabled) {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .upload-button:disabled {

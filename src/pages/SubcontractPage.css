@@ -140,8 +140,8 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #A5213A;
-  border: none;
+  background: rgba(165, 33, 58, 0.08);
+  border: 2px solid #A5213A;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -149,11 +149,11 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 18px;
-  color: #FFFFFF;
+  color: #A5213A;
 }
 
 .action-button:hover:not(:disabled) {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .action-button:disabled {

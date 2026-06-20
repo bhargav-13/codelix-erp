@@ -28,6 +28,7 @@ import ForgingPage from './pages/ForgingPage';
 import PurchasePage from './pages/PurchasePage';
 import CashflowPage from './pages/CashflowPage';
 import RejectionPage from './pages/RejectionPage';
+import CRMPage from './pages/CRMPage';
 import './App.css';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -58,7 +59,7 @@ function App() {
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="crm" element={<div className="placeholder">CRM & Sales Coming Soon</div>} />
+            <Route path="crm" element={<CRMPage />} />
             <Route path="inventory/ground-floor" element={<InventoryGroundFloorPage />} />
             <Route path="inventory/first-floor" element={<InventoryFirstFloorPage />} />
             <Route path="inventory/raw-materials" element={<RawInventoryPage />} />

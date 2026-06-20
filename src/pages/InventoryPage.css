@@ -88,12 +88,13 @@
 }
 
 .primary-button {
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
+  border: 2px solid #A5213A;
 }
 
 .primary-button:hover {
-  background: #7A1829;
+  background: rgba(165, 33, 58, 0.15);
 }
 
 .secondary-button {
@@ -141,10 +142,11 @@
 }
 
 .tab-button.active {
-  background: #A5213A;
-  color: #FFFFFF;
+  background: rgba(165, 33, 58, 0.08);
+  color: #A5213A;
   font-weight: 500;
-  border-bottom-color: #FFFFFF;
+  border: 2px solid #A5213A;
+  border-bottom-color: #A5213A;
 }
 
 .tab-button:hover:not(.active) {
