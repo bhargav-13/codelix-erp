@@ -50,6 +50,45 @@
   margin-left: 0;
 }
 
+/* ── Sidebar Toggle Button (desktop only) ── */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;           /* vertically centred in the 64px header */
+  left: 248px;         /* right edge of the 260px sidebar, half in / half out */
+  z-index: 1001;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #E5E7EB;
+  color: #6B7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+  transition: left 0.3s ease, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  color: #A5213A;
+  border-color: #A5213A;
+  box-shadow: 0 2px 8px rgba(165, 33, 58, 0.18);
+}
+
+/* When sidebar is collapsed, move the button to the left edge */
+.sidebar-collapsed .sidebar-toggle-btn {
+  left: 8px;
+}
+
+/* Hide toggle on mobile — hamburger handles it there */
+@media (max-width: 1024px) {
+  .sidebar-toggle-btn {
+    display: none;
+  }
+}
+
 /* Tablet and Mobile Responsive */
 @media (max-width: 1024px) {
   .main-content {

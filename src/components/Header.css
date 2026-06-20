@@ -144,6 +144,11 @@
   color: #2D1017;
 }
 
+/* Sidebar collapsed — header expands to full width */
+.sidebar-collapsed .header {
+  left: 0;
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 1024px) {
   .header {

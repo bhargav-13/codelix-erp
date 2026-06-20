@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import './Layout.css';
@@ -91,8 +92,18 @@ const Layout: React.FC = () => {
   }, [handleKeyDown]);
 
   return (
-    <div className="layout">
+    <div className={`layout${sidebarOpen ? '' : ' sidebar-collapsed'}`}>
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+
+      {/* Sidebar toggle button — always visible on desktop */}
+      <button
+        className="sidebar-toggle-btn"
+        onClick={toggleSidebar}
+        title={sidebarOpen ? 'Collapse sidebar (Ctrl+B)' : 'Expand sidebar (Ctrl+B)'}
+      >
+        {sidebarOpen ? <ChevronLeft size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
+      </button>
+
       <div className={`main-content${sidebarOpen ? '' : ' sidebar-collapsed'}`}>
         <Header onMenuClick={toggleSidebar} />
         <div className="content">
