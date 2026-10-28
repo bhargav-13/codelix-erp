@@ -44,13 +44,12 @@ export const NAV: NavGroup[] = [
   {
     label: 'Inventory',
     items: [
-      { label: 'Stock · Unit 1', path: '/inventory/ground-floor', icon: Boxes, source: 'live', legacy: true },
-      { label: 'Stock · Unit 2', path: '/inventory/first-floor', icon: Boxes, source: 'live', legacy: true },
-      { label: 'Raw materials', path: '/inventory/raw-materials', icon: Layers, source: 'live', legacy: true },
-      { label: 'Products', path: '/item-master/products', icon: Package, source: 'live', legacy: true },
-      { label: 'Categories', path: '/item-master/categories', icon: ClipboardList, source: 'live', legacy: true },
-      { label: 'Purchase', path: '/purchase', icon: Truck, source: 'live', legacy: true },
-      { label: 'Rejection', path: '/rejection', icon: Undo2, source: 'live', legacy: true },
+      { label: 'Stock', path: '/stock', icon: Boxes, source: 'live' },
+      { label: 'Raw materials', path: '/raw-materials', icon: Layers, source: 'live' },
+      { label: 'Products', path: '/products', icon: Package, source: 'live' },
+      { label: 'Categories', path: '/categories', icon: ClipboardList, source: 'live' },
+      { label: 'Purchase', path: '/purchase', icon: Truck, source: 'live' },
+      { label: 'Rejection', path: '/rejection', icon: Undo2, source: 'live' },
     ],
   },
   {

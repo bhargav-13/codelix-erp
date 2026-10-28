@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
           </div>
         </Card>
 
-        <Card title="Low stock" action={<Link to="/inventory/ground-floor" className="flex items-center gap-1 text-[13px] text-accent">Stock <ArrowUpRight size={14} /></Link>}>
+        <Card title="Low stock" action={<Link to="/stock" className="flex items-center gap-1 text-[13px] text-accent">Stock <ArrowUpRight size={14} /></Link>}>
           <div className="px-5 pb-3">
             {[...d.lowStockItems.map(i => ({ name: i.product?.productName, qty: i.quantityInKg, alert: i.lowStockAlert })),
               ...d.lowStockRawItems.map(i => ({ name: i.product?.productName, qty: i.quantityInKg, alert: i.lowStockAlert }))]

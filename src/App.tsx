@@ -11,6 +11,11 @@ import Parties from './app/pages/Parties';
 import Orders from './app/pages/sales/Orders';
 import Invoices from './app/pages/sales/Invoices';
 import Payments from './app/pages/sales/Payments';
+import Stock from './app/pages/inventory/Stock';
+import RawMaterials from './app/pages/inventory/RawMaterials';
+import { Categories, Products } from './app/pages/inventory/NameList';
+import Purchase from './app/pages/inventory/Purchase';
+import Rejection from './app/pages/inventory/Rejection';
 import Employees from './app/pages/hr/Employees';
 import AttendancePage from './app/pages/hr/Attendance';
 import Kiosk from './app/pages/hr/Kiosk';
@@ -20,20 +25,13 @@ import './styles/dark-theme.css';
 import SubcontractingPage from './pages/SubcontractingPage';
 import SubcontractPage from './pages/SubcontractPage';
 import CromePage from './pages/CromePage';
-import InventoryGroundFloorPage from './pages/InventoryGroundFloorPage';
-import InventoryFirstFloorPage from './pages/InventoryFirstFloorPage';
-import RawInventoryPage from './pages/RawInventoryPage';
-import InventoryProductsPage from './pages/InventoryProductsPage';
-import CategoryPage from './pages/CategoryPage';
 import ProductCatalogPage from './pages/ProductCatalogPage';
 import KevinScrapPage from './pages/KevinScrapPage';
 import JayeshScrapPage from './pages/JayeshScrapPage';
 import ElectricPage from './pages/ElectricPage';
 import CastingPage from './pages/CastingPage';
 import ForgingPage from './pages/ForgingPage';
-import PurchasePage from './pages/PurchasePage';
 import CashflowPage from './pages/CashflowPage';
-import RejectionPage from './pages/RejectionPage';
 import CRMPage from './pages/CRMPage';
 import './App.css';
 
@@ -75,11 +73,15 @@ function App() {
             <Route path="hr/leave" element={<Leave />} />
             <Route path="hr/payroll" element={<Payroll />} />
             <Route path="crm" element={<CRMPage />} />
-            <Route path="inventory/ground-floor" element={<InventoryGroundFloorPage />} />
-            <Route path="inventory/first-floor" element={<InventoryFirstFloorPage />} />
-            <Route path="inventory/raw-materials" element={<RawInventoryPage />} />
-            <Route path="item-master/products" element={<InventoryProductsPage />} />
-            <Route path="item-master/categories" element={<CategoryPage />} />
+            <Route path="stock" element={<Stock />} />
+            <Route path="inventory/ground-floor" element={<Navigate to="/stock?unit=1" replace />} />
+            <Route path="inventory/first-floor" element={<Navigate to="/stock?unit=2" replace />} />
+            <Route path="raw-materials" element={<RawMaterials />} />
+            <Route path="inventory/raw-materials" element={<Navigate to="/raw-materials" replace />} />
+            <Route path="products" element={<Products />} />
+            <Route path="item-master/products" element={<Navigate to="/products" replace />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="item-master/categories" element={<Navigate to="/categories" replace />} />
             <Route path="orders" element={<Orders />} />
             <Route path="orders/ground-floor" element={<Navigate to="/orders?unit=1" replace />} />
             <Route path="orders/first-floor" element={<Navigate to="/orders?unit=2" replace />} />
@@ -98,8 +100,8 @@ function App() {
             <Route path="electric" element={<ElectricPage />} />
             <Route path="casting" element={<CastingPage />} />
             <Route path="forging" element={<ForgingPage />} />
-            <Route path="purchase" element={<PurchasePage />} />
-            <Route path="rejection" element={<RejectionPage />} />
+            <Route path="purchase" element={<Purchase />} />
+            <Route path="rejection" element={<Rejection />} />
             <Route path="cashflow" element={<CashflowPage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
