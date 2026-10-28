@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Download, Pencil, Plus, Trash2 } from 'lucide-react';
 import { partyApi } from '../../api/party';
 import type { OrderByPartyResponse, Party } from '../../types';
+import { normalizeDates } from './sales/shared';
 import {
   Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, fmtDate, inr, toast, useAsync,
 } from '../ui';
@@ -19,7 +20,7 @@ const Parties: React.FC = () => {
   const [deleting, setDeleting] = useState<Party | null>(null);
   const [viewing, setViewing] = useState<Party | null>(null);
   const orders = useAsync<OrderByPartyResponse | null>(
-    () => (viewing ? partyApi.getOrdersByPartyName(viewing.name) : Promise.resolve(null)),
+    () => (viewing ? partyApi.getOrdersByPartyName(viewing.name).then(normalizeDates) : Promise.resolve(null)),
     [viewing?.partyId],
   );
 

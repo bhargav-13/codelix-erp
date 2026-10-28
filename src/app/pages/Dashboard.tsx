@@ -99,7 +99,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
-        <Card title="Recent orders" action={<Link to="/orders/ground-floor" className="flex items-center gap-1 text-[13px] text-accent">All <ArrowUpRight size={14} /></Link>}>
+        <Card title="Recent orders" action={<Link to="/orders" className="flex items-center gap-1 text-[13px] text-accent">All <ArrowUpRight size={14} /></Link>}>
           <div className="px-5 pb-3">
             {d.recentOrders.slice(0, 6).map(o => (
               <div key={o.id} className="flex items-center justify-between border-b border-line py-2.5 last:border-0">

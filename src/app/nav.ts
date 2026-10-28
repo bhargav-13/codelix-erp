@@ -36,12 +36,9 @@ export const NAV: NavGroup[] = [
     items: [
       { label: 'Parties', path: '/parties', icon: Handshake, source: 'live' },
       { label: 'CRM', path: '/crm', icon: Gauge, source: 'live', legacy: true },
-      { label: 'Orders · Unit 1', path: '/orders/ground-floor', icon: ShoppingCart, source: 'live', legacy: true },
-      { label: 'Orders · Unit 2', path: '/orders/first-floor', icon: ShoppingCart, source: 'live', legacy: true },
-      { label: 'Invoices · Unit 1', path: '/invoices/ground-floor', icon: Receipt, source: 'live', legacy: true },
-      { label: 'Invoices · Unit 2', path: '/invoices/first-floor', icon: Receipt, source: 'live', legacy: true },
-      { label: 'Payment reminders · Unit 1', path: '/payment-reminder/ground-floor', icon: BellRing, source: 'live', legacy: true },
-      { label: 'Payment reminders · Unit 2', path: '/payment-reminder/first-floor', icon: BellRing, source: 'live', legacy: true },
+      { label: 'Orders', path: '/orders', icon: ShoppingCart, source: 'live' },
+      { label: 'Invoices', path: '/invoices', icon: Receipt, source: 'live' },
+      { label: 'Payments', path: '/payments', icon: BellRing, source: 'live' },
     ],
   },
   {
