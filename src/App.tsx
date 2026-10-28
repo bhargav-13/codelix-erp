@@ -16,21 +16,20 @@ import RawMaterials from './app/pages/inventory/RawMaterials';
 import { Categories, Products } from './app/pages/inventory/NameList';
 import Purchase from './app/pages/inventory/Purchase';
 import Rejection from './app/pages/inventory/Rejection';
+import Subcontracting from './app/pages/production/Subcontracting';
+import Subcontractors from './app/pages/production/Subcontractors';
+import Chrome from './app/pages/production/Chrome';
+import Casting from './app/pages/production/Casting';
+import Forging from './app/pages/production/Forging';
+import Scrap from './app/pages/production/Scrap';
 import Employees from './app/pages/hr/Employees';
 import AttendancePage from './app/pages/hr/Attendance';
 import Kiosk from './app/pages/hr/Kiosk';
 import Leave from './app/pages/hr/Leave';
 import Payroll from './app/pages/hr/Payroll';
 import './styles/dark-theme.css';
-import SubcontractingPage from './pages/SubcontractingPage';
-import SubcontractPage from './pages/SubcontractPage';
-import CromePage from './pages/CromePage';
 import ProductCatalogPage from './pages/ProductCatalogPage';
-import KevinScrapPage from './pages/KevinScrapPage';
-import JayeshScrapPage from './pages/JayeshScrapPage';
 import ElectricPage from './pages/ElectricPage';
-import CastingPage from './pages/CastingPage';
-import ForgingPage from './pages/ForgingPage';
 import CashflowPage from './pages/CashflowPage';
 import CRMPage from './pages/CRMPage';
 import './App.css';
@@ -85,21 +84,22 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="orders/ground-floor" element={<Navigate to="/orders?unit=1" replace />} />
             <Route path="orders/first-floor" element={<Navigate to="/orders?unit=2" replace />} />
-            <Route path="subcontracting" element={<SubcontractingPage />} />
-            <Route path="subcontractor" element={<SubcontractPage />} />
-            <Route path="crome" element={<CromePage />} />
+            <Route path="subcontracting" element={<Subcontracting />} />
+            <Route path="subcontractor" element={<Subcontractors />} />
+            <Route path="crome" element={<Chrome />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="invoices/ground-floor" element={<Navigate to="/invoices?unit=1" replace />} />
             <Route path="invoices/first-floor" element={<Navigate to="/invoices?unit=2" replace />} />
             <Route path="payments" element={<Payments />} />
             <Route path="payment-reminder/ground-floor" element={<Navigate to="/payments?unit=1" replace />} />
             <Route path="payment-reminder/first-floor" element={<Navigate to="/payments?unit=2" replace />} />
-            <Route path="scrap/kevin" element={<KevinScrapPage />} />
-            <Route path="scrap/jayesh" element={<JayeshScrapPage />} />
+            <Route path="scrap" element={<Scrap />} />
+            <Route path="scrap/kevin" element={<Navigate to="/scrap" replace />} />
+            <Route path="scrap/jayesh" element={<Navigate to="/scrap" replace />} />
             <Route path="party-master" element={<Navigate to="/parties" replace />} />
             <Route path="electric" element={<ElectricPage />} />
-            <Route path="casting" element={<CastingPage />} />
-            <Route path="forging" element={<ForgingPage />} />
+            <Route path="casting" element={<Casting />} />
+            <Route path="forging" element={<Forging />} />
             <Route path="purchase" element={<Purchase />} />
             <Route path="rejection" element={<Rejection />} />
             <Route path="cashflow" element={<CashflowPage />} />

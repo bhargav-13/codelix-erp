@@ -55,13 +55,12 @@ export const NAV: NavGroup[] = [
   {
     label: 'Production',
     items: [
-      { label: 'Subcontracting', path: '/subcontracting', icon: Factory, source: 'live', legacy: true },
-      { label: 'Subcontractors', path: '/subcontractor', icon: Users, source: 'live', legacy: true },
-      { label: 'Chrome plating', path: '/crome', icon: Sparkles, source: 'live', legacy: true },
-      { label: 'Casting', path: '/casting', icon: Flame, source: 'live', legacy: true },
-      { label: 'Forging', path: '/forging', icon: Hammer, source: 'live', legacy: true },
-      { label: 'Scrap · A', path: '/scrap/kevin', icon: Trash2, source: 'live', legacy: true },
-      { label: 'Scrap · B', path: '/scrap/jayesh', icon: Trash2, source: 'live', legacy: true },
+      { label: 'Subcontracting', path: '/subcontracting', icon: Factory, source: 'live' },
+      { label: 'Subcontractors', path: '/subcontractor', icon: Users, source: 'live' },
+      { label: 'Chrome plating', path: '/crome', icon: Sparkles, source: 'live' },
+      { label: 'Casting', path: '/casting', icon: Flame, source: 'live' },
+      { label: 'Forging', path: '/forging', icon: Hammer, source: 'live' },
+      { label: 'Scrap', path: '/scrap', icon: Trash2, source: 'live' },
     ],
   },
   {
