@@ -152,3 +152,63 @@
   white-space: pre-line;
   text-align: left;
 }
+
+/* ── Dark login mode ─────────────────────────────── */
+.login-dark {
+  background: linear-gradient(135deg, #080810 0%, #0E0E1A 50%, #13131F 100%) !important;
+  transition: background 0.4s ease;
+}
+
+.login-dark .login-container {
+  background: #13131C;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8);
+  border: 1px solid #1E1E2C;
+}
+
+.login-dark .login-title {
+  color: #DDE0EE;
+}
+
+.login-dark .login-subtitle {
+  color: #55556A;
+}
+
+.login-dark .login-label {
+  color: #9090A8;
+}
+
+.login-dark .login-input {
+  background: #1A1A26;
+  border-color: #26263A;
+  color: #DDE0EE;
+}
+
+.login-dark .login-input::placeholder {
+  color: #40404E;
+}
+
+.login-dark .login-input:hover:not(:disabled) {
+  border-color: #32324A;
+}
+
+.login-dark .login-input:focus {
+  border-color: #C03050;
+  background: #1A1A26;
+  box-shadow: 0 0 0 3px rgba(192, 48, 80, 0.14);
+}
+
+.login-dark .login-button {
+  background: linear-gradient(135deg, #C03050 0%, #8A1E38 100%);
+  box-shadow: 0 8px 20px rgba(140, 30, 60, 0.4);
+}
+
+.login-dark .login-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 10px 24px rgba(140, 30, 60, 0.5);
+}
+
+.login-dark .error-message {
+  background: #1A0E14;
+  border-color: #3A1520;
+  color: #FF7090;
+}

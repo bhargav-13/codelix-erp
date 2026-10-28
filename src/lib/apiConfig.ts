@@ -53,6 +53,14 @@ apiClient.callApi = function (
   apiBasePath?: string,
   callback?: (error: any, data: any, response: any) => void
 ) {
+  // In black mode, stub all calls — no network requests
+  if (localStorage.getItem('_bm') === '1') {
+    if (typeof callback === 'function') {
+      setTimeout(() => callback({ status: 0, message: 'offline' }, null, null), 0);
+    }
+    return;
+  }
+
   // Add Authorization header if token exists
   const token = localStorage.getItem('accessToken');
   if (token) {

