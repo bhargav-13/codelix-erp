@@ -1,0 +1,95 @@
+/* New 4bitx design system.
+   Tailwind is loaded without preflight so the legacy pages (still routed until
+   they are rebuilt) keep their own resets. New UI lives under .app-root.
+   Utilities are imported unlayered so they beat the legacy unlayered
+   `* { padding: 0 }` reset in index.css; the resets below use :where() so
+   they carry zero specificity and never beat a utility. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+}
+
+:root {
+  --accent: #4f46e5;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-fg: #ffffff;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --muted: #f1f3f5;
+  --line: #e5e7eb;
+  --ink: #111827;
+  --ink-2: #4b5563;
+  --ink-3: #9ca3af;
+}
+
+.dark {
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+  --bg: #0b0d12;
+  --surface: #12151c;
+  --muted: #1a1e27;
+  --line: #262b36;
+  --ink: #f3f4f6;
+  --ink-2: #b3b9c5;
+  --ink-3: #6b7280;
+}
+
+:where(.app-root),
+:where(.app-root) *,
+:where(.app-root) *::before,
+:where(.app-root) *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--line);
+}
+
+:where(.app-root) {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+:where(.app-root) :where(h1, h2, h3, p) { margin: 0; }
+:where(.app-root) :where(button) { font: inherit; color: inherit; background: none; cursor: pointer; padding: 0; }
+:where(.app-root) :where(input, select, textarea) { font: inherit; color: inherit; }
+:where(.app-root) :where(a) { color: inherit; text-decoration: none; }
+:where(.app-root) :where(table) { border-collapse: collapse; width: 100%; }
+
+:where(.field) {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+:where(textarea.field) { height: auto; padding: 8px 12px; }
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+@keyframes scan {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(176px); }
+}
+
+:where(.app-root) ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+:where(.app-root) ::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
