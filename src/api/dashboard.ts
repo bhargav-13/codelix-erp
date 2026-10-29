@@ -131,9 +131,8 @@ export interface FullDashboardData {
   topProducts: TopProduct[];
 }
 
-export const dashboardApi = {
-  // Fetch all data for both floors and both billing modes
-  fetchAllData: async () => {
+// Fetch all data for both floors and both billing modes
+async function fetchAllData() {
     // Use safe fetch — returns [] on error so one failing endpoint doesn't break the whole dashboard
     const safeArray = <T>(p: Promise<T[]>): Promise<T[]> => p.catch(() => [] as T[]);
 
@@ -169,8 +168,10 @@ export const dashboardApi = {
 
     const groundFloorInvoices = [...groundFloorInvoicesOfficial, ...groundFloorInvoicesOffline];
     const firstFloorInvoices = [...firstFloorInvoicesOfficial, ...firstFloorInvoicesOffline];
-    const groundFloorPayments = [...groundFloorPaymentsOfficial, ...groundFloorPaymentsOffline];
-    const firstFloorPayments = [...firstFloorPaymentsOfficial, ...firstFloorPaymentsOffline];
+    // The payments endpoint ignores `mode` and returns both bill types each time, so de-duplicate by id.
+    const uniqueById = (list: Payment[]) => [...new Map(list.map(p => [p.id, p])).values()];
+    const groundFloorPayments = uniqueById([...groundFloorPaymentsOfficial, ...groundFloorPaymentsOffline]);
+    const firstFloorPayments = uniqueById([...firstFloorPaymentsOfficial, ...firstFloorPaymentsOffline]);
 
     return {
       groundFloorOrders,
@@ -186,10 +187,16 @@ export const dashboardApi = {
       allRawItems,
       allSubcontracts,
     };
-  },
+  }
 
-  getFullDashboard: async (): Promise<FullDashboardData> => {
-    const data = await dashboardApi.fetchAllData();
+export type DashboardRawData = Awaited<ReturnType<typeof fetchAllData>>;
+
+export const dashboardApi = {
+  fetchAllData,
+
+  // Pass the result of fetchAllData() to reuse it instead of fetching again.
+  getFullDashboard: async (preloaded?: DashboardRawData): Promise<FullDashboardData> => {
+    const data = preloaded ?? await fetchAllData();
     const {
       groundFloorOrders,
       firstFloorOrders,
