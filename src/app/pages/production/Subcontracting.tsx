@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Pencil, Plus, Sparkles, Trash2, Undo2 } from 'lucide-react';
+import { FileDown, Pencil, Plus, Sparkles, Trash2, Undo2 } from 'lucide-react';
 import { subcontractingApi } from '../../../api/subcontracting';
 import { cromeApi } from '../../../api/crome';
 import type {
@@ -11,6 +11,8 @@ import {
 import { SelectWithAdd, n } from '../inventory/shared';
 import { fetchAllPages, today } from '../sales/shared';
 import { JOB_STATUS, PackagingEditor, newPackaging, packagingKg } from './shared';
+import { chitthiNo, downloadChitthi } from '../../pdf/chitthi';
+import { useSettings } from '../../settings';
 
 const netOf = (r: SubReturn) => r.netReturnStock ?? r.returnStock - packagingKg(r.packagings || []);
 
@@ -55,7 +57,7 @@ const JobForm: React.FC<{ job: Job | null; open: boolean; jobs: Job[]; onClose: 
     try {
       if (job) await subcontractingApi.updateSubcontracting(job.subcontractingId, payload);
       else await subcontractingApi.addSubcontracting(payload);
-      toast.ok(job ? 'Job updated' : existing ? 'Added to the running job' : 'Job created');
+      toast.ok(job ? 'Job updated' : existing ? 'Added to the running job' : 'Job created — download its chitthi from the list');
       onSaved();
     } catch {
       toast.err('Could not save the job');
@@ -223,6 +225,11 @@ export const ChromeForm: React.FC<{ target: { job: Job; ret: SubReturn } | null;
 /* ---------------------------------- Page ---------------------------------- */
 
 const Subcontracting: React.FC = () => {
+  const { settings } = useSettings();
+  const chitthi = (j: Job) => {
+    try { downloadChitthi(j, { name: settings.companyName, tagline: settings.tagline, accent: settings.accent }); }
+    catch { toast.err('Could not create the chitthi'); }
+  };
   const q = useAsync(() => fetchAllPages(page => subcontractingApi.getSubcontractingList({ page, size: 100 }))
     .then(l => l.sort((a, b) => b.orderDate.localeCompare(a.orderDate) || b.subcontractingId - a.subcontractingId)), []);
   const [tab, setTab] = useState<SubcontractingStatus | 'ALL'>('IN_PROCESS');
@@ -271,7 +278,7 @@ const Subcontracting: React.FC = () => {
 
   return (
     <>
-      <PageHeader title="Subcontracting" subtitle="Material sent out for job work and what came back."
+      <PageHeader title="Subcontracting (Job work)" subtitle="Material sent out for job work, what came back, and the chitthi for each job."
         actions={<Button icon={<Plus size={16} />} onClick={() => setForm({ job: null })}>Send for job work</Button>} />
       <div className="mb-4 grid grid-cols-2 gap-4 xl:grid-cols-4">
         <Stat label="Jobs in process" value={open.length} />
@@ -290,7 +297,8 @@ const Subcontracting: React.FC = () => {
             rows={rows}
             onRowClick={j => setViewingId(j.subcontractingId)}
             columns={[
-              { key: 'c', header: 'Contractor', render: j => <><div className="font-medium">{j.contractor.name}</div><div className="text-[12px] text-ink-3">{j.item.name}</div></> },
+              { key: 'n', header: 'Chitthi', render: j => <span className="font-medium">{chitthiNo(j.subcontractingId)}</span> },
+              { key: 'c', header: 'Job worker', render: j => <><div className="font-medium">{j.contractor.name}</div><div className="text-[12px] text-ink-3">{j.item.name}</div></> },
               { key: 'd', header: 'Sent on', render: j => fmtDate(j.orderDate) },
               { key: 's', header: 'Sent', align: 'right', render: j => `${num(j.sentStock, 2)} ${j.unit.toLowerCase()}` },
               { key: 'r', header: 'Returned (net)', align: 'right', render: j => num(j.totalNetReturnStock, 2) },
@@ -301,6 +309,7 @@ const Subcontracting: React.FC = () => {
                 key: 'x', header: '', align: 'right', render: j => (
                   <div className="flex justify-end gap-1" onClick={e => e.stopPropagation()}>
                     {j.status === 'IN_PROCESS' && <Button size="sm" variant="outline" icon={<Undo2 size={13} />} onClick={() => setReturning(j)}>Return</Button>}
+                    <Button size="sm" variant="ghost" title="Download chitthi" icon={<FileDown size={14} />} onClick={() => chitthi(j)} />
                     <Button size="sm" variant="ghost" title="Edit" icon={<Pencil size={14} />} onClick={() => setForm({ job: j })} />
                   </div>
                 ),
@@ -310,9 +319,10 @@ const Subcontracting: React.FC = () => {
         )}
       </Card>
 
-      <Drawer open={!!viewing && !returning && !chrome && !form} wide title={viewing ? `${viewing.contractor.name} · ${viewing.item.name}` : ''} onClose={() => setViewingId(null)}
+      <Drawer open={!!viewing && !returning && !chrome && !form} wide title={viewing ? `${chitthiNo(viewing.subcontractingId)} · ${viewing.contractor.name} · ${viewing.item.name}` : ''} onClose={() => setViewingId(null)}
         footer={viewing && <>
           <Button variant="ghost" icon={<Trash2 size={15} />} className="mr-auto" onClick={() => setDeleting(viewing)}>Delete</Button>
+          <Button variant="outline" icon={<FileDown size={15} />} onClick={() => chitthi(viewing)}>Chitthi PDF</Button>
           <select className="field h-9 w-[150px]" value={viewing.status} onChange={e => setStatus(viewing, e.target.value as SubcontractingStatus)}>
             {(Object.keys(JOB_STATUS) as SubcontractingStatus[]).map(s => <option key={s} value={s}>{JOB_STATUS[s].label}</option>)}
           </select>

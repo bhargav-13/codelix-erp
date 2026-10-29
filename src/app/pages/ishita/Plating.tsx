@@ -1,26 +1,35 @@
 import React, { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { gres, gresCalc, items, jobCalc, jobWorks } from '../../data/ishita';
-import { Badge, Card, DataTable, Drawer, PageHeader, Stat, Tabs, fmtDate, inr, num } from '../../ui';
+import { subcontractingApi } from '../../../api/subcontracting';
+import { gres, gresCalc, items } from '../../data/ishita';
+import { Badge, Card, DataTable, Drawer, ErrorNote, PageHeader, Spinner, Stat, Tabs, fmtDate, inr, num, useAsync } from '../../ui';
+import { fetchAllPages } from '../sales/shared';
+import { chitthiNo } from '../../pdf/chitthi';
 
 interface Lot { id: string; party: string; no: string; date: string; what: string; netKg: number; backKg: number; amount: number; done: boolean }
 interface Vendor { name: string; lots: Lot[]; netKg: number; backKg: number; pendingKg: number; amount: number; open: number; avgDays: number | null }
 
-/** Vendor-wise analytics across job work (in-side / out-side) and gres, as on Ishita's plating screens. */
+/**
+ * Vendor-wise analytics, as on Ishita's plating screens: live subcontracting
+ * (job work) jobs from the 4bitx backend, plus the gres sample module.
+ */
 const Plating: React.FC = () => {
-  const jobs = jobWorks.use();
+  const jobs = useAsync(() => fetchAllPages(page => subcontractingApi.getSubcontractingList({ page, size: 100 })), []);
   const fill = gres.use();
   const catalog = items.use();
-  const [scope, setScope] = useState('OUTSIDE');
+  const [scope, setScope] = useState('JOB');
   const [viewing, setViewing] = useState<Vendor | null>(null);
 
   const name = (id: number) => catalog.find(i => i.id === id)?.name ?? '—';
 
   const lots: Lot[] = useMemo(() => scope === 'GRES'
     ? fill.map(g => { const c = gresCalc(g); return { id: `g${g.id}`, party: g.vendor, no: g.chitthiNo, date: g.date, what: g.lines.map(l => name(l.itemId)).join(', '), netKg: c.netKg, backKg: c.returnedKg, amount: c.amount, done: c.complete }; })
-    : jobs.filter(j => j.mode === scope).map(j => { const c = jobCalc(j); return { id: `j${j.id}`, party: j.party, no: `#${j.chitthiNo}`, date: j.date, what: `${name(j.itemId)} ${j.size} · ${j.finish}`, netKg: c.netKg, backKg: c.returnedKg, amount: c.amount, done: c.status === 'FULLY_RETURNED' }; }),
+    : (jobs.data || []).map(j => ({
+      id: `s${j.subcontractingId}`, party: j.contractor?.name || '—', no: chitthiNo(j.subcontractingId), date: j.orderDate, what: j.item?.name || '—',
+      netKg: j.sentStock, backKg: j.totalReturnStock || 0, amount: j.totalAmount || 0, done: j.status !== 'IN_PROCESS',
+    })),
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  [scope, jobs, fill, catalog]);
+  [scope, jobs.data, fill, catalog]);
 
   const vendors: Vendor[] = useMemo(() => {
     const m = new Map<string, Lot[]>();
@@ -43,7 +52,8 @@ const Plating: React.FC = () => {
   return (
     <>
       <PageHeader title="Plating analytics" subtitle="How much each vendor or party has, what came back, and what's still out."
-        actions={<Tabs value={scope} onChange={setScope} tabs={[{ id: 'OUTSIDE', label: 'Out-side' }, { id: 'INHOUSE', label: 'In-side' }, { id: 'GRES', label: 'Gres' }]} />} />
+        actions={<Tabs value={scope} onChange={setScope} tabs={[{ id: 'JOB', label: 'Subcontracting (Job work)' }, { id: 'GRES', label: 'Gres' }]} />} />
+      {scope === 'JOB' && jobs.loading ? <Spinner /> : scope === 'JOB' && jobs.error ? <ErrorNote error={jobs.error} onRetry={jobs.reload} /> : <>
       <div className="mb-4 grid grid-cols-2 gap-4 xl:grid-cols-4">
         <Stat label="Sent" value={`${num(tot.net, 1)} kg`} hint={`${lots.length} chitthis`} />
         <Stat label="Back" value={`${num(tot.back, 1)} kg`} hint={tot.net ? `${Math.round((tot.back / tot.net) * 100)}% returned` : undefined} />
@@ -56,7 +66,7 @@ const Plating: React.FC = () => {
             rows={vendors}
             onRowClick={setViewing}
             columns={[
-              { key: 'n', header: scope === 'INHOUSE' ? 'Party' : 'Vendor', render: v => <span className="font-medium">{v.name}</span> },
+              { key: 'n', header: scope === 'JOB' ? 'Job worker' : 'Vendor', render: v => <span className="font-medium">{v.name}</span> },
               { key: 'c', header: 'Chitthis', align: 'right', render: v => <>{v.lots.length}{v.open > 0 && <span className="ml-1 text-[12px] text-ink-3">({v.open} open)</span>}</> },
               { key: 's', header: 'Sent kg', align: 'right', render: v => num(v.netKg, 1) },
               { key: 'p', header: 'Still out', align: 'right', render: v => <span className={v.pendingKg > 0 ? 'font-semibold' : 'text-ink-3'}>{num(v.pendingKg, 1)}</span> },
@@ -80,6 +90,8 @@ const Plating: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      </>}
 
       <Drawer open={!!viewing} wide title={viewing?.name || ''} onClose={() => setViewing(null)}>
         {viewing && (

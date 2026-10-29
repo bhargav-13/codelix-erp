@@ -25,7 +25,6 @@ import Scrap from './app/pages/production/Scrap';
 import Cashflow from './app/pages/accounts/Cashflow';
 import Electricity from './app/pages/accounts/Electricity';
 import CRM from './app/pages/CRM';
-import JobWork from './app/pages/ishita/JobWork';
 import Gres from './app/pages/ishita/Gres';
 import Plating from './app/pages/ishita/Plating';
 import Packing from './app/pages/ishita/Packing';
@@ -77,7 +76,7 @@ function App() {
             <Route path="hr/leave" element={<Leave />} />
             <Route path="hr/payroll" element={<Payroll />} />
             <Route path="crm" element={<CRM />} />
-            <Route path="job-work" element={<JobWork />} />
+            <Route path="job-work" element={<Navigate to="/subcontracting" replace />} />
             <Route path="gres" element={<Gres />} />
             <Route path="plating" element={<Plating />} />
             <Route path="packing" element={<Packing />} />

@@ -1,6 +1,5 @@
 /**
- * Sample modules modelled on the Ishita SME ERP (brass hardware): job work
- * chitthis, gres filling, plating analytics, packing invoices and the client
+ * Sample modules modelled on the Ishita SME ERP (brass hardware): gres filling, plating analytics, packing invoices and the client
  * portal. Browser-only data via demoStore; the maths mirrors Ishita's screens.
  */
 import { collection } from './demoStore';
@@ -39,73 +38,17 @@ export const items = collection<Item>('ishita.items', () => [
 
 export const sizeLabel = (s?: Size) => (s ? `${s.inch} (${s.mm})` : '—');
 
-/* ------------------------------- Job work -------------------------------- */
-
-export type JobMode = 'OUTSIDE' | 'INHOUSE' | 'MANUAL';
-export const MODE_LABEL: Record<JobMode, string> = { OUTSIDE: 'Out-side', INHOUSE: 'In-side', MANUAL: 'Manual' };
+/* --------------------------------- Shared --------------------------------- */
 
 export interface Return { date: string; kg: number }
-
-export interface JobWork {
-  id: number;
-  mode: JobMode;
-  party: string;
-  chitthiNo: string;
-  date: string;
-  itemId: number;
-  size: string;
-  finish: string;
-  grossKg: number;
-  elementType: 'PETI' | 'DRUM';
-  elementCount: number;
-  elementKg: number;
-  pcsWeight: number;
-  ratePerKg: number;
-  returns: Return[];
-}
 
 export const VENDORS = ['Shree Plating Works', 'Om Electroplaters', 'Jalaram Polish', 'Krishna PVD Coating', 'Bhavani Buffing'];
 export const CUSTOMERS = ['Raj Hardware, Rajkot', 'Patel Brass Mart, Jamnagar', 'Ambika Traders, Ahmedabad', 'Sai Sanitary, Surat', 'New India Hardware, Mumbai'];
 
 const r3 = (n: number) => Math.round(n * 1000) / 1000;
 
-export function jobCalc(j: Pick<JobWork, 'grossKg' | 'elementCount' | 'elementKg' | 'pcsWeight' | 'ratePerKg' | 'returns'>) {
-  const netKg = Math.max(0, r3(j.grossKg - j.elementCount * j.elementKg));
-  const pcs = j.pcsWeight > 0 ? Math.round(netKg / j.pcsWeight) : 0;
-  const amount = netKg * j.ratePerKg;
-  const returnedKg = r3(j.returns.reduce((s, r) => s + r.kg, 0));
-  const pendingKg = Math.max(0, r3(netKg - returnedKg));
-  const status = returnedKg <= 0 ? 'PENDING' : pendingKg <= 0.001 ? 'FULLY_RETURNED' : 'PARTIALLY_RETURNED';
-  return { netKg, pcs, amount, returnedKg, pendingKg, status: status as 'PENDING' | 'PARTIALLY_RETURNED' | 'FULLY_RETURNED' };
-}
-
 function rng(seed: number) { let s = seed; return () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646; }
 const daysAgo = (n: number) => { const d = new Date(); d.setDate(d.getDate() - n); return iso(d); };
-
-export const jobWorks = collection<JobWork>('ishita.jobworks', () => {
-  const r = rng(11);
-  const list = items.all();
-  return Array.from({ length: 34 }, (_, i) => {
-    const it = list[Math.floor(r() * list.length)];
-    const sz = it.sizes[Math.floor(r() * it.sizes.length)];
-    const mode: JobMode = r() < 0.6 ? 'OUTSIDE' : r() < 0.75 ? 'INHOUSE' : 'MANUAL';
-    const elementCount = 2 + Math.floor(r() * 6);
-    const grossKg = r3(40 + r() * 160 + elementCount);
-    const net = grossKg - elementCount;
-    const age = 2 + Math.floor(r() * 70);
-    const roll = r();
-    const returns: Return[] = roll < 0.35 ? [] : roll < 0.6
-      ? [{ date: daysAgo(Math.max(0, age - 5)), kg: r3(net * (0.3 + r() * 0.4)) }]
-      : [{ date: daysAgo(Math.max(0, age - 4)), kg: r3(net * 0.5) }, { date: daysAgo(Math.max(0, age - 9)), kg: r3(net * 0.5) }];
-    return {
-      id: i + 1, mode,
-      party: mode === 'OUTSIDE' ? VENDORS[Math.floor(r() * VENDORS.length)] : CUSTOMERS[Math.floor(r() * CUSTOMERS.length)],
-      chitthiNo: String(101 + i), date: daysAgo(age), itemId: it.id, size: sizeLabel(sz),
-      finish: FINISHES[Math.floor(r() * FINISHES.length)], grossKg, elementType: 'PETI' as const, elementCount, elementKg: 1,
-      pcsWeight: sz.pcsWeight, ratePerKg: Math.round(45 + r() * 50), returns,
-    };
-  }).sort((a, b) => b.date.localeCompare(a.date));
-});
 
 /* --------------------------------- GRES ---------------------------------- */
 
