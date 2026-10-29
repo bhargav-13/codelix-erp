@@ -17,8 +17,6 @@ export interface NavItem {
   path: string;
   icon: LucideIcon;
   source: Source;
-  /** Still the pre-rebuild page; rebuilt in the new UI in a later phase. */
-  legacy?: boolean;
 }
 
 export interface NavGroup {
@@ -35,7 +33,7 @@ export const NAV: NavGroup[] = [
     label: 'Sales',
     items: [
       { label: 'Parties', path: '/parties', icon: Handshake, source: 'live' },
-      { label: 'CRM', path: '/crm', icon: Gauge, source: 'live', legacy: true },
+      { label: 'CRM', path: '/crm', icon: Gauge, source: 'demo' },
       { label: 'Orders', path: '/orders', icon: ShoppingCart, source: 'live' },
       { label: 'Invoices', path: '/invoices', icon: Receipt, source: 'live' },
       { label: 'Payments', path: '/payments', icon: BellRing, source: 'live' },
@@ -76,8 +74,8 @@ export const NAV: NavGroup[] = [
   {
     label: 'Accounts',
     items: [
-      { label: 'Cashflow', path: '/cashflow', icon: Wallet, source: 'live', legacy: true },
-      { label: 'Electricity', path: '/electric', icon: Zap, source: 'live', legacy: true },
+      { label: 'Cashflow', path: '/cashflow', icon: Wallet, source: 'live' },
+      { label: 'Electricity', path: '/electric', icon: Zap, source: 'live' },
     ],
   },
   {

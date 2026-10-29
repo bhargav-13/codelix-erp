@@ -184,11 +184,7 @@ const AppShell: React.FC = () => {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          {current?.legacy ? (
-            <div className="legacy-page"><Outlet /></div>
-          ) : (
-            <div className="mx-auto max-w-[1400px] p-4 sm:p-6"><Outlet /></div>
-          )}
+          <div className="mx-auto max-w-[1400px] p-4 sm:p-6"><Outlet /></div>
         </main>
       </div>
       <CommandSearch open={searchOpen} onClose={() => setSearchOpen(false)} />

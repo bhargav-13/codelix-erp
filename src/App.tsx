@@ -22,6 +22,9 @@ import Chrome from './app/pages/production/Chrome';
 import Casting from './app/pages/production/Casting';
 import Forging from './app/pages/production/Forging';
 import Scrap from './app/pages/production/Scrap';
+import Cashflow from './app/pages/accounts/Cashflow';
+import Electricity from './app/pages/accounts/Electricity';
+import CRM from './app/pages/CRM';
 import Employees from './app/pages/hr/Employees';
 import AttendancePage from './app/pages/hr/Attendance';
 import Kiosk from './app/pages/hr/Kiosk';
@@ -29,9 +32,6 @@ import Leave from './app/pages/hr/Leave';
 import Payroll from './app/pages/hr/Payroll';
 import './styles/dark-theme.css';
 import ProductCatalogPage from './pages/ProductCatalogPage';
-import ElectricPage from './pages/ElectricPage';
-import CashflowPage from './pages/CashflowPage';
-import CRMPage from './pages/CRMPage';
 import './App.css';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -71,7 +71,7 @@ function App() {
             <Route path="hr/kiosk" element={<Kiosk />} />
             <Route path="hr/leave" element={<Leave />} />
             <Route path="hr/payroll" element={<Payroll />} />
-            <Route path="crm" element={<CRMPage />} />
+            <Route path="crm" element={<CRM />} />
             <Route path="stock" element={<Stock />} />
             <Route path="inventory/ground-floor" element={<Navigate to="/stock?unit=1" replace />} />
             <Route path="inventory/first-floor" element={<Navigate to="/stock?unit=2" replace />} />
@@ -97,12 +97,12 @@ function App() {
             <Route path="scrap/kevin" element={<Navigate to="/scrap" replace />} />
             <Route path="scrap/jayesh" element={<Navigate to="/scrap" replace />} />
             <Route path="party-master" element={<Navigate to="/parties" replace />} />
-            <Route path="electric" element={<ElectricPage />} />
+            <Route path="electric" element={<Electricity />} />
             <Route path="casting" element={<Casting />} />
             <Route path="forging" element={<Forging />} />
             <Route path="purchase" element={<Purchase />} />
             <Route path="rejection" element={<Rejection />} />
-            <Route path="cashflow" element={<CashflowPage />} />
+            <Route path="cashflow" element={<Cashflow />} />
             <Route path="settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>

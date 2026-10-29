@@ -4,8 +4,10 @@ import { ChevronLeft, ChevronRight, Inbox, Loader2, Search, X } from 'lucide-rea
 
 export { clsx as cx };
 
-export const inr = (n: number | undefined | null) =>
-  '₹' + Math.round(n || 0).toLocaleString('en-IN');
+export const inr = (n: number | undefined | null) => {
+  const v = Math.round(n || 0);
+  return (v < 0 ? '−₹' : '₹') + Math.abs(v).toLocaleString('en-IN');
+};
 
 export const num = (n: number | undefined | null, digits = 0) =>
   (n || 0).toLocaleString('en-IN', { maximumFractionDigits: digits });
