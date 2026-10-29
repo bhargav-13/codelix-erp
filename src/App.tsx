@@ -25,6 +25,11 @@ import Scrap from './app/pages/production/Scrap';
 import Cashflow from './app/pages/accounts/Cashflow';
 import Electricity from './app/pages/accounts/Electricity';
 import CRM from './app/pages/CRM';
+import JobWork from './app/pages/ishita/JobWork';
+import Gres from './app/pages/ishita/Gres';
+import Plating from './app/pages/ishita/Plating';
+import Packing from './app/pages/ishita/Packing';
+import ClientPortal from './app/pages/ishita/ClientPortal';
 import Employees from './app/pages/hr/Employees';
 import AttendancePage from './app/pages/hr/Attendance';
 import Kiosk from './app/pages/hr/Kiosk';
@@ -72,6 +77,11 @@ function App() {
             <Route path="hr/leave" element={<Leave />} />
             <Route path="hr/payroll" element={<Payroll />} />
             <Route path="crm" element={<CRM />} />
+            <Route path="job-work" element={<JobWork />} />
+            <Route path="gres" element={<Gres />} />
+            <Route path="plating" element={<Plating />} />
+            <Route path="packing" element={<Packing />} />
+            <Route path="client-portal" element={<ClientPortal />} />
             <Route path="stock" element={<Stock />} />
             <Route path="inventory/ground-floor" element={<Navigate to="/stock?unit=1" replace />} />
             <Route path="inventory/first-floor" element={<Navigate to="/stock?unit=2" replace />} />

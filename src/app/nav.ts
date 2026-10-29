@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Banknote, Boxes, CalendarCheck, ClipboardList, Factory, Flame, Gauge, Handshake, LayoutDashboard, Layers, Package,
+  BarChart3, Banknote, Boxes, Droplets, PackageCheck, Store, Workflow, CalendarCheck, ClipboardList, Factory, Flame, Gauge, Handshake, LayoutDashboard, Layers, Package,
   Receipt, ScanFace, Settings, ShoppingCart, Trash2, Truck, Undo2, Users, Wallet, Zap, BellRing, Hammer, Sparkles, Clock,
 } from 'lucide-react';
 
@@ -59,7 +59,15 @@ export const NAV: NavGroup[] = [
       { label: 'Casting', path: '/casting', icon: Flame, source: 'live' },
       { label: 'Forging', path: '/forging', icon: Hammer, source: 'live' },
       { label: 'Scrap', path: '/scrap', icon: Trash2, source: 'live' },
+      { label: 'Job work', path: '/job-work', icon: Workflow, source: 'demo' },
+      { label: 'Gres', path: '/gres', icon: Droplets, source: 'demo' },
+      { label: 'Plating analytics', path: '/plating', icon: BarChart3, source: 'demo' },
+      { label: 'Packing invoices', path: '/packing', icon: PackageCheck, source: 'demo' },
     ],
+  },
+  {
+    label: 'Customers',
+    items: [{ label: 'Client portal', path: '/client-portal', icon: Store, source: 'demo' }],
   },
   {
     label: 'People',
