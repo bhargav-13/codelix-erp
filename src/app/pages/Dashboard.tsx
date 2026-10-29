@@ -11,7 +11,8 @@ import { partyApi } from '../../api/party';
 import { cashflowSummaryApi } from '../../api/cashflow';
 import { attendance, employees, iso } from '../data/hr';
 import { leads, STAGES } from '../data/crm';
-import { jobCalc, jobWorks, requests, clients } from '../data/ishita';
+import { requests, clients } from '../data/ishita';
+import { chitthiNo } from '../pdf/chitthi';
 import { CountUp, LiveDot, Meter, Ring, Rise, Spark } from '../motion';
 import { useSettings } from '../settings';
 import { Badge, Card, ErrorNote, Tabs, cx, fmtDate, inr, num, useAsync } from '../ui';
@@ -78,7 +79,7 @@ const Dashboard: React.FC = () => {
     await partyApi.getAllParties();
     const raw = await dashboardApi.fetchAllData();
     const [full, cash] = await Promise.all([dashboardApi.getFullDashboard(raw), cashflowSummaryApi.get().catch(() => null)]);
-    return { raw: normalizeDates(raw), full, cash };
+    return { raw: normalizeDates(raw), full: normalizeDates(full), cash };
   }, []);
   const [range, setRange] = useState('12m');
 
@@ -86,7 +87,6 @@ const Dashboard: React.FC = () => {
   const emps = employees.use();
   const att = attendance.use();
   const crm = leads.use();
-  const jobs = jobWorks.use();
   const reqs = requests.use();
   const cl = clients.use();
 
@@ -132,13 +132,14 @@ const Dashboard: React.FC = () => {
     return { open: open.reduce((s, l) => s + l.value, 0), count: open.length, stages, due: open.filter(l => l.nextFollowUp && l.nextFollowUp <= today).length };
   }, [crm, today]);
 
+  // Subcontracting (job work) still out with each job worker, from the live jobs.
   const jobwork = useMemo(() => {
-    const c = jobs.map(j => ({ j, c: jobCalc(j) }));
-    const byVendor = new Map<string, number>();
-    c.filter(x => x.j.mode === 'OUTSIDE').forEach(x => byVendor.set(x.j.party, (byVendor.get(x.j.party) || 0) + x.c.pendingKg));
-    const vendors = [...byVendor.entries()].map(([name, kg]) => ({ name, kg })).sort((a, b) => b.kg - a.kg).slice(0, 5);
-    return { out: c.reduce((s, x) => s + x.c.pendingKg, 0), sent: c.reduce((s, x) => s + x.c.netKg, 0), open: c.filter(x => x.c.status !== 'FULLY_RETURNED').length, vendors };
-  }, [jobs]);
+    const open = (q.data?.raw.allSubcontracts || []).filter(j => j.status === 'IN_PROCESS');
+    const byWorker = new Map<string, number>();
+    open.forEach(j => byWorker.set(j.contractor?.name || '—', (byWorker.get(j.contractor?.name || '—') || 0) + Math.max(0, j.sentStock - (j.totalReturnStock || 0))));
+    const vendors = [...byWorker.entries()].map(([name, kg]) => ({ name, kg })).sort((a, b) => b.kg - a.kg).slice(0, 5);
+    return { out: vendors.reduce((s, v) => s + v.kg, 0), vendors };
+  }, [q.data]);
 
   const feed = useMemo(() => {
     type F = { at: string; icon: React.ReactNode; text: React.ReactNode; tone: string };
@@ -150,9 +151,9 @@ const Dashboard: React.FC = () => {
     att.filter(a => a.date === today && a.inTime).forEach(a => items.push({ at: today, icon: <ScanFace size={14} />, tone: '#0ea5e9', text: <><b>{emps.find(e => e.id === a.employeeId)?.name}</b> punched in at {a.inTime}</> }));
     reqs.forEach(r => items.push({ at: r.date, icon: <Store size={14} />, tone: '#f59e0b', text: <><b>{cl.find(c => c.id === r.clientId)?.company}</b> sent an order request</> }));
     crm.filter(l => l.stage === 'Won').forEach(l => items.push({ at: l.lastContact, icon: <BadgeCheck size={14} />, tone: '#10b981', text: <>Deal won · <b>{l.company}</b> {inr(l.value)}</> }));
-    jobs.slice(0, 8).forEach(j => items.push({ at: j.date, icon: <Factory size={14} />, tone: '#8b5cf6', text: <>Chitthi #{j.chitthiNo} sent to <b>{j.party}</b></> }));
+    (q.data?.raw.allSubcontracts || []).slice(0, 8).forEach(j => items.push({ at: String(j.orderDate).slice(0, 10), icon: <Factory size={14} />, tone: '#8b5cf6', text: <>Chitthi {chitthiNo(j.subcontractingId)} sent to <b>{j.contractor?.name}</b></> }));
     return items.sort((a, b) => b.at.localeCompare(a.at)).slice(0, 18);
-  }, [q.data, att, emps, reqs, cl, crm, jobs, today]);
+  }, [q.data, att, emps, reqs, cl, crm, today]);
 
   if (q.loading) return <Skeleton />;
   if (q.error || !q.data || !live) return <ErrorNote error={q.error} onRetry={q.reload} />;
@@ -370,7 +371,7 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
             <div className="mt-4 rounded-lg bg-muted p-3">
-              <div className="flex justify-between text-[13px]"><span className="text-ink-2">Job work out (chitthis)</span><b><CountUp value={jobwork.out} format={n => `${num(n, 0)} kg`} /></b></div>
+              <div className="flex justify-between text-[13px]"><span className="text-ink-2">Still with job workers</span><b><CountUp value={jobwork.out} format={n => `${num(n, 0)} kg`} /></b></div>
               <div className="mt-2 space-y-2">
                 {jobwork.vendors.map((v, i) => (
                   <div key={v.name}>
@@ -454,7 +455,7 @@ const Dashboard: React.FC = () => {
               { l: 'Cash in today', v: q.data.cash?.totalIncome ?? 0, f: short, icon: <Wallet size={15} />, c: '#10b981', to: '/cashflow' },
               { l: 'Cash out today', v: q.data.cash?.totalExpense ?? 0, f: short, icon: <Wallet size={15} />, c: '#ef4444', to: '/cashflow' },
               { l: 'Client requests', v: waiting.length, f: (n: number) => num(n), icon: <Store size={15} />, c: '#f59e0b', to: '/client-portal' },
-              { l: 'Jobs at contractors', v: sub.inProcess + jobwork.open, f: (n: number) => num(n), icon: <Factory size={15} />, c: '#8b5cf6', to: '/job-work' },
+              { l: 'Jobs at job workers', v: sub.inProcess, f: (n: number) => num(n), icon: <Factory size={15} />, c: '#8b5cf6', to: '/subcontracting' },
               { l: 'Overdue invoices', v: k.overduePayments, f: (n: number) => num(n), icon: <AlertTriangle size={15} />, c: '#ef4444', to: '/payments' },
               { l: 'Pending invoices', v: k.pendingInvoices, f: (n: number) => num(n), icon: <ShoppingCart size={15} />, c: 'var(--accent)', to: '/invoices' },
             ].map(t => (
