@@ -14,9 +14,12 @@ class ApiClient {
       },
     });
 
-    // Request interceptor to add token
+    // Request interceptor — block all requests in black mode
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
+        if (localStorage.getItem('_bm') === '1') {
+          return Promise.reject(Object.assign(new Error('offline'), { config, response: undefined }));
+        }
         const token = localStorage.getItem('accessToken');
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -32,7 +35,7 @@ class ApiClient {
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
           originalRequest._retry = true;
 
           try {
