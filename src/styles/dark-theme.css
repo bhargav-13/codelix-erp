@@ -1,359 +1,359 @@
 /* ================================================================
    Dark mode — applied via html.bm-active
-   No references to this in the UI. Scope: structural + content.
+   No references to this in the UI. Scope: legacy pages only — never the new shell (.app-root).
    ================================================================ */
 
 /* ── Global ─────────────────────────────────────────────────── */
-html.bm-active body {
+html.bm-active:not(:has(.app-root)) body {
   background: #111115;
   color: #DDE0EE;
 }
 
-html.bm-active .loading-screen,
-html.bm-active .placeholder {
+html.bm-active:not(:has(.app-root)) .loading-screen,
+html.bm-active:not(:has(.app-root)) .placeholder {
   background: #111115;
   color: #55556A;
 }
 
 /* ── Layout ─────────────────────────────────────────────────── */
-html.bm-active .layout {
+html.bm-active:not(:has(.app-root)) .layout {
   background: #111115;
 }
 
-html.bm-active .main-content {
+html.bm-active:not(:has(.app-root)) .main-content {
   background: #111115;
 }
 
-html.bm-active .content {
+html.bm-active:not(:has(.app-root)) .content {
   background: #111115;
 }
 
 /* Sidebar toggle button */
-html.bm-active .sidebar-toggle-btn {
+html.bm-active:not(:has(.app-root)) .sidebar-toggle-btn {
   background: #1A1A22;
   border-color: #2A2A38;
   color: #7070888;
 }
 
-html.bm-active .sidebar-toggle-btn:hover {
+html.bm-active:not(:has(.app-root)) .sidebar-toggle-btn:hover {
   border-color: #C03050;
   color: #C03050;
   box-shadow: 0 2px 8px rgba(192, 48, 80, 0.2);
 }
 
 /* Sidebar overlay */
-html.bm-active .sidebar-overlay {
+html.bm-active:not(:has(.app-root)) .sidebar-overlay {
   background: rgba(0, 0, 0, 0.65);
 }
 
 /* ── Sidebar ─────────────────────────────────────────────────── */
-html.bm-active .sidebar {
+html.bm-active:not(:has(.app-root)) .sidebar {
   background: #0D0D12;
   border-right-color: #1A1A22;
 }
 
-html.bm-active .sidebar-divider {
+html.bm-active:not(:has(.app-root)) .sidebar-divider {
   background: #1A1A22;
 }
 
-html.bm-active .sidebar-label {
+html.bm-active:not(:has(.app-root)) .sidebar-label {
   color: #C0C0D4;
 }
 
-html.bm-active .sidebar-sublabel {
+html.bm-active:not(:has(.app-root)) .sidebar-sublabel {
   color: #7A7A90;
 }
 
-html.bm-active .sidebar-icon {
+html.bm-active:not(:has(.app-root)) .sidebar-icon {
   color: #7A7A90;
 }
 
-html.bm-active .expand-icon {
+html.bm-active:not(:has(.app-root)) .expand-icon {
   color: #7A7A90;
 }
 
-html.bm-active .sidebar-item.active {
+html.bm-active:not(:has(.app-root)) .sidebar-item.active {
   background: rgba(192, 48, 80, 0.12);
   border-color: #C03050;
 }
 
-html.bm-active .sidebar-item.active .sidebar-label,
-html.bm-active .sidebar-item.active .sidebar-icon,
-html.bm-active .sidebar-item.active .expand-icon {
+html.bm-active:not(:has(.app-root)) .sidebar-item.active .sidebar-label,
+html.bm-active:not(:has(.app-root)) .sidebar-item.active .sidebar-icon,
+html.bm-active:not(:has(.app-root)) .sidebar-item.active .expand-icon {
   color: #E0506E;
 }
 
-html.bm-active .sidebar-item:not(.active):hover {
+html.bm-active:not(:has(.app-root)) .sidebar-item:not(.active):hover {
   background: rgba(192, 48, 80, 0.07);
 }
 
-html.bm-active .sidebar-subsection.expanded {
+html.bm-active:not(:has(.app-root)) .sidebar-subsection.expanded {
   border-left-color: #25253A;
 }
 
-html.bm-active .sidebar-subitem.active {
+html.bm-active:not(:has(.app-root)) .sidebar-subitem.active {
   background: rgba(192, 48, 80, 0.1);
 }
 
-html.bm-active .sidebar-subitem.active .sidebar-sublabel {
+html.bm-active:not(:has(.app-root)) .sidebar-subitem.active .sidebar-sublabel {
   color: #E0506E;
 }
 
-html.bm-active .sidebar-subitem:not(.active):hover {
+html.bm-active:not(:has(.app-root)) .sidebar-subitem:not(.active):hover {
   background: rgba(192, 48, 80, 0.06);
 }
 
-html.bm-active .sidebar-footer {
+html.bm-active:not(:has(.app-root)) .sidebar-footer {
   border-top-color: #1A1A22;
 }
 
-html.bm-active .user-name {
+html.bm-active:not(:has(.app-root)) .user-name {
   color: #C0C0D4;
 }
 
-html.bm-active .mobile-close-btn {
+html.bm-active:not(:has(.app-root)) .mobile-close-btn {
   background: rgba(192, 48, 80, 0.1);
   color: #C03050;
 }
 
-html.bm-active .mobile-close-btn:hover {
+html.bm-active:not(:has(.app-root)) .mobile-close-btn:hover {
   background: rgba(192, 48, 80, 0.18);
 }
 
 /* ── Header ─────────────────────────────────────────────────── */
-html.bm-active .header {
+html.bm-active:not(:has(.app-root)) .header {
   background: #0D0D12;
   border-bottom-color: #1A1A22;
 }
 
-html.bm-active .hamburger-line {
+html.bm-active:not(:has(.app-root)) .hamburger-line {
   background: #C03050;
 }
 
-html.bm-active .header-user:hover {
+html.bm-active:not(:has(.app-root)) .header-user:hover {
   background: #1A1A22;
 }
 
-html.bm-active .header-user-name {
+html.bm-active:not(:has(.app-root)) .header-user-name {
   color: #C0C0D4;
 }
 
-html.bm-active .dropdown-menu {
+html.bm-active:not(:has(.app-root)) .dropdown-menu {
   background: #16161E;
   border-color: #2A2A38;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-html.bm-active .dropdown-item:hover {
+html.bm-active:not(:has(.app-root)) .dropdown-item:hover {
   background: #1E1E2C;
 }
 
-html.bm-active .dropdown-item-text {
+html.bm-active:not(:has(.app-root)) .dropdown-item-text {
   color: #C0C0D4;
 }
 
 /* ── Keyboard shortcuts modal ────────────────────────────────── */
-html.bm-active .shortcuts-fab {
+html.bm-active:not(:has(.app-root)) .shortcuts-fab {
   background: rgba(192, 48, 80, 0.1);
   border-color: #C03050;
   color: #C03050;
 }
 
-html.bm-active .shortcuts-fab:hover {
+html.bm-active:not(:has(.app-root)) .shortcuts-fab:hover {
   background: rgba(192, 48, 80, 0.18);
 }
 
-html.bm-active .shortcuts-overlay {
+html.bm-active:not(:has(.app-root)) .shortcuts-overlay {
   background: rgba(0, 0, 0, 0.6);
 }
 
-html.bm-active .shortcuts-modal {
+html.bm-active:not(:has(.app-root)) .shortcuts-modal {
   background: #16161E;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
 }
 
-html.bm-active .shortcuts-modal-header {
+html.bm-active:not(:has(.app-root)) .shortcuts-modal-header {
   border-bottom-color: #25253A;
 }
 
-html.bm-active .shortcuts-modal-title {
+html.bm-active:not(:has(.app-root)) .shortcuts-modal-title {
   color: #DDE0EE;
 }
 
-html.bm-active .shortcuts-modal-close {
+html.bm-active:not(:has(.app-root)) .shortcuts-modal-close {
   color: #55556A;
 }
 
-html.bm-active .shortcuts-modal-close:hover {
+html.bm-active:not(:has(.app-root)) .shortcuts-modal-close:hover {
   background: #1E1E2C;
   color: #DDE0EE;
 }
 
-html.bm-active .shortcut-key {
+html.bm-active:not(:has(.app-root)) .shortcut-key {
   background: #1A1A22;
   border-color: #2A2A38;
   color: #9090A8;
 }
 
-html.bm-active .shortcut-plus {
+html.bm-active:not(:has(.app-root)) .shortcut-plus {
   color: #55556A;
 }
 
-html.bm-active .shortcut-desc {
+html.bm-active:not(:has(.app-root)) .shortcut-desc {
   color: #7A7A90;
 }
 
 /* ── Dashboard page ──────────────────────────────────────────── */
-html.bm-active .dashboard-page {
+html.bm-active:not(:has(.app-root)) .dashboard-page {
   background: #111115;
 }
 
-html.bm-active .dashboard-header {
+html.bm-active:not(:has(.app-root)) .dashboard-header {
   border-bottom-color: #25253A;
 }
 
-html.bm-active .dashboard-title {
+html.bm-active:not(:has(.app-root)) .dashboard-title {
   color: #DDE0EE;
 }
 
-html.bm-active .dashboard-subtitle {
+html.bm-active:not(:has(.app-root)) .dashboard-subtitle {
   color: #55556A;
 }
 
-html.bm-active .last-updated {
+html.bm-active:not(:has(.app-root)) .last-updated {
   color: #55556A;
 }
 
-html.bm-active .refresh-btn {
+html.bm-active:not(:has(.app-root)) .refresh-btn {
   background: rgba(192, 48, 80, 0.08);
   color: #C03050;
   border-color: #C03050;
 }
 
-html.bm-active .refresh-btn:hover {
+html.bm-active:not(:has(.app-root)) .refresh-btn:hover {
   background: rgba(192, 48, 80, 0.16);
 }
 
-html.bm-active .dashboard-tabs {
+html.bm-active:not(:has(.app-root)) .dashboard-tabs {
   background: #1A1A22;
 }
 
 /* ── Generic page backgrounds (covers all sub-pages) ─────────── */
-html.bm-active [class$="-page"],
-html.bm-active [class*="-page "] {
+html.bm-active:not(:has(.app-root)) [class$="-page"],
+html.bm-active:not(:has(.app-root)) [class*="-page "] {
   background: #111115;
 }
 
 /* ── Tables ──────────────────────────────────────────────────── */
-html.bm-active table {
+html.bm-active:not(:has(.app-root)) table {
   background: #16161E;
 }
 
-html.bm-active th {
+html.bm-active:not(:has(.app-root)) th {
   background: #1A1A22 !important;
   color: #9090A8 !important;
   border-color: #25253A !important;
 }
 
-html.bm-active td {
+html.bm-active:not(:has(.app-root)) td {
   color: #C0C0D4 !important;
   border-color: #1E1E2A !important;
 }
 
-html.bm-active tr:hover td {
+html.bm-active:not(:has(.app-root)) tr:hover td {
   background: #1A1A22 !important;
 }
 
-html.bm-active tr:nth-child(even) td {
+html.bm-active:not(:has(.app-root)) tr:nth-child(even) td {
   background: #141418 !important;
 }
 
 /* ── Cards ───────────────────────────────────────────────────── */
-html.bm-active [class*="card"],
-html.bm-active [class*="-card"] {
+html.bm-active:not(:has(.app-root)) [class*="card"],
+html.bm-active:not(:has(.app-root)) [class*="-card"] {
   background: #1A1A22 !important;
   border-color: #25253A !important;
   color: #C0C0D4;
 }
 
 /* ── Generic container backgrounds ───────────────────────────── */
-html.bm-active [class*="container"],
-html.bm-active [class*="-section"],
-html.bm-active [class*="-wrapper"] {
+html.bm-active:not(:has(.app-root)) [class*="container"],
+html.bm-active:not(:has(.app-root)) [class*="-section"],
+html.bm-active:not(:has(.app-root)) [class*="-wrapper"] {
   background-color: #16161E;
 }
 
 /* ── Inputs, selects, textareas ──────────────────────────────── */
-html.bm-active input:not([type="checkbox"]):not([type="radio"]),
-html.bm-active select,
-html.bm-active textarea {
+html.bm-active:not(:has(.app-root)) input:not([type="checkbox"]):not([type="radio"]),
+html.bm-active:not(:has(.app-root)) select,
+html.bm-active:not(:has(.app-root)) textarea {
   background: #1A1A26 !important;
   border-color: #26263A !important;
   color: #DDE0EE !important;
 }
 
-html.bm-active input::placeholder,
-html.bm-active textarea::placeholder {
+html.bm-active:not(:has(.app-root)) input::placeholder,
+html.bm-active:not(:has(.app-root)) textarea::placeholder {
   color: #40404E !important;
 }
 
-html.bm-active input:focus,
-html.bm-active select:focus,
-html.bm-active textarea:focus {
+html.bm-active:not(:has(.app-root)) input:focus,
+html.bm-active:not(:has(.app-root)) select:focus,
+html.bm-active:not(:has(.app-root)) textarea:focus {
   border-color: #C03050 !important;
   box-shadow: 0 0 0 3px rgba(192, 48, 80, 0.14) !important;
   background: #1A1A26 !important;
 }
 
 /* ── Buttons (secondary/outline) ─────────────────────────────── */
-html.bm-active button:not([class*="login-button"]):not([class*="sidebar"]):not([class*="mobile"]):not([class*="shortcuts"]):not([class*="toggle"]):not([class*="fab"]) {
+html.bm-active:not(:has(.app-root)) button:not([class*="login-button"]):not([class*="sidebar"]):not([class*="mobile"]):not([class*="shortcuts"]):not([class*="toggle"]):not([class*="fab"]) {
   color: #C0C0D4;
 }
 
 /* ── Modals ──────────────────────────────────────────────────── */
-html.bm-active [class*="modal"]:not([class*="overlay"]):not([class*="shortcuts-overlay"]) {
+html.bm-active:not(:has(.app-root)) [class*="modal"]:not([class*="overlay"]):not([class*="shortcuts-overlay"]) {
   background: #16161E !important;
   border-color: #25253A !important;
   color: #DDE0EE;
 }
 
-html.bm-active [class*="modal-header"],
-html.bm-active [class*="modal-footer"] {
+html.bm-active:not(:has(.app-root)) [class*="modal-header"],
+html.bm-active:not(:has(.app-root)) [class*="modal-footer"] {
   background: #1A1A22 !important;
   border-color: #25253A !important;
 }
 
-html.bm-active [class*="modal-title"] {
+html.bm-active:not(:has(.app-root)) [class*="modal-title"] {
   color: #DDE0EE !important;
 }
 
-html.bm-active [class*="overlay"] {
+html.bm-active:not(:has(.app-root)) [class*="overlay"] {
   background: rgba(0, 0, 0, 0.65) !important;
 }
 
 /* ── Labels and headings (general) ───────────────────────────── */
-html.bm-active h1,
-html.bm-active h2,
-html.bm-active h3,
-html.bm-active h4,
-html.bm-active h5 {
+html.bm-active:not(:has(.app-root)) h1,
+html.bm-active:not(:has(.app-root)) h2,
+html.bm-active:not(:has(.app-root)) h3,
+html.bm-active:not(:has(.app-root)) h4,
+html.bm-active:not(:has(.app-root)) h5 {
   color: #DDE0EE;
 }
 
-html.bm-active p,
-html.bm-active span:not([class*="badge"]):not([class*="tag"]) {
+html.bm-active:not(:has(.app-root)) p,
+html.bm-active:not(:has(.app-root)) span:not([class*="badge"]):not([class*="tag"]) {
   color: #C0C0D4;
 }
 
-html.bm-active label {
+html.bm-active:not(:has(.app-root)) label {
   color: #9090A8;
 }
 
 /* ── Scrollbar in dark mode ───────────────────────────────────── */
-html.bm-active ::-webkit-scrollbar-thumb {
+html.bm-active:not(:has(.app-root)) ::-webkit-scrollbar-thumb {
   background: rgba(192, 48, 80, 0.22);
 }
 
-html.bm-active ::-webkit-scrollbar-thumb:hover {
+html.bm-active:not(:has(.app-root)) ::-webkit-scrollbar-thumb:hover {
   background: rgba(192, 48, 80, 0.45);
 }

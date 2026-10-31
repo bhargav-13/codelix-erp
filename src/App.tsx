@@ -18,6 +18,7 @@ import Purchase from './app/pages/inventory/Purchase';
 import Rejection from './app/pages/inventory/Rejection';
 import Subcontracting from './app/pages/production/Subcontracting';
 import Subcontractors from './app/pages/production/Subcontractors';
+import JobRejection from './app/pages/production/JobRejection';
 import Chrome from './app/pages/production/Chrome';
 import Casting from './app/pages/production/Casting';
 import Forging from './app/pages/production/Forging';
@@ -29,6 +30,10 @@ import Gres from './app/pages/ishita/Gres';
 import Plating from './app/pages/ishita/Plating';
 import Packing from './app/pages/ishita/Packing';
 import ClientPortal from './app/pages/ishita/ClientPortal';
+import Bills from './app/pages/ishita/Bills';
+import ExportInvoices from './app/pages/ishita/ExportInvoices';
+import ClientPricing from './app/pages/ishita/ClientPricing';
+import ItemMaster from './app/pages/ishita/ItemMaster';
 import Employees from './app/pages/hr/Employees';
 import AttendancePage from './app/pages/hr/Attendance';
 import Kiosk from './app/pages/hr/Kiosk';
@@ -78,7 +83,15 @@ function App() {
             <Route path="crm" element={<CRM />} />
             <Route path="job-work" element={<Navigate to="/subcontracting" replace />} />
             <Route path="gres" element={<Gres />} />
-            <Route path="plating" element={<Plating />} />
+            <Route path="plating" element={<Navigate to="/outside-job-work" replace />} />
+            <Route path="in-house-plating" element={<Plating key="in" scope="INHOUSE" />} />
+            <Route path="outside-job-work" element={<Plating key="out" scope="OUTSIDE" />} />
+            <Route path="outside-gres" element={<Plating key="gres" scope="GRES" />} />
+            <Route path="bills/purchase" element={<Bills kind="PURCHASE" />} />
+            <Route path="bills/sales" element={<Bills kind="SALES" />} />
+            <Route path="export-invoices" element={<ExportInvoices />} />
+            <Route path="client-management" element={<ClientPricing />} />
+            <Route path="item-master" element={<ItemMaster />} />
             <Route path="packing" element={<Packing />} />
             <Route path="client-portal" element={<ClientPortal />} />
             <Route path="stock" element={<Stock />} />
@@ -95,6 +108,7 @@ function App() {
             <Route path="orders/first-floor" element={<Navigate to="/orders?unit=2" replace />} />
             <Route path="subcontracting" element={<Subcontracting />} />
             <Route path="subcontractor" element={<Subcontractors />} />
+            <Route path="subcontracting/rejection" element={<JobRejection />} />
             <Route path="crome" element={<Chrome />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="invoices/ground-floor" element={<Navigate to="/invoices?unit=1" replace />} />

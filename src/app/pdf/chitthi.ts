@@ -1,10 +1,10 @@
 import { jsPDF } from 'jspdf';
-import type { Subcontracting } from '../../types';
+import { RETURN_KIND, contractorName, itemName, jobCalc, jobNo, packKg, returnNet, type Job } from '../data/production';
 
 /**
- * Job-work chitthi (challan) for one subcontracting job: what was sent, at
- * what rates, every return so far, and signature blocks. Generated in the
- * browser so it works for any job without a backend endpoint.
+ * Job-work chitthi (challan) for one subcontracting job: every lot sent, at
+ * what rates, every return so far, the rejection taken off the job pay, and
+ * signature blocks. Generated in the browser so it works without a backend.
  */
 
 export const chitthiNo = (id: number) => `SC-${String(id).padStart(5, '0')}`;
@@ -14,7 +14,8 @@ const kg = (n?: number | null, unit = 'kg') => `${(n || 0).toLocaleString('en-IN
 // jsPDF's built-in fonts have no ₹ glyph, so amounts use "Rs."
 const rs = (n?: number | null) => `Rs. ${(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
 
-export function downloadChitthi(job: Subcontracting, company: { name: string; tagline?: string; accent?: string }) {
+export function downloadChitthi(job: Job, company: { name: string; tagline?: string; accent?: string }) {
+  const c = jobCalc(job);
   const doc = new jsPDF({ unit: 'mm', format: 'a5' });
   const W = doc.internal.pageSize.getWidth();
   const M = 10;
@@ -36,73 +37,83 @@ export function downloadChitthi(job: Subcontracting, company: { name: string; ta
   doc.text('JOB WORK CHITTHI', W - M, 11, { align: 'right' });
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
-  doc.text(chitthiNo(job.subcontractingId), W - M, 17, { align: 'right' });
+  doc.text(`${chitthiNo(job.id)} · ${jobNo(job)}`, W - M, 17, { align: 'right' });
 
   // Party + dates
   doc.setTextColor('#111827');
   let y = 33;
   const label = (t: string, x: number, yy: number) => { doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor('#6b7280'); doc.text(t.toUpperCase(), x, yy); };
   const value = (t: string, x: number, yy: number, bold = true) => { doc.setFont('helvetica', bold ? 'bold' : 'normal'); doc.setFontSize(10); doc.setTextColor('#111827'); doc.text(t, x, yy); };
+  const page = () => { if (y > 175) { doc.addPage(); y = 20; } };
 
-  label('Job worker', M, y); label('Date sent', W / 2 + 4, y);
-  value(job.contractor?.name || '-', M, y + 5); value(fmtDate(job.orderDate), W / 2 + 4, y + 5);
+  label('Job worker', M, y); label('Item', W / 2 + 4, y);
+  value(contractorName(job.contractorId), M, y + 5); value(itemName(job.itemId), W / 2 + 4, y + 5);
   y += 13;
   label('Status', M, y); label('Printed', W / 2 + 4, y);
   value(job.status === 'IN_PROCESS' ? 'In process' : job.status === 'COMPLETED' ? 'Completed' : 'Rejected', M, y + 5, false);
   value(fmtDate(new Date().toISOString()), W / 2 + 4, y + 5, false);
   y += 12;
 
-  // Goods sent table
   const row = (cells: string[], xs: number[], yy: number, opts: { bold?: boolean; fill?: string; align?: ('left' | 'right')[] } = {}) => {
     if (opts.fill) { doc.setFillColor(opts.fill); doc.rect(M, yy - 4.5, W - 2 * M, 7, 'F'); }
     doc.setFont('helvetica', opts.bold ? 'bold' : 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor('#111827');
-    cells.forEach((c, i) => doc.text(c, xs[i], yy, { align: opts.align?.[i] || 'left' }));
+    cells.forEach((cell, i) => doc.text(cell, xs[i], yy, { align: opts.align?.[i] || 'left' }));
   };
+  const right4: ('left' | 'right')[] = ['left', 'right', 'right', 'right'];
+
+  // Lots sent
   doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.text('Goods sent', M, y); y += 6;
   const gx = [M + 2, W / 2 - 8, W / 2 + 22, W - M - 2];
-  row(['Item', 'Quantity', 'Material', 'Job work'], gx, y, { bold: true, fill: '#f1f3f5', align: ['left', 'right', 'right', 'right'] }); y += 7;
-  row([job.item?.name || '-', kg(job.sentStock, unit), rs(job.price), rs(job.jobWorkPay)], gx, y, { align: ['left', 'right', 'right', 'right'] });
-  y += 3; doc.setDrawColor('#e5e7eb'); doc.line(M, y, W - M, y); y += 8;
+  row(['Date', 'Quantity', 'Material', 'Job work'], gx, y, { bold: true, fill: '#f1f3f5', align: right4 }); y += 7;
+  for (const s of job.sends) {
+    row([fmtDate(s.date), kg(s.qty, unit), rs(s.price), rs(s.jobPay)], gx, y, { align: right4 });
+    y += 6; page();
+  }
+  if (job.sends.length > 1) { row(['Total / avg', kg(c.sent, unit), rs(c.price), rs(c.jobPay)], gx, y, { bold: true, align: right4 }); y += 6; }
+  y += 1; doc.setDrawColor('#e5e7eb'); doc.line(M, y, W - M, y); y += 8;
 
-  // Returns table
+  // Returns
   doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.text('Returns', M, y); y += 6;
-  const rx = [M + 2, W / 2 - 14, W / 2 + 16, W - M - 2];
-  row(['Date', 'Gross', 'Packaging', 'Net'], rx, y, { bold: true, fill: '#f1f3f5', align: ['left', 'right', 'right', 'right'] }); y += 7;
-  const returns = job.subReturns || [];
-  if (!returns.length) { row(['Nothing returned yet', '', '', ''], rx, y); y += 6; }
-  for (const r of returns) {
-    const pack = (r.packagings || []).reduce((s, p) => s + (p.packagingWeight || 0) * (p.packagingCount || 0), 0);
-    row([fmtDate(r.returnDate), kg(r.returnStock), kg(pack), kg(r.netReturnStock ?? r.returnStock - pack)], rx, y, { align: ['left', 'right', 'right', 'right'] });
-    y += 6;
-    if (y > 160) { doc.addPage(); y = 20; }
+  const rx = [M + 2, W / 2 - 18, W / 2 + 6, W / 2 + 28, W - M - 2];
+  const right5: ('left' | 'right')[] = ['left', 'right', 'right', 'right', 'right'];
+  row(['Date', 'Gross', 'Packaging', 'Rejection', 'Net'], rx, y, { bold: true, fill: '#f1f3f5', align: right5 }); y += 7;
+  if (!job.returns.length) { row(['Nothing returned yet', '', '', '', ''], rx, y); y += 6; }
+  for (const r of job.returns) {
+    row([`${fmtDate(r.date)} · ${RETURN_KIND[r.kind]}`, kg(r.gross), kg(packKg(r.packs)), kg(r.rejection), kg(returnNet(r))], rx, y, { align: right5 });
+    y += 6; page();
   }
   y += 2; doc.line(M, y, W - M, y); y += 8;
 
   // Totals
   const totals: [string, string][] = [
-    ['Sent', kg(job.sentStock, unit)],
-    ['Returned (net)', kg(job.totalNetReturnStock)],
-    ['Used', kg(job.usedStock)],
-    ['Still with job worker', kg(Math.max(0, job.sentStock - (job.totalReturnStock || 0)), unit)],
+    ['Sent', kg(c.sent, unit)],
+    ['Returned (net)', kg(c.netReturned)],
+    ['Used', kg(c.used)],
+    ['Still with job worker', kg(c.pending, unit)],
+    ['Material value', rs(c.value)],
+    ['Job pay', rs(c.grossJobPay)],
   ];
-  totals.forEach(([l, v]) => { label(l, M, y); doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor('#111827'); doc.text(v, W - M, y, { align: 'right' }); y += 6; });
+  if (c.rejection > 0) totals.push([`Rejection ${kg(c.rejection)} x ${rs(c.rejectionRate)}`, `- ${rs(c.rejectionAmount)}`]);
+  totals.forEach(([l, v]) => { page(); label(l, M, y); doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor('#111827'); doc.text(v, W - M, y, { align: 'right' }); y += 6; });
   doc.setFillColor('#eef2ff'); doc.rect(M, y - 3, W - 2 * M, 10, 'F');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(accent);
-  doc.text('Amount', M + 3, y + 3.5); doc.text(rs(job.totalAmount), W - M - 3, y + 3.5, { align: 'right' });
+  doc.text('Net job pay', M + 3, y + 3.5); doc.text(rs(c.netJobPay), W - M - 3, y + 3.5, { align: 'right' });
   y += 14;
 
   if (job.remark) {
+    page();
     label('Remark', M, y); doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor('#111827');
     doc.text(doc.splitTextToSize(job.remark, W - 2 * M), M, y + 5); y += 14;
   }
 
   // Signatures
+  if (y > 185) { doc.addPage(); y = 20; }
   const sy = Math.max(y + 14, doc.internal.pageSize.getHeight() - 22);
   doc.setDrawColor('#9ca3af');
   doc.line(M, sy, M + 50, sy); doc.line(W - M - 50, sy, W - M, sy);
   label('Sent by', M, sy + 5); label("Job worker's signature", W - M - 50, sy + 5);
 
-  doc.save(`chitthi-${chitthiNo(job.subcontractingId)}.pdf`);
+  doc.save(`chitthi-${chitthiNo(job.id)}.pdf`);
 }
