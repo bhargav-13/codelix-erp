@@ -5,7 +5,7 @@ import { purchasePartyApi } from '../../../api/purchaseParty';
 import { rejectionApi } from '../../../api/rejection';
 import type { PurchaseParty, RejectionRequest, RejectionResponse, StockItem } from '../../../types';
 import {
-  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, fmtDate, inr, num, toast, useAsync,
+  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, Select, fmtDate, inr, num, toast, useAsync,
 } from '../../ui';
 import { UNIT_LABEL, fetchAllPages, today, type Floor } from '../sales/shared';
 import { n } from './shared';
@@ -117,10 +117,10 @@ const Rejection: React.FC = () => {
           <Tabs value={tab} onChange={t => setTab(t as 'ALL' | ReturnType)} tabs={[{ id: 'ALL', label: 'All' }, { id: 'CASH', label: 'Cash' }, { id: 'MAAL', label: 'Goods' }]} />
           <SearchBox value={search} onChange={setSearch} placeholder="Search supplier" />
           <div className="ml-auto flex flex-wrap items-center gap-2">
-            <select className="field h-8 w-[150px]" value={pdf.partyId} onChange={e => setPdf({ ...pdf, partyId: Number(e.target.value) })}>
+            <Select className="field h-8 w-[150px]" value={pdf.partyId} onChange={e => setPdf({ ...pdf, partyId: Number(e.target.value) })}>
               <option value={0}>All suppliers</option>
               {parties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
+            </Select>
             <input type="date" className="field h-8 w-[140px]" value={pdf.from} onChange={e => setPdf({ ...pdf, from: e.target.value })} />
             <input type="date" className="field h-8 w-[140px]" value={pdf.to} onChange={e => setPdf({ ...pdf, to: e.target.value })} />
             <Button size="sm" variant="outline" icon={<FileDown size={14} />} loading={exporting} onClick={exportPdf}>PDF</Button>
@@ -157,10 +157,10 @@ const Rejection: React.FC = () => {
         footer={<><Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button><Button loading={busy} onClick={save}>Save</Button></>}>
         <div className="space-y-4">
           <Field label="Supplier">
-            <select className="field" value={form.partyId} onChange={e => setForm({ ...form, partyId: Number(e.target.value) })}>
+            <Select className="field" value={form.partyId} onChange={e => setForm({ ...form, partyId: Number(e.target.value) })}>
               <option value={0}>Select supplier…</option>
               {parties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
+            </Select>
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Date"><input type="date" className="field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></Field>
@@ -175,14 +175,14 @@ const Rejection: React.FC = () => {
           ) : (
             <>
               <Field label="Stock item">
-                <select className="field" value={form.stockItemId || 0} onChange={e => setForm({ ...form, stockItemId: Number(e.target.value) })}>
+                <Select className="field" value={form.stockItemId || 0} onChange={e => setForm({ ...form, stockItemId: Number(e.target.value) })}>
                   <option value={0}>Select stock item…</option>
                   {stock.map(s => (
                     <option key={s.stockItemId} value={s.stockItemId}>
                       {s.product.productName} · {UNIT_LABEL[s.inventoryFloor as Floor] ?? '—'} · {num(s.quantityInKg, 2)} kg
                     </option>
                   ))}
-                </select>
+                </Select>
               </Field>
               <Field label="Quantity returned (kg)"><input type="number" className="field" value={form.returnQty || ''} onChange={e => setForm({ ...form, returnQty: n(e.target.value) })} /></Field>
             </>

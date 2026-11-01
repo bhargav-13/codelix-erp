@@ -5,7 +5,7 @@ import {
 } from '../../data/ishita';
 import { iso } from '../../data/hr';
 import { useSettings } from '../../settings';
-import { Badge, Button, Card, DataTable, Drawer, Field, PageHeader, Stat, Tabs, fmtDate, num, toast, type Tone } from '../../ui';
+import { Badge, Button, Card, DataTable, Drawer, Field, PageHeader, Stat, Tabs, Select, fmtDate, num, toast, type Tone } from '../../ui';
 
 const STATUS: Record<RequestStatus, { label: string; tone: Tone }> = {
   PENDING_APPROVAL: { label: 'Waiting for approval', tone: 'amber' },
@@ -176,9 +176,9 @@ const ClientApp: React.FC = () => {
       <div>
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-dashed border-accent bg-accent-soft px-4 py-3 text-[13px]">
           <span className="font-medium text-accent">Previewing the client app as</span>
-          <select className="field h-8 w-[220px]" value={clientId} onChange={e => { setClientId(Number(e.target.value)); setCart([]); }}>
+          <Select className="field h-8 w-[220px]" value={clientId} onChange={e => { setClientId(Number(e.target.value)); setCart([]); }}>
             {cl.map(c => <option key={c.id} value={c.id}>{c.company}</option>)}
-          </select>
+          </Select>
           <span className="text-ink-2">— this is what {me.contact} sees after logging in to {settings.companyName}.</span>
         </div>
         <div className="mb-3 flex flex-wrap gap-2">
@@ -199,8 +199,8 @@ const ClientApp: React.FC = () => {
                 <div className="font-semibold">{it.name}</div>
                 <div className="mb-3 text-[12px] text-ink-3">{it.category} · {it.pcsPerBox} pcs/box · {it.boxPerCarton} box/carton</div>
                 <div className="grid grid-cols-2 gap-2">
-                  <select className="field h-8" value={c.size} onChange={e => setC({ size: e.target.value })}>{it.sizes.map(s => <option key={sizeLabel(s)}>{sizeLabel(s)}</option>)}</select>
-                  <select className="field h-8" value={c.finish} onChange={e => setC({ finish: e.target.value })}>{FINISHES.map(f => <option key={f}>{f}</option>)}</select>
+                  <Select className="field h-8" value={c.size} onChange={e => setC({ size: e.target.value })}>{it.sizes.map(s => <option key={sizeLabel(s)}>{sizeLabel(s)}</option>)}</Select>
+                  <Select className="field h-8" value={c.finish} onChange={e => setC({ finish: e.target.value })}>{FINISHES.map(f => <option key={f}>{f}</option>)}</Select>
                   <input type="number" className="field h-8" placeholder={`${it.pcsPerBox * it.boxPerCarton} pcs`} value={c.qty || ''} onChange={e => setC({ qty: Number(e.target.value) || 0 })} />
                   <Button size="sm" icon={<ShoppingCart size={13} />} onClick={() => add(it.id)}>Add</Button>
                 </div>

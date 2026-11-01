@@ -4,7 +4,8 @@ import {
   RETURN_KIND, availableForChrome, chromeLots, contractorName, contractors, itemName, jobCalc, jobNo, jobs, nextId, packKg, platingParties,
   returnNet, subItems, type Job, type JobPlace, type JobReturn, type JobStatus, type JobUnit, type Pack, type ReturnKind, type Send,
 } from '../../data/production';
-import { Badge, Button, Card, Drawer, Empty, Field, PageHeader, SearchBox, Stat, Tabs, cx, fmtDate, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Drawer, Empty, Field, PageHeader, Presence, Reveal, SearchBox, Stat, Tabs, Select, cx, fmtDate, inr, num, toast } from '../../ui';
+import { Rise } from '../../motion';
 import { SelectWithAdd, n } from '../inventory/shared';
 import { today } from '../sales/shared';
 import { Figure, JOB_STATUS, Line, PackagingEditor, money, newPack, packSummary, qty } from './shared';
@@ -94,9 +95,9 @@ const JobForm: React.FC<{ job: Job | null; open: boolean; onClose: () => void }>
           <Field label="Quantity sent">
             <div className="flex gap-2">
               <input type="number" className="field" disabled={multi} value={f.qty || ''} onChange={e => setF({ ...f, qty: n(e.target.value) })} />
-              <select className="field w-[76px]" value={f.unit} onChange={e => setF({ ...f, unit: e.target.value as JobUnit })}>
+              <Select className="field w-[76px]" value={f.unit} onChange={e => setF({ ...f, unit: e.target.value as JobUnit })}>
                 <option value="KG">kg</option><option value="PC">pc</option>
-              </select>
+              </Select>
             </div>
           </Field>
           <Field label="Material rate (₹ / kg)"><input type="number" className="field" disabled={multi} value={f.price || ''} onChange={e => setF({ ...f, price: n(e.target.value) })} /></Field>
@@ -188,9 +189,9 @@ const ReturnForm: React.FC<{ target: { job: Job; ret: JobReturn | null } | null;
         <div className="grid grid-cols-2 gap-4">
           <Field label="Return date"><input type="date" className="field" value={date} onChange={e => setDate(e.target.value)} /></Field>
           <Field label="What came back">
-            <select className="field" value={kind} onChange={e => setKind(e.target.value as ReturnKind)}>
+            <Select className="field" value={kind} onChange={e => setKind(e.target.value as ReturnKind)}>
               {(Object.keys(RETURN_KIND) as ReturnKind[]).map(k => <option key={k} value={k}>{RETURN_KIND[k]}</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label="Gross return (kg)"><input type="number" className="field" value={gross || ''} onChange={e => setGross(n(e.target.value))} /></Field>
           <Field label="Rejection (kg)"><input type="number" className="field" value={rejection || ''} onChange={e => setRejection(n(e.target.value))} /></Field>
@@ -366,7 +367,8 @@ const JobCard: React.FC<{
   job: Job;
   onEdit: () => void; onDelete: () => void; onChitthi: () => void; onReturn: (r: JobReturn | null) => void;
   onSend: (s: Send) => void; onRejection: () => void; onChrome: (r: JobReturn) => void;
-}> = ({ job, onEdit, onDelete, onChitthi, onReturn, onSend, onRejection, onChrome }) => {
+  delay?: number;
+}> = ({ job, onEdit, onDelete, onChitthi, onReturn, onSend, onRejection, onChrome, delay = 0 }) => {
   const lots = chromeLots.use();
   const c = jobCalc(job, lots);
   const [showSends, setShowSends] = useState(false);
@@ -388,7 +390,8 @@ const JobCard: React.FC<{
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Rise delay={delay}>
+    <Card className="overflow-hidden transition-shadow duration-200 hover:shadow-[0_8px_30px_-14px_rgb(0_0_0/.18)]">
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line px-5 py-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -420,7 +423,7 @@ const JobCard: React.FC<{
         <Figure label="In chrome" value={<span className="text-violet-600 dark:text-violet-400">{chunksInChrome}/{job.returns.length} chunks</span>} sub={c.chromeKg > 0 ? qty(c.chromeKg) : undefined} />
       </div>
       <div className="h-1 bg-muted" title={`${c.returnedPct.toFixed(1)}% returned`}>
-        <div className="h-full bg-emerald-500 transition-all" style={{ width: `${c.returnedPct}%` }} />
+        <div className="h-full bg-emerald-500 transition-all duration-700 ease-out" style={{ width: `${c.returnedPct}%` }} />
       </div>
 
       <div className="grid gap-4 p-5 lg:grid-cols-2">
@@ -429,7 +432,8 @@ const JobCard: React.FC<{
           {job.sends.length > 1
             ? <Collapse title={`Sent details (${job.sends.length})`} open={showSends} onToggle={() => setShowSends(v => !v)} />
             : <div className="py-1 font-semibold">Sent details</div>}
-          {showSends && job.sends.length > 1 && (
+          {job.sends.length > 1 && (
+            <Reveal open={showSends}>
             <div className="my-2 divide-y divide-line rounded-md bg-muted/60">
               {job.sends.map(s => (
                 <div key={s.id} className="flex items-center gap-3 px-3 py-2 text-[13px]">
@@ -443,6 +447,7 @@ const JobCard: React.FC<{
                 </div>
               ))}
             </div>
+            </Reveal>
           )}
           <Line label="Sent stock" value={qty(c.sent, u)} />
           <Line label={job.sends.length > 1 ? 'Avg rate' : 'Rate'} value={`${money(c.price)} / ${u.toLowerCase()}`} />
@@ -460,7 +465,7 @@ const JobCard: React.FC<{
         {job.returns.length ? (
           <div className="rounded-lg border border-line p-4">
             <Collapse title={`Return details (${job.returns.length})`} open={showReturns} onToggle={() => setShowReturns(v => !v)} />
-            {showReturns && (
+            <Reveal open={showReturns}>
               <div className="my-2 divide-y divide-line rounded-md bg-muted/60">
                 {job.returns.map(r => {
                   const rl = c.lotsByReturn.get(r.id);
@@ -489,7 +494,7 @@ const JobCard: React.FC<{
                   );
                 })}
               </div>
-            )}
+            </Reveal>
             <Line label="Gross returned" value={qty(c.grossReturned)} />
             <Line label="Rejection on returns" value={qty(c.returnsRejection)} />
             <Line label="Still with job worker" value={qty(c.pending, u)} />
@@ -502,14 +507,15 @@ const JobCard: React.FC<{
 
       <div className="flex flex-wrap items-center gap-2 border-t border-line px-5 py-3">
         <span className="mr-1 text-[12px] font-medium uppercase tracking-wide text-ink-3">Processes</span>
-        <select className="field h-8 w-[140px]" value={job.status} onChange={e => setStatus(e.target.value as JobStatus)}>
-          {(Object.keys(JOB_STATUS) as JobStatus[]).map(s => <option key={s} value={s}>{JOB_STATUS[s].label}</option>)}
-        </select>
+        <Select className="field h-8 w-[150px]" value={job.status} onChange={e => setStatus(e.target.value as JobStatus)}>
+          {(Object.keys(JOB_STATUS) as JobStatus[]).map(s => <option key={s} value={s} data-tone={JOB_STATUS[s].tone} data-hint={JOB_STATUS[s].hint}>{JOB_STATUS[s].label}</option>)}
+        </Select>
         <Button size="sm" icon={<Undo2 size={14} />} onClick={() => onReturn(null)}>Return record</Button>
         <Button size="sm" variant="outline" onClick={onRejection}>Rejection{c.rejection > 0 ? ` · ${num(c.rejection, 3)} kg` : ''}</Button>
         {job.remark && <span className="ml-auto max-w-md truncate text-[13px] text-ink-2" title={job.remark}><b>Remark:</b> {job.remark}</span>}
       </div>
     </Card>
+    </Rise>
   );
 };
 
@@ -570,10 +576,10 @@ const Subcontracting: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 p-4">
           <Tabs value={tab} onChange={t => setTab(t as JobStatus | 'ALL')}
             tabs={[{ id: 'ALL', label: 'All' }, { id: 'IN_PROCESS', label: 'In process' }, { id: 'COMPLETED', label: 'Completed' }, { id: 'REJECTED', label: 'Rejected' }]} />
-          <select className="field h-9 w-[200px]" value={who} onChange={e => setWho(Number(e.target.value))}>
+          <Select className="field h-9 w-[200px]" value={who} onChange={e => setWho(Number(e.target.value))}>
             <option value={0}>All contractors</option>
             {people.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
+          </Select>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search by name or order" /></div>
         </div>
       </Card>
@@ -582,8 +588,8 @@ const Subcontracting: React.FC = () => {
         <Card><Empty title="No subcontracting orders found" hint="Change the filters or add a job work." action={<Button icon={<Plus size={15} />} onClick={() => setForm({ job: null })}>Add job work</Button>} /></Card>
       ) : (
         <div className="space-y-4">
-          {slice.map(j => (
-            <JobCard key={j.id} job={j}
+          {slice.map((j, i) => (
+            <JobCard key={j.id} job={j} delay={i * 40}
               onEdit={() => setForm({ job: j })} onDelete={() => setDeleting(j)} onChitthi={() => chitthi(j)}
               onReturn={r => setRet({ job: j, ret: r })} onSend={s => setSendEdit({ job: j, send: s })}
               onRejection={() => setRejecting(j)} onChrome={r => setChrome({ job: j, ret: r })} />
@@ -601,11 +607,11 @@ const Subcontracting: React.FC = () => {
       )}
 
       <JobForm open={!!form} job={formJob} onClose={() => setForm(null)} />
-      <SendForm target={sendEdit} onClose={() => setSendEdit(null)} />
-      <ReturnForm target={retTarget} onClose={() => setRet(null)} />
-      <RejectionForm job={rejectJob} onClose={() => setRejecting(null)} />
-      <ChromeForm target={chromeTarget} onClose={() => setChrome(null)} />
-      <DeleteJob job={deleting} onClose={() => setDeleting(null)} />
+      <Presence value={sendEdit}>{t => <SendForm target={t} onClose={() => setSendEdit(null)} />}</Presence>
+      <Presence value={retTarget}>{t => <ReturnForm target={t} onClose={() => setRet(null)} />}</Presence>
+      <Presence value={rejectJob}>{j => <RejectionForm job={j} onClose={() => setRejecting(null)} />}</Presence>
+      <Presence value={chromeTarget}>{t => <ChromeForm target={t} onClose={() => setChrome(null)} />}</Presence>
+      <Presence value={deleting}>{j => <DeleteJob job={j} onClose={() => setDeleting(null)} />}</Presence>
     </>
   );
 };

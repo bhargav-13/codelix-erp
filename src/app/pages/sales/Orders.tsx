@@ -3,7 +3,7 @@ import { Eye, Pencil, Plus, Trash2, Truck, Undo2 } from 'lucide-react';
 import { ordersApi } from '../../../api/orders';
 import type { Order, OrderStatus } from '../../../types';
 import {
-  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, PageHeader, SearchBox, Spinner, Stat, fmtDate, inr, num, toast, useAsync,
+  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, PageHeader, Presence, SearchBox, Spinner, Stat, Select, fmtDate, inr, num, toast, useAsync,
 } from '../../ui';
 import DispatchForm from './DispatchForm';
 import OrderForm from './OrderForm';
@@ -95,10 +95,10 @@ const Orders: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <UnitTabs value={unit} onChange={setUnit} />
-          <select className="field max-w-[170px]" value={status} onChange={e => setStatus(e.target.value as OrderStatus | '')}>
+          <Select className="field max-w-[170px]" value={status} onChange={e => setStatus(e.target.value as OrderStatus | '')}>
             <option value="">All statuses</option>
             {(Object.keys(ORDER_STATUS) as OrderStatus[]).map(s => <option key={s} value={s}>{ORDER_STATUS[s].label}</option>)}
-          </select>
+          </Select>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search party or order no." /></div>
         </div>
         {q.loading ? <Spinner /> : q.error ? <ErrorNote error={q.error} onRetry={q.reload} /> : (
@@ -178,7 +178,7 @@ const Orders: React.FC = () => {
         onClose={() => setForm(null)}
         onSaved={() => { setForm(null); refresh(); }}
       />
-      <DispatchForm order={dispatch?.order ?? null} mode={dispatch?.mode ?? 'dispatch'} onClose={() => setDispatch(null)} onDone={() => { setDispatch(null); refresh(); }} />
+      <Presence value={dispatch}>{d => <DispatchForm order={d.order} mode={d.mode} onClose={() => setDispatch(null)} onDone={() => { setDispatch(null); refresh(); }} />}</Presence>
       <Confirm open={!!deleting} title="Delete order?" message={`${deleting ? orderNo(deleting.id) : ''} will be removed permanently.`}
         busy={busy} onCancel={() => setDeleting(null)} onConfirm={remove} />
     </>

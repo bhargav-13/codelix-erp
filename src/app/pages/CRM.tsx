@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Download, Phone, Plus, Trash2 } from 'lucide-react';
 import { OWNERS, STAGES, leads, type Lead, type Stage } from '../data/crm';
 import { iso } from '../data/hr';
-import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, Tabs, cx, fmtDate, inr, toast, type Tone } from '../ui';
+import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, Tabs, Select, cx, fmtDate, inr, toast, type Tone } from '../ui';
 
 const STAGE_TONE: Record<Stage, Tone> = {
   'New enquiry': 'blue', 'Quotation sent': 'amber', Negotiation: 'accent', 'Follow-up': 'gray', Won: 'green', Lost: 'red',
@@ -81,10 +81,10 @@ const CRM: React.FC = () => {
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Tabs value={view} onChange={setView} tabs={[{ id: 'board', label: 'Board' }, { id: 'list', label: 'List' }]} />
-        <select className="field h-9 max-w-[170px]" value={owner} onChange={e => setOwner(e.target.value)}>
+        <Select className="field h-9 max-w-[170px]" value={owner} onChange={e => setOwner(e.target.value)}>
           <option value="">Everyone</option>
           {OWNERS.map(o => <option key={o}>{o}</option>)}
-        </select>
+        </Select>
         <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search lead, company, product" /></div>
       </div>
 
@@ -169,10 +169,10 @@ const CRM: React.FC = () => {
           <Field label="Product interest"><input className="field" value={form.product} onChange={e => set('product', e.target.value)} /></Field>
           <Field label="Deal value (₹)"><input type="number" className="field" value={form.value || ''} onChange={e => set('value', Number(e.target.value) || 0)} /></Field>
           <Field label="Stage">
-            <select className="field" value={form.stage} onChange={e => set('stage', e.target.value as Stage)}>{STAGES.map(s => <option key={s}>{s}</option>)}</select>
+            <Select className="field" value={form.stage} onChange={e => set('stage', e.target.value as Stage)}>{STAGES.map(s => <option key={s}>{s}</option>)}</Select>
           </Field>
           <Field label="Owner">
-            <select className="field" value={form.owner} onChange={e => set('owner', e.target.value)}>{OWNERS.map(o => <option key={o}>{o}</option>)}</select>
+            <Select className="field" value={form.owner} onChange={e => set('owner', e.target.value)}>{OWNERS.map(o => <option key={o}>{o}</option>)}</Select>
           </Field>
           <Field label="Next follow-up"><input type="date" className="field" value={form.nextFollowUp || ''} onChange={e => set('nextFollowUp', e.target.value)} /></Field>
           <Field label="Last contact"><input type="date" className="field" value={form.lastContact} onChange={e => set('lastContact', e.target.value)} /></Field>

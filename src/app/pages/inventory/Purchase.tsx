@@ -7,7 +7,7 @@ import { purchasePartyApi } from '../../../api/purchaseParty';
 import type { Category, Product, PurchaseParty, PurchaseRequest, PurchaseResponse } from '../../../types';
 import { InventoryFloor, PurchaseInventoryType, QuantityUnit } from '../../../types';
 import {
-  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, inr, num, toast, useAsync,
+  Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, Select, inr, num, toast, useAsync,
 } from '../../ui';
 import { fetchAllPages } from '../sales/shared';
 import { SelectWithAdd, n } from './shared';
@@ -194,9 +194,9 @@ const PurchaseForm: React.FC<{ purchase: PurchaseResponse | null; open: boolean;
             <Field label="Weight per piece">
               <div className="flex gap-2">
                 <input className="field" type="number" value={form.weightPerPc || ''} onChange={e => set({ weightPerPc: n(e.target.value) })} />
-                <select className="field w-[84px]" value={form.quantityUnit || QuantityUnit.KG} onChange={e => set({ quantityUnit: e.target.value as PurchaseRequest['quantityUnit'] })}>
+                <Select className="field w-[84px]" value={form.quantityUnit || QuantityUnit.KG} onChange={e => set({ quantityUnit: e.target.value as PurchaseRequest['quantityUnit'] })}>
                   <option value={QuantityUnit.KG}>kg</option><option value={QuantityUnit.GM}>g</option>
-                </select>
+                </Select>
               </div>
             </Field>
             <Field label="Pieces (calculated)"><div className="field flex items-center bg-muted">{num(form.quantityInPc)}</div></Field>
@@ -366,10 +366,10 @@ const Purchase: React.FC = () => {
         : (
           <Card>
             <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
-              <select className="field max-w-[180px]" value={type} onChange={e => setType(e.target.value)}>
+              <Select className="field max-w-[180px]" value={type} onChange={e => setType(e.target.value)}>
                 <option value="">Everything</option>
                 {(Object.keys(INV_LABEL) as InvType[]).map(t => <option key={t} value={t}>{INV_LABEL[t]}</option>)}
-              </select>
+              </Select>
               <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search challan, product, supplier" /></div>
             </div>
             <DataTable

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Check, Plus, X } from 'lucide-react';
-import { Badge, Button, toast } from '../../ui';
+import { Badge, Button, Select, toast } from '../../ui';
 
 /** A <select> with an inline "+ New" that creates the option on the server and selects it. */
 export function SelectWithAdd<T>({
@@ -47,10 +47,10 @@ export function SelectWithAdd<T>({
   }
   return (
     <div className="flex gap-2">
-      <select className="field" value={value} onChange={e => onChange(Number(e.target.value))}>
+      <Select className="field" value={value} onChange={e => onChange(Number(e.target.value))}>
         <option value={0}>{placeholder}</option>
         {options.map(o => <option key={getId(o)} value={getId(o)}>{getLabel(o)}</option>)}
-      </select>
+      </Select>
       <Button variant="outline" title={`New ${noun.toLowerCase()}`} icon={<Plus size={15} />} onClick={() => setAdding(true)} />
     </div>
   );
