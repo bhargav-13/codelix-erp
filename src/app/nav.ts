@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  BarChart3, Banknote, Boxes, Droplets, PackageCheck, Store, CalendarCheck, ClipboardList, Factory, Flame, Gauge, Handshake, LayoutDashboard, Layers, Package,
-  Receipt, ScanFace, Settings, ShoppingCart, Trash2, Truck, Undo2, Users, Wallet, Zap, BellRing, Hammer, Sparkles, Clock,
+  Banknote, Boxes, Building2, Droplets, PackageCheck, Store, CalendarCheck, ClipboardList, Factory, FileText, Flame, Gauge, Globe, Handshake, Home, LayoutDashboard,
+  Layers, Package, Receipt, ScanFace, Settings, ShoppingCart, Tags, Trash2, Truck, Undo2, Users, Wallet, Warehouse, Zap, BellRing, Hammer, Sparkles, Clock, Ban,
 } from 'lucide-react';
 
 /**
@@ -36,7 +36,10 @@ export const NAV: NavGroup[] = [
       { label: 'CRM', path: '/crm', icon: Gauge, source: 'demo' },
       { label: 'Orders', path: '/orders', icon: ShoppingCart, source: 'live' },
       { label: 'Invoices', path: '/invoices', icon: Receipt, source: 'live' },
+      { label: 'Export invoices', path: '/export-invoices', icon: Globe, source: 'demo' },
       { label: 'Payments', path: '/payments', icon: BellRing, source: 'live' },
+      { label: 'Purchase bills', path: '/bills/purchase', icon: FileText, source: 'demo' },
+      { label: 'Sales bills', path: '/bills/sales', icon: FileText, source: 'demo' },
     ],
   },
   {
@@ -45,6 +48,7 @@ export const NAV: NavGroup[] = [
       { label: 'Stock', path: '/stock', icon: Boxes, source: 'live' },
       { label: 'Raw materials', path: '/raw-materials', icon: Layers, source: 'live' },
       { label: 'Products', path: '/products', icon: Package, source: 'live' },
+      { label: 'Item master', path: '/item-master', icon: Tags, source: 'demo' },
       { label: 'Categories', path: '/categories', icon: ClipboardList, source: 'live' },
       { label: 'Purchase', path: '/purchase', icon: Truck, source: 'live' },
       { label: 'Rejection', path: '/rejection', icon: Undo2, source: 'live' },
@@ -53,20 +57,26 @@ export const NAV: NavGroup[] = [
   {
     label: 'Production',
     items: [
-      { label: 'Subcontracting (Job work)', path: '/subcontracting', icon: Factory, source: 'live' },
-      { label: 'Subcontractors', path: '/subcontractor', icon: Users, source: 'live' },
-      { label: 'Chrome plating', path: '/crome', icon: Sparkles, source: 'live' },
+      { label: 'Subcontracting (Job work)', path: '/subcontracting', icon: Factory, source: 'demo' },
+      { label: 'Subcontractor', path: '/subcontractor', icon: Users, source: 'demo' },
+      { label: 'Crome', path: '/crome', icon: Sparkles, source: 'demo' },
+      { label: 'Job work rejection', path: '/subcontracting/rejection', icon: Ban, source: 'demo' },
       { label: 'Casting', path: '/casting', icon: Flame, source: 'live' },
       { label: 'Forging', path: '/forging', icon: Hammer, source: 'live' },
       { label: 'Scrap', path: '/scrap', icon: Trash2, source: 'live' },
       { label: 'Gres', path: '/gres', icon: Droplets, source: 'demo' },
-      { label: 'Plating analytics', path: '/plating', icon: BarChart3, source: 'live' },
+      { label: 'In-house plating', path: '/in-house-plating', icon: Home, source: 'demo' },
+      { label: 'Outside job work', path: '/outside-job-work', icon: Building2, source: 'demo' },
+      { label: 'Outside gres', path: '/outside-gres', icon: Warehouse, source: 'demo' },
       { label: 'Packing invoices', path: '/packing', icon: PackageCheck, source: 'demo' },
     ],
   },
   {
     label: 'Customers',
-    items: [{ label: 'Client portal', path: '/client-portal', icon: Store, source: 'demo' }],
+    items: [
+      { label: 'Client management', path: '/client-management', icon: Handshake, source: 'demo' },
+      { label: 'Client portal', path: '/client-portal', icon: Store, source: 'demo' },
+    ],
   },
   {
     label: 'People',

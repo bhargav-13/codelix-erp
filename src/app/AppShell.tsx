@@ -97,7 +97,8 @@ const AppShell: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const current = ALL_ITEMS.find(i => location.pathname.startsWith(i.path));
+  // Longest match wins, so /subcontracting/rejection is not taken for /subcontracting.
+  const current = ALL_ITEMS.filter(i => location.pathname.startsWith(i.path)).sort((a, b) => b.path.length - a.path.length)[0];
   const logout = () => {
     if (isBlackMode) deactivateBlackMode();
     signOut();
@@ -129,6 +130,7 @@ const AppShell: React.FC = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
+                end={ALL_ITEMS.some(o => o.path !== item.path && o.path.startsWith(`${item.path}/`))}
                 title={collapsed ? item.label : undefined}
                 className={({ isActive }) => cx(
                   'flex items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] transition-colors',

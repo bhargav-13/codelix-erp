@@ -13,6 +13,7 @@ import { attendance, employees, iso } from '../data/hr';
 import { leads, STAGES } from '../data/crm';
 import { requests, clients } from '../data/ishita';
 import { chitthiNo } from '../pdf/chitthi';
+import { contractorName, jobCalc, jobs as jobStore } from '../data/production';
 import { CountUp, LiveDot, Meter, Ring, Rise, Spark } from '../motion';
 import { useSettings } from '../settings';
 import { Badge, Card, ErrorNote, Tabs, cx, fmtDate, inr, num, useAsync } from '../ui';
@@ -89,6 +90,7 @@ const Dashboard: React.FC = () => {
   const crm = leads.use();
   const reqs = requests.use();
   const cl = clients.use();
+  const jw = jobStore.use();
 
   const today = iso(new Date());
 
@@ -132,14 +134,15 @@ const Dashboard: React.FC = () => {
     return { open: open.reduce((s, l) => s + l.value, 0), count: open.length, stages, due: open.filter(l => l.nextFollowUp && l.nextFollowUp <= today).length };
   }, [crm, today]);
 
-  // Subcontracting (job work) still out with each job worker, from the live jobs.
+  // Subcontracting (job work) still out with each job worker.
   const jobwork = useMemo(() => {
-    const open = (q.data?.raw.allSubcontracts || []).filter(j => j.status === 'IN_PROCESS');
+    const open = jw.filter(j => j.status === 'IN_PROCESS');
     const byWorker = new Map<string, number>();
-    open.forEach(j => byWorker.set(j.contractor?.name || '—', (byWorker.get(j.contractor?.name || '—') || 0) + Math.max(0, j.sentStock - (j.totalReturnStock || 0))));
+    open.forEach(j => { const name = contractorName(j.contractorId); byWorker.set(name, (byWorker.get(name) || 0) + jobCalc(j).pending); });
     const vendors = [...byWorker.entries()].map(([name, kg]) => ({ name, kg })).sort((a, b) => b.kg - a.kg).slice(0, 5);
-    return { out: vendors.reduce((s, v) => s + v.kg, 0), vendors };
-  }, [q.data]);
+    const count = (s: string) => jw.filter(j => j.status === s).length;
+    return { out: vendors.reduce((s, v) => s + v.kg, 0), vendors, inProcess: open.length, completed: count('COMPLETED'), rejected: count('REJECTED') };
+  }, [jw]);
 
   const feed = useMemo(() => {
     type F = { at: string; icon: React.ReactNode; text: React.ReactNode; tone: string };
@@ -151,9 +154,9 @@ const Dashboard: React.FC = () => {
     att.filter(a => a.date === today && a.inTime).forEach(a => items.push({ at: today, icon: <ScanFace size={14} />, tone: '#0ea5e9', text: <><b>{emps.find(e => e.id === a.employeeId)?.name}</b> punched in at {a.inTime}</> }));
     reqs.forEach(r => items.push({ at: r.date, icon: <Store size={14} />, tone: '#f59e0b', text: <><b>{cl.find(c => c.id === r.clientId)?.company}</b> sent an order request</> }));
     crm.filter(l => l.stage === 'Won').forEach(l => items.push({ at: l.lastContact, icon: <BadgeCheck size={14} />, tone: '#10b981', text: <>Deal won · <b>{l.company}</b> {inr(l.value)}</> }));
-    (q.data?.raw.allSubcontracts || []).slice(0, 8).forEach(j => items.push({ at: String(j.orderDate).slice(0, 10), icon: <Factory size={14} />, tone: '#8b5cf6', text: <>Chitthi {chitthiNo(j.subcontractingId)} sent to <b>{j.contractor?.name}</b></> }));
+    jw.forEach(j => j.sends.forEach(s => items.push({ at: s.date, icon: <Factory size={14} />, tone: '#8b5cf6', text: <>Chitthi {chitthiNo(j.id)} sent to <b>{contractorName(j.contractorId)}</b></> })));
     return items.sort((a, b) => b.at.localeCompare(a.at)).slice(0, 18);
-  }, [q.data, att, emps, reqs, cl, crm, today]);
+  }, [q.data, att, emps, reqs, cl, crm, jw, today]);
 
   if (q.loading) return <Skeleton />;
   if (q.error || !q.data || !live) return <ErrorNote error={q.error} onRetry={q.reload} />;
@@ -165,7 +168,7 @@ const Dashboard: React.FC = () => {
   const dueSlices: { status: string; amount: number; color: string }[] = dueTotal > 0
     ? d.paymentStatusBreakdown.map(p => ({ status: p.status, amount: p.amount, color: p.color }))
     : [{ status: 'Nothing due', amount: 1, color: 'var(--muted)' }];
-  const sub = d.subcontractingMetrics;
+  const sub = jobwork;
   const subTotal = sub.inProcess + sub.completed + sub.rejected;
   const waiting = reqs.filter(r => r.status === 'PENDING_APPROVAL');
   const lowStock = [...d.lowStockItems.map(i => ({ name: i.product?.productName, qty: i.quantityInKg, alert: i.lowStockAlert })),
