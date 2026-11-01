@@ -5,7 +5,7 @@ import {
   chromeCalc, chromeLots, contractorName, itemName, jobCalc, jobNo, jobs, packKg, partyName, platingParties,
   type ChromeLot, type JobStatus, type Pack,
 } from '../../data/production';
-import { Badge, Button, Card, Confirm, Drawer, Empty, Field, PageHeader, SearchBox, Stat, Tabs, cx, fmtDate, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Confirm, Drawer, Empty, Field, PageHeader, Presence, Reveal, SearchBox, Stat, Tabs, Select, cx, fmtDate, inr, num, toast } from '../../ui';
 import { n } from '../inventory/shared';
 import { UNIT_LABEL, today, type Floor } from '../sales/shared';
 import { Figure, JOB_STATUS, Line, PackagingEditor, money, monthStart, newPack, packSummary, qty } from './shared';
@@ -76,9 +76,9 @@ const ReturnForm: React.FC<{ lot: ChromeLot | null; onClose: () => void }> = ({ 
             <Field label="Item name"><input className="field" value={stockItem} onChange={e => setStockItem(e.target.value)} /></Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Unit">
-                <select className="field" value={floor} onChange={e => setFloor(e.target.value as Floor)}>
+                <Select className="field" value={floor} onChange={e => setFloor(e.target.value as Floor)}>
                   {(Object.keys(UNIT_LABEL) as Floor[]).map(f => <option key={f} value={f}>{UNIT_LABEL[f]}</option>)}
-                </select>
+                </Select>
               </Field>
               <Field label="Pieces"><input type="number" className="field" value={pcs || ''} onChange={e => setPcs(n(e.target.value))} /></Field>
             </div>
@@ -129,10 +129,10 @@ const LotCard: React.FC<{ lot: ChromeLot; onReturn: () => void; onDelete: () => 
             <button type="button" onClick={() => setOpen(v => !v)} className="mb-1 flex w-full items-center justify-between font-semibold">
               Return details <ChevronDown size={14} className={cx('text-ink-3 transition-transform', open && 'rotate-180')} />
             </button>
-            {open && <>
+            <Reveal open={open}>
               <Line label="Gross return" value={qty(lot.back.gross)} />
               <Line label="Packaging" value={qty(packKg(lot.back.packs))} />
-            </>}
+            </Reveal>
             <Line label="Net return" value={qty(c.backNet)} />
             <Line label="Rate" value={`${money(lot.back.rate)} / kg`} />
             <Line strong label="Amount" value={money(c.amount)} />
@@ -148,9 +148,9 @@ const LotCard: React.FC<{ lot: ChromeLot; onReturn: () => void; onDelete: () => 
       </div>
       <div className="flex flex-wrap items-center gap-2 border-t border-line px-5 py-3">
         <span className="mr-1 text-[12px] font-medium uppercase tracking-wide text-ink-3">Status</span>
-        <select className="field h-8 w-[140px]" value={lot.status} onChange={e => setStatus(e.target.value as JobStatus)}>
-          {(Object.keys(JOB_STATUS) as JobStatus[]).map(s => <option key={s} value={s}>{JOB_STATUS[s].label}</option>)}
-        </select>
+        <Select className="field h-8 w-[150px]" value={lot.status} onChange={e => setStatus(e.target.value as JobStatus)}>
+          {(Object.keys(JOB_STATUS) as JobStatus[]).map(s => <option key={s} value={s} data-tone={JOB_STATUS[s].tone} data-hint={JOB_STATUS[s].hint}>{JOB_STATUS[s].label}</option>)}
+        </Select>
         {!lot.back && <Button size="sm" icon={<Undo2 size={14} />} onClick={onReturn}>Return record</Button>}
         {(lot.remark || lot.back?.remark) && <span className="ml-auto truncate text-[13px] text-ink-2">{lot.back?.remark || lot.remark}</span>}
       </div>
@@ -227,10 +227,10 @@ const Chrome: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 p-4">
           <Tabs value={tab} onChange={t => setTab(t as JobStatus | 'ALL')}
             tabs={[{ id: 'ALL', label: 'All' }, { id: 'IN_PROCESS', label: 'In process' }, { id: 'COMPLETED', label: 'Completed' }, { id: 'REJECTED', label: 'Rejected' }]} />
-          <select className="field h-9 w-[200px]" value={party} onChange={e => setParty(Number(e.target.value))}>
+          <Select className="field h-9 w-[200px]" value={party} onChange={e => setParty(Number(e.target.value))}>
             <option value={0}>All parties</option>
             {parties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
+          </Select>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search party, contractor, item" /></div>
         </div>
       </Card>
@@ -238,7 +238,7 @@ const Chrome: React.FC = () => {
         ? <Card><Empty title="No crome lots here" hint="Send a return chunk from Subcontracting (Job work) to plating." /></Card>
         : <div className="grid gap-4 xl:grid-cols-2">{rows.map(l => <LotCard key={l.id} lot={l} onReturn={() => setReturning(l)} onDelete={() => setDeleting(l)} />)}</div>}
 
-      <ReturnForm lot={returning} onClose={() => setReturning(null)} />
+      <Presence value={returning}>{l => <ReturnForm lot={l} onClose={() => setReturning(null)} />}</Presence>
       <Confirm open={!!deleting} title={`Delete CRM-${deleting?.id}?`}
         message={deleting?.back?.stockItem
           ? `This lot's return added ${deleting.back.stockItem} to ${deleting.back.stockUnit}; deleting takes that stock back out.`
@@ -249,10 +249,10 @@ const Chrome: React.FC = () => {
         {report && (
           <div className="space-y-4">
             <Field label="Party">
-              <select className="field" value={report.party} onChange={e => setReport({ ...report, party: Number(e.target.value) })}>
+              <Select className="field" value={report.party} onChange={e => setReport({ ...report, party: Number(e.target.value) })}>
                 <option value={0}>All parties</option>
                 {parties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-              </select>
+              </Select>
             </Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="From"><input type="date" className="field" value={report.from} onChange={e => setReport({ ...report, from: e.target.value })} /></Field>

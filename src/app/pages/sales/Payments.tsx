@@ -5,7 +5,7 @@ import { paymentApi } from '../../../api/payment';
 import type { Party, PartyLedgerResponse, Payment, PaymentStatus } from '../../../types';
 import { BillingType } from '../../../types';
 import {
-  Badge, Button, Card, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, fmtDate, inr, toast, useAsync, type Tone,
+  Badge, Button, Card, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, Select, fmtDate, inr, toast, useAsync, type Tone,
 } from '../../ui';
 import { UnitBadge, UnitTabs, downloadBlob, fetchAllPages, floorsFor, normalizeDates, orderNo, today, useUnit, type Floor } from './shared';
 
@@ -97,13 +97,13 @@ const ByOrder: React.FC<{ partyNames: Map<number, string> }> = ({ partyNames }) 
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <UnitTabs value={unit} onChange={setUnit} />
-          <select className="field max-w-[170px]" value={status} onChange={e => setStatus(e.target.value as PaymentStatus | 'OPEN' | '')}>
+          <Select className="field max-w-[170px]" value={status} onChange={e => setStatus(e.target.value as PaymentStatus | 'OPEN' | '')}>
             <option value="OPEN">Unpaid</option>
             <option value="OVERDUE">Overdue</option>
             <option value="DUE_SOON">Due soon</option>
             <option value="UPCOMING">Upcoming</option>
             <option value="">All</option>
-          </select>
+          </Select>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search party or order no." /></div>
         </div>
         {q.loading ? <Spinner /> : q.error ? <ErrorNote error={q.error} onRetry={q.reload} /> : (

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowDownLeft, ArrowUpRight, FileDown, Pencil, Trash2 } from 'lucide-react';
 import { forgingInwardApi, forgingInwardItemsApi, forgingOutwardApi, forgingPartyApi, forgingReportApi } from '../../../api/forging';
 import type { ForgingInward, ForgingInwardItem, ForgingOutward, ForgingParty, InwardWeightUnit } from '../../../types';
-import { Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, fmtDate, num, toast, useAsync, type Tone } from '../../ui';
+import { Badge, Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Tabs, Select, fmtDate, num, toast, useAsync, type Tone } from '../../ui';
 import { SelectWithAdd, n } from '../inventory/shared';
 import { today } from '../sales/shared';
 import { fromDmy } from './shared';
@@ -179,10 +179,10 @@ const Forging: React.FC = () => {
           <input type="date" className="field h-8 w-[150px]" value={from} onChange={e => setFrom(e.target.value)} />
           <span className="text-ink-3">–</span>
           <input type="date" className="field h-8 w-[150px]" value={to} onChange={e => setTo(e.target.value)} />
-          <select className="field h-8 w-[160px]" value={party} onChange={e => setParty(e.target.value)}>
+          <Select className="field h-8 w-[160px]" value={party} onChange={e => setParty(e.target.value)}>
             <option value="">All parties</option>
             {parties.map(p => <option key={p.partyId}>{p.partyName}</option>)}
-          </select>
+          </Select>
           <Button size="sm" variant="outline" className="ml-auto" icon={<FileDown size={14} />} onClick={pdf}>Report</Button>
         </div>
         {q.loading ? <Spinner /> : q.error ? <ErrorNote error={q.error} onRetry={q.reload} /> : tab === 'parties' ? (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { packKg, type JobStatus, type Pack, type PackType } from '../../data/production';
-import { Button, Field, num, type Tone } from '../../ui';
+import { Button, Field, Select, num, type Tone } from '../../ui';
 
 /** Standard tare per packaging piece, in kg. Drums vary, so their weight is typed in. */
 export const PACKAGING_KG: Record<PackType, number | null> = { BAG: 0.075, FOAM: 0.15, PETI: 1.2, DRUM: null };
@@ -18,10 +18,10 @@ export const PackagingEditor: React.FC<{ rows: Pack[]; onChange: (rows: Pack[]) 
       {rows.map((r, i) => (
         <div key={i} className="grid grid-cols-[1fr_92px_80px_auto] items-end gap-2">
           <Field label={i === 0 ? 'Packaging' : ''}>
-            <select className="field" value={r.type}
+            <Select className="field" value={r.type}
               onChange={e => { const t = e.target.value as PackType; set(i, { type: t, kgEach: PACKAGING_KG[t] ?? r.kgEach }); }}>
               {(Object.keys(PACKAGING_LABEL) as PackType[]).map(t => <option key={t} value={t}>{PACKAGING_LABEL[t]}</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label={i === 0 ? 'Kg each' : ''}>
             <input className="field" type="number" disabled={PACKAGING_KG[r.type] !== null} value={r.kgEach || ''}
@@ -41,10 +41,10 @@ export const PackagingEditor: React.FC<{ rows: Pack[]; onChange: (rows: Pack[]) 
   );
 };
 
-export const JOB_STATUS: Record<JobStatus, { label: string; tone: Tone }> = {
-  IN_PROCESS: { label: 'In process', tone: 'amber' },
-  COMPLETED: { label: 'Completed', tone: 'green' },
-  REJECTED: { label: 'Rejected', tone: 'red' },
+export const JOB_STATUS: Record<JobStatus, { label: string; tone: Tone; hint: string }> = {
+  IN_PROCESS: { label: 'In process', tone: 'amber', hint: 'Material is still out for work' },
+  COMPLETED: { label: 'Completed', tone: 'green', hint: 'Everything has come back' },
+  REJECTED: { label: 'Rejected', tone: 'red', hint: 'The lot was rejected' },
 };
 
 /** A labelled figure in a card's summary strip, e.g. "Sent · 250.000 kg". */

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Highlighter, Plus, Sigma, Trash2 } from 'lucide-react';
 import { FINISHES, clients, items, sizeLabel, type Client } from '../../data/ishita';
 import { clientPrices, finishPrice, pricingRules, ruleFor, type PricingRule } from '../../data/trade';
-import { Badge, Button, Card, Drawer, Empty, PageHeader, SearchBox, cx, num, toast } from '../../ui';
+import { Badge, Button, Card, Drawer, Empty, PageHeader, Presence, SearchBox, cx, num, toast } from '../../ui';
 import { n } from '../inventory/shared';
 
 /* ---------------------------- Formula editor ---------------------------- */
@@ -118,6 +118,8 @@ const ClientPricing: React.FC = () => {
   const [clientId, setClientId] = useState<number>(list[0]?.id ?? 0);
   const [formula, setFormula] = useState<number | null | undefined>(undefined);
   const [adding, setAdding] = useState<Client | null>(null);
+  // undefined = closed, null = the global formula
+  const formulaFor = useMemo(() => (formula === undefined ? null : { clientId: formula }), [formula]);
   const [finishes, setFinishes] = useState<string[]>(FINISHES.slice(0, 6));
 
   const client = list.find(c => c.id === clientId) || null;
@@ -214,8 +216,8 @@ const ClientPricing: React.FC = () => {
           )}
         </Card>
       </div>
-      <FormulaDrawer clientId={formula} onClose={() => setFormula(undefined)} />
-      <AddItems client={adding} onClose={() => setAdding(null)} />
+      <Presence value={formulaFor}>{f => <FormulaDrawer clientId={f.clientId} onClose={() => setFormula(undefined)} />}</Presence>
+      <Presence value={adding}>{c => <AddItems client={c} onClose={() => setAdding(null)} />}</Presence>
     </>
   );
 };

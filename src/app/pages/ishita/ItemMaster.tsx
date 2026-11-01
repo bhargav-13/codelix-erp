@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, Plus, Trash2 } from 'lucide-react';
 import { FINISHES, items, sizeLabel, type Item, type Size } from '../../data/ishita';
-import { Badge, Button, Card, Confirm, Drawer, Empty, Field, PageHeader, SearchBox, Stat, cx, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Confirm, Drawer, Empty, Field, PageHeader, Reveal, SearchBox, Stat, Select, cx, inr, num, toast } from '../../ui';
 import { n } from '../inventory/shared';
 
 type Draft = Omit<Item, 'id'>;
@@ -52,16 +52,16 @@ const ItemMaster: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <SearchBox value={search} onChange={setSearch} placeholder="Search item, size or category" />
-          <select className="field h-9 w-[180px]" value={cat} onChange={e => setCat(e.target.value)}>
+          <Select className="field h-9 w-[180px]" value={cat} onChange={e => setCat(e.target.value)}>
             <option value="">All categories</option>
             {cats.map(c => <option key={c}>{c}</option>)}
-          </select>
+          </Select>
         </div>
         {!rows.length ? <Empty title="No items match" /> : (
           <div className="divide-y divide-line">
             {rows.map(it => (
               <div key={it.id}>
-                <button type="button" onClick={() => toggle(it.id)} className="flex w-full items-center gap-4 px-5 py-3 text-left hover:bg-muted/60">
+                <button type="button" onClick={() => toggle(it.id)} className="flex w-full items-center gap-4 px-5 py-3 text-left transition-colors hover:bg-muted/60">
                   <ChevronDown size={16} className={cx('shrink-0 text-ink-3 transition-transform', !open.has(it.id) && '-rotate-90')} />
                   <div className="min-w-0 flex-1">
                     <div className="font-medium">{it.name}</div>
@@ -71,7 +71,7 @@ const ItemMaster: React.FC = () => {
                   <span className="hidden w-32 text-right text-[13px] text-ink-2 sm:block">{it.pcsPerBox} pc / box · {it.boxPerCarton} box</span>
                   <span className="w-20 text-right text-[13px] text-ink-2">{it.sizes.length} size{it.sizes.length > 1 ? 's' : ''}</span>
                 </button>
-                {open.has(it.id) && (
+                <Reveal open={open.has(it.id)}>
                   <div className="bg-muted/40 px-5 pb-4 pt-1">
                     <div className="overflow-x-auto">
                       <table className="text-left text-[13px]">
@@ -101,7 +101,7 @@ const ItemMaster: React.FC = () => {
                       <Button size="sm" variant="ghost" icon={<Trash2 size={14} />} onClick={() => setDeleting(it)}>Delete</Button>
                     </div>
                   </div>
-                )}
+                </Reveal>
               </div>
             ))}
           </div>

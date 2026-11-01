@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, Plus, X } from 'lucide-react';
 import { employees, iso, leaves, type LeaveRequest } from '../../data/hr';
-import { Badge, Button, Card, DataTable, Drawer, Field, PageHeader, Stat, Tabs, fmtDate, toast } from '../../ui';
+import { Badge, Button, Card, DataTable, Drawer, Field, PageHeader, Stat, Tabs, Select, fmtDate, toast } from '../../ui';
 
 const days = (l: LeaveRequest) => Math.round((new Date(l.to).getTime() - new Date(l.from).getTime()) / 86400000) + 1;
 
@@ -60,14 +60,14 @@ const Leave: React.FC = () => {
       >
         <div className="space-y-4">
           <Field label="Employee">
-            <select className="field" value={form.employeeId} onChange={e => setForm({ ...form, employeeId: Number(e.target.value) })}>
+            <Select className="field" value={form.employeeId} onChange={e => setForm({ ...form, employeeId: Number(e.target.value) })}>
               {emps.filter(e => e.active).map(e => <option key={e.id} value={e.id}>{e.name} ({e.code})</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label="Leave type">
-            <select className="field" value={form.type} onChange={e => setForm({ ...form, type: e.target.value as LeaveRequest['type'] })}>
+            <Select className="field" value={form.type} onChange={e => setForm({ ...form, type: e.target.value as LeaveRequest['type'] })}>
               <option>Casual</option><option>Sick</option><option>Earned</option>
-            </select>
+            </Select>
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="From"><input type="date" className="field" value={form.from} onChange={e => setForm({ ...form, from: e.target.value })} /></Field>

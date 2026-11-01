@@ -5,7 +5,7 @@ import {
   type Currency, type ExportInvoice, type ExportItem, type PartyBlock,
 } from '../../data/trade';
 import { DOC_TITLE, downloadExportDoc, type ExportDoc } from '../../pdf/exportDocs';
-import { Badge, Button, Card, Confirm, DataTable, Field, PageHeader, SearchBox, Stat, Tabs, fmtDate, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Confirm, DataTable, Field, PageHeader, SearchBox, Stat, Tabs, Select, fmtDate, inr, num, toast } from '../../ui';
 import { n } from '../inventory/shared';
 
 type Draft = Omit<ExportInvoice, 'id'> & { id?: number };
@@ -84,7 +84,7 @@ const Editor: React.FC<{ initial: Draft; onDone: () => void }> = ({ initial, onD
               <Field label="P/O no."><input className="field" value={f.poNo} onChange={e => set('poNo', e.target.value)} /></Field>
               <Field label="P/O date"><input type="date" className="field" value={f.poDate} onChange={e => set('poDate', e.target.value)} /></Field>
               <Field label="Incoterms">
-                <select className="field" value={f.incoterms} onChange={e => set('incoterms', e.target.value)}>{INCOTERMS.map(i => <option key={i}>{i}</option>)}</select>
+                <Select className="field" value={f.incoterms} onChange={e => set('incoterms', e.target.value)}>{INCOTERMS.map(i => <option key={i}>{i}</option>)}</Select>
               </Field>
               <Field label="Payment terms" className="sm:col-span-2"><input className="field" value={f.paymentTerms} onChange={e => set('paymentTerms', e.target.value)} /></Field>
               <Field label="Pre-carriage"><input className="field" value={f.preCarriage} onChange={e => set('preCarriage', e.target.value)} /></Field>
@@ -118,7 +118,7 @@ const Editor: React.FC<{ initial: Draft; onDone: () => void }> = ({ initial, onD
                     <Field label="Total quantity">
                       <div className="flex gap-1">
                         <input type="number" className="field" value={it.qty || ''} onChange={e => setItem(i, { qty: n(e.target.value) })} />
-                        <select className="field w-[74px] px-2" value={it.unit} onChange={e => setItem(i, { unit: e.target.value as ExportItem['unit'] })}><option>pcs</option><option>sets</option><option>kgs</option></select>
+                        <Select className="field w-[74px] px-2" value={it.unit} onChange={e => setItem(i, { unit: e.target.value as ExportItem['unit'] })}><option>pcs</option><option>sets</option><option>kgs</option></Select>
                       </div>
                     </Field>
                     <Field label={`Unit price (${CURRENCY_SYMBOL[f.currency]})`}><input type="number" className="field" value={it.unitPrice || ''} onChange={e => setItem(i, { unitPrice: n(e.target.value) })} /></Field>

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { contractorName, contractors, itemName, jobCalc, jobNo, jobs, type Job } from '../../data/production';
-import { Badge, Button, Card, DataTable, PageHeader, SearchBox, Stat, fmtDate, inr, num } from '../../ui';
+import { Badge, Button, Card, DataTable, PageHeader, Presence, SearchBox, Stat, Select, fmtDate, inr, num } from '../../ui';
 import { RejectionForm } from './Subcontracting';
 import { money } from './shared';
 
@@ -38,10 +38,10 @@ const JobRejection: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <SearchBox value={search} onChange={setSearch} placeholder="Search contractor, item or PBI-" />
-          <select className="field h-9 w-[200px]" value={who} onChange={e => setWho(Number(e.target.value))}>
+          <Select className="field h-9 w-[200px]" value={who} onChange={e => setWho(Number(e.target.value))}>
             <option value={0}>All contractors</option>
             {people.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
+          </Select>
           <div className="ml-auto flex items-center gap-2">
             <input type="date" className="field h-9 w-[140px]" value={from} onChange={e => setFrom(e.target.value)} title="From" />
             <input type="date" className="field h-9 w-[140px]" value={to} onChange={e => setTo(e.target.value)} title="To" />
@@ -63,7 +63,7 @@ const JobRejection: React.FC = () => {
           ]}
         />
       </Card>
-      <RejectionForm job={fresh} onClose={() => setEditing(null)} />
+      <Presence value={fresh}>{j => <RejectionForm job={j} onClose={() => setEditing(null)} />}</Presence>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { DEPARTMENTS, employees, iso, shifts, type Category, type Employee } from '../../data/hr';
-import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Tabs, fmtDate, inr, toast } from '../../ui';
+import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Tabs, Select, fmtDate, inr, toast } from '../../ui';
 
 const CATEGORY_LABEL: Record<Category, string> = { REGULAR: 'Regular', CONTRACTOR: 'Contractor', WORK_BASIS: 'Work basis' };
 
@@ -55,10 +55,10 @@ const Employees: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <SearchBox value={search} onChange={setSearch} placeholder="Search name or code" />
-          <select className="field max-w-[180px]" value={dept} onChange={e => setDept(e.target.value)}>
+          <Select className="field max-w-[180px]" value={dept} onChange={e => setDept(e.target.value)}>
             <option value="all">All departments</option>
             {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
-          </select>
+          </Select>
           <div className="ml-auto">
             <Tabs value={status} onChange={setStatus} tabs={[{ id: 'active', label: 'Active' }, { id: 'inactive', label: 'Left' }, { id: 'all', label: 'All' }]} />
           </div>
@@ -108,20 +108,20 @@ const Employees: React.FC = () => {
           <Field label="Employee code"><input className="field" value={form.code} onChange={e => set('code', e.target.value)} /></Field>
           <Field label="Mobile"><input className="field" value={form.phone} onChange={e => set('phone', e.target.value)} /></Field>
           <Field label="Department">
-            <select className="field" value={form.department} onChange={e => set('department', e.target.value)}>
+            <Select className="field" value={form.department} onChange={e => set('department', e.target.value)}>
               {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label="Designation"><input className="field" value={form.designation} onChange={e => set('designation', e.target.value)} /></Field>
           <Field label="Type">
-            <select className="field" value={form.category} onChange={e => set('category', e.target.value as Category)}>
+            <Select className="field" value={form.category} onChange={e => set('category', e.target.value as Category)}>
               {Object.entries(CATEGORY_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label="Shift">
-            <select className="field" value={form.shiftId} onChange={e => set('shiftId', Number(e.target.value))}>
+            <Select className="field" value={form.shiftId} onChange={e => set('shiftId', Number(e.target.value))}>
               {shiftList.map(s => <option key={s.id} value={s.id}>{s.name} ({s.start}–{s.end})</option>)}
-            </select>
+            </Select>
           </Field>
           <Field label="Joining date"><input className="field" type="date" value={form.joinDate} onChange={e => set('joinDate', e.target.value)} /></Field>
           <Field label="Monthly salary (₹)"><input className="field" type="number" value={form.monthlySalary} onChange={e => set('monthlySalary', Number(e.target.value))} /></Field>

@@ -153,8 +153,8 @@ const AppShell: React.FC = () => {
       <div className="hidden lg:block">{sidebar}</div>
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex lg:hidden">
-          <div className="absolute inset-0 bg-black/30" onClick={() => setMobileOpen(false)} />
-          <div className="relative">{sidebar}</div>
+          <div className="fade-in absolute inset-0 bg-black/30" onClick={() => setMobileOpen(false)} />
+          <div className="slide-right relative">{sidebar}</div>
         </div>
       )}
 
@@ -186,7 +186,7 @@ const AppShell: React.FC = () => {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-[1400px] p-4 sm:p-6"><Outlet /></div>
+          <div key={location.pathname} className="page-in mx-auto max-w-[1400px] p-4 sm:p-6"><Outlet /></div>
         </main>
       </div>
       <CommandSearch open={searchOpen} onClose={() => setSearchOpen(false)} />

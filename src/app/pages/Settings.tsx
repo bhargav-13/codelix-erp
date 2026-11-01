@@ -3,7 +3,7 @@ import { Database, ImagePlus, RotateCcw } from 'lucide-react';
 import { resetDemoData } from '../data/demoStore';
 import { NAV } from '../nav';
 import { ACCENTS, useSettings, type CompanySettings } from '../settings';
-import { Badge, Button, Card, Field, PageHeader, cx, toast } from '../ui';
+import { Badge, Button, Card, Field, PageHeader, Select, cx, toast } from '../ui';
 
 const Settings: React.FC = () => {
   const { settings, update } = useSettings();
@@ -31,7 +31,7 @@ const Settings: React.FC = () => {
               <input className="field" value={settings.tagline} onChange={e => update({ tagline: e.target.value })} />
             </Field>
             <Field label="Industry">
-              <select
+              <Select
                 className="field"
                 value={settings.industry}
                 onChange={e => update({ industry: e.target.value as CompanySettings['industry'] })}
@@ -39,7 +39,7 @@ const Settings: React.FC = () => {
                 <option value="manufacturing">General manufacturing</option>
                 <option value="forging">Forging & casting</option>
                 <option value="plating">Plating & finishing</option>
-              </select>
+              </Select>
             </Field>
             <Field label="Logo">
               <div className="flex items-center gap-3">

@@ -5,7 +5,7 @@ import { partyApi } from '../../../api/party';
 import { productApi, stockItemApi } from '../../../api/inventory';
 import type { Order, OrderProductRequest, OrderRequest, Party, Product, StockItem } from '../../../types';
 import { InventoryFloor, QuantityUnit } from '../../../types';
-import { Button, Drawer, Field, Spinner, inr, toast } from '../../ui';
+import { Button, Drawer, Field, Spinner, Select, inr, toast } from '../../ui';
 import { UNIT_LABEL, type Floor, today } from './shared';
 
 const emptyLine = (): OrderProductRequest => ({
@@ -143,15 +143,15 @@ const OrderForm: React.FC<{
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <Field label="Party" className="col-span-2">
-              <select className="field" value={form.partyId} onChange={e => set({ partyId: Number(e.target.value) })}>
+              <Select className="field" value={form.partyId} onChange={e => set({ partyId: Number(e.target.value) })}>
                 <option value={0}>Select party…</option>
                 {parties.map(p => <option key={p.partyId} value={p.partyId}>{p.name}</option>)}
-              </select>
+              </Select>
             </Field>
             <Field label="Unit">
-              <select className="field" value={form.orderFloor} onChange={e => set({ orderFloor: e.target.value as Floor })}>
+              <Select className="field" value={form.orderFloor} onChange={e => set({ orderFloor: e.target.value as Floor })}>
                 {(Object.keys(UNIT_LABEL) as Floor[]).map(f => <option key={f} value={f}>{UNIT_LABEL[f]}</option>)}
-              </select>
+              </Select>
             </Field>
             <Field label="Billed share (%)">
               <input className="field" type="number" min={0} max={100} value={billedPct}
@@ -170,14 +170,14 @@ const OrderForm: React.FC<{
               {form.products.map((l, i) => (
                 <div key={i} className="rounded-lg border border-line p-3">
                   <div className="flex gap-2">
-                    <select className="field flex-1" value={productIdFor(l)} onChange={e => pickProduct(i, Number(e.target.value))}>
+                    <Select className="field flex-1" value={productIdFor(l)} onChange={e => pickProduct(i, Number(e.target.value))}>
                       <option value={0}>Select product…</option>
                       {products.map(p => <option key={p.productId} value={p.productId}>{p.productName}</option>)}
-                    </select>
-                    <select className="field w-[84px]" value={l.quantityUnit} onChange={e => setLine(i, e.target.value === 'pc'
+                    </Select>
+                    <Select className="field w-[84px]" value={l.quantityUnit} onChange={e => setLine(i, e.target.value === 'pc'
                       ? { quantityUnit: 'pc', quantityKg: 0, rateDifference: 0 } : { quantityUnit: 'kg', quantityPc: 0 })}>
                       <option value="kg">kg</option><option value="pc">pc</option>
-                    </select>
+                    </Select>
                     <Button variant="ghost" icon={<Trash2 size={15} />} disabled={form.products.length === 1}
                       onClick={() => set({ products: form.products.filter((_, idx) => idx !== i) })} />
                   </div>

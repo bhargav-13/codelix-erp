@@ -5,7 +5,7 @@ import { imageApi } from '../../../api/image';
 import type { Category, Product, StockItem, StockItemImage, StockItemRequest } from '../../../types';
 import { QuantityUnit } from '../../../types';
 import {
-  Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, inr, num, toast, useAsync,
+  Button, Card, Confirm, DataTable, Drawer, ErrorNote, Field, PageHeader, SearchBox, Spinner, Stat, Select, inr, num, toast, useAsync,
 } from '../../ui';
 import { UNIT_LABEL, UnitBadge, UnitTabs, fetchAllPages, floorsFor, useUnit, type Floor } from '../sales/shared';
 import { SelectWithAdd, StockBadge, n } from './shared';
@@ -103,19 +103,19 @@ const StockForm: React.FC<{ item: Row | null; open: boolean; defaultFloor: Floor
             onCreate={async name => { const c = await categoryApi.createCategory({ categoryName: name }); setCategories(cs => [...cs, c]); return c; }} />
         </Field>
         <Field label="Unit">
-          <select className="field" value={form.inventoryFloor} onChange={e => set({ inventoryFloor: e.target.value as Floor })}>
+          <Select className="field" value={form.inventoryFloor} onChange={e => set({ inventoryFloor: e.target.value as Floor })}>
             {(Object.keys(UNIT_LABEL) as Floor[]).map(f => <option key={f} value={f}>{UNIT_LABEL[f]}</option>)}
-          </select>
+          </Select>
         </Field>
         <Field label="Quantity (kg)"><input className="field" type="number" value={form.quantityInKg || ''} onChange={e => set({ quantityInKg: n(e.target.value) })} /></Field>
         <Field label="Rate per kg (₹)"><input className="field" type="number" value={form.pricePerKg || ''} onChange={e => set({ pricePerKg: n(e.target.value) })} /></Field>
         <Field label="Weight per piece">
           <div className="flex gap-2">
             <input className="field" type="number" value={form.weightPerPc || ''} onChange={e => set({ weightPerPc: n(e.target.value) })} />
-            <select className="field w-[84px]" value={form.quantityUnit} onChange={e => set({ quantityUnit: e.target.value as Form['quantityUnit'] })}>
+            <Select className="field w-[84px]" value={form.quantityUnit} onChange={e => set({ quantityUnit: e.target.value as Form['quantityUnit'] })}>
               <option value={QuantityUnit.KG}>kg</option>
               <option value={QuantityUnit.GM}>g</option>
-            </select>
+            </Select>
           </div>
         </Field>
         <Field label="Pieces (calculated)"><div className="field flex items-center bg-muted">{num(form.quantityInPc)}</div></Field>
@@ -195,10 +195,10 @@ const Stock: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <UnitTabs value={unit} onChange={setUnit} />
-          <select className="field max-w-[180px]" value={category} onChange={e => setCategory(e.target.value)}>
+          <Select className="field max-w-[180px]" value={category} onChange={e => setCategory(e.target.value)}>
             <option value="">All categories</option>
             {categories.map(c => <option key={c}>{c}</option>)}
-          </select>
+          </Select>
           <label className="flex items-center gap-2 text-[13px]"><input type="checkbox" checked={lowOnly} onChange={e => setLowOnly(e.target.checked)} /> Low stock only</label>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search product" /></div>
         </div>

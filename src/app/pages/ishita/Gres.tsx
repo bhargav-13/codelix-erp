@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Plus, Trash2, Undo2 } from 'lucide-react';
 import { VENDORS, gres, gresCalc, items, sizeLabel, type Gres as GresT, type GresLine } from '../../data/ishita';
 import { iso } from '../../data/hr';
-import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, Tabs, fmtDate, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, Tabs, Select, fmtDate, inr, num, toast } from '../../ui';
 
 /** Gres (grease) filling: lots of mixed items sent to a vendor, returned by weight. */
 const Gres: React.FC = () => {
@@ -84,9 +84,9 @@ const Gres: React.FC = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <Field label="Vendor">
-              <select className="field" value={form.vendor} onChange={e => setForm({ ...form, vendor: e.target.value })}>
+              <Select className="field" value={form.vendor} onChange={e => setForm({ ...form, vendor: e.target.value })}>
                 <option value="">Select…</option>{VENDORS.map(v => <option key={v}>{v}</option>)}
-              </select>
+              </Select>
             </Field>
             <Field label="Chitthi no."><input className="field" value={form.chitthiNo} onChange={e => setForm({ ...form, chitthiNo: e.target.value })} /></Field>
             <Field label="Date"><input type="date" className="field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></Field>
@@ -96,12 +96,12 @@ const Gres: React.FC = () => {
             return (
               <div key={i} className="grid grid-cols-[1.3fr_1fr_90px_90px_auto] items-end gap-2">
                 <Field label={i === 0 ? 'Item' : ''}>
-                  <select className="field" value={l.itemId} onChange={e => { const x = catalog.find(c => c.id === Number(e.target.value))!; setLine(i, { itemId: x.id, size: sizeLabel(x.sizes[0]) }); }}>
+                  <Select className="field" value={l.itemId} onChange={e => { const x = catalog.find(c => c.id === Number(e.target.value))!; setLine(i, { itemId: x.id, size: sizeLabel(x.sizes[0]) }); }}>
                     {catalog.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
+                  </Select>
                 </Field>
                 <Field label={i === 0 ? 'Size' : ''}>
-                  <select className="field" value={l.size} onChange={e => setLine(i, { size: e.target.value })}>{it?.sizes.map(s => <option key={sizeLabel(s)}>{sizeLabel(s)}</option>)}</select>
+                  <Select className="field" value={l.size} onChange={e => setLine(i, { size: e.target.value })}>{it?.sizes.map(s => <option key={sizeLabel(s)}>{sizeLabel(s)}</option>)}</Select>
                 </Field>
                 <Field label={i === 0 ? 'Net kg' : ''}><input type="number" className="field" value={l.netKg || ''} onChange={e => setLine(i, { netKg: Number(e.target.value) || 0 })} /></Field>
                 <Field label={i === 0 ? '₹/kg' : ''}><input type="number" className="field" value={l.ratePerKg || ''} onChange={e => setLine(i, { ratePerKg: Number(e.target.value) || 0 })} /></Field>

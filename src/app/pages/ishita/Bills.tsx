@@ -5,7 +5,7 @@ import {
   ELEMENT_GM, ELEMENT_TYPES, PURCHASE_PARTIES, SALES_PARTIES, billCalc, billLineCalc, bills, type Bill, type BillKind, type BillLine, type QtyUnit,
 } from '../../data/trade';
 import { items, sizeLabel } from '../../data/ishita';
-import { Button, Card, Confirm, Drawer, Empty, Field, PageHeader, SearchBox, Stat, cx, fmtDate, inr, num, toast } from '../../ui';
+import { Button, Card, Confirm, Drawer, Empty, Field, PageHeader, Presence, SearchBox, Stat, Select, cx, fmtDate, inr, num, toast } from '../../ui';
 import { n } from '../inventory/shared';
 import { today } from '../sales/shared';
 import { monthStart } from '../production/shared';
@@ -89,32 +89,32 @@ const BillForm: React.FC<{ kind: BillKind; bill: Bill | 'new' | null; onClose: (
                 <div key={i} className="rounded-lg border border-line p-3">
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     <Field label="Item">
-                      <select className="field" value={l.item} onChange={e => { const x = catalog.find(c2 => c2.name === e.target.value); setLine(i, { item: e.target.value, size: x ? sizeLabel(x.sizes[0]) : '' }); }}>
+                      <Select className="field" value={l.item} onChange={e => { const x = catalog.find(c2 => c2.name === e.target.value); setLine(i, { item: e.target.value, size: x ? sizeLabel(x.sizes[0]) : '' }); }}>
                         <option value="">Select…</option>
                         {catalog.map(x => <option key={x.id}>{x.name}</option>)}
-                      </select>
+                      </Select>
                     </Field>
                     <Field label="Size">
-                      <select className="field" value={l.size} onChange={e => setLine(i, { size: e.target.value })}>
+                      <Select className="field" value={l.size} onChange={e => setLine(i, { size: e.target.value })}>
                         <option value="">—</option>
                         {(it?.sizes || []).map(s => <option key={s.mm}>{sizeLabel(s)}</option>)}
-                      </select>
+                      </Select>
                     </Field>
                     <Field label="Quantity">
                       <div className="flex gap-1">
                         <input type="number" className="field" value={l.qty || ''} onChange={e => setLine(i, { qty: n(e.target.value) })} />
-                        <select className="field w-[72px] px-2" value={l.unit} onChange={e => setLine(i, { unit: e.target.value as QtyUnit })}>
+                        <Select className="field w-[72px] px-2" value={l.unit} onChange={e => setLine(i, { unit: e.target.value as QtyUnit })}>
                           <option>Kgs</option><option>Gms</option><option>Pc</option>
-                        </select>
+                        </Select>
                       </div>
                     </Field>
                     <div className="flex items-end justify-end">
                       <Button variant="ghost" icon={<Trash2 size={15} />} disabled={f.lines.length === 1} onClick={() => setF({ ...f, lines: f.lines.filter((_, k) => k !== i) })} />
                     </div>
                     <Field label="Element">
-                      <select className="field" value={l.element} onChange={e => setLine(i, { element: e.target.value, elementGm: ELEMENT_GM[e.target.value] ?? l.elementGm })}>
+                      <Select className="field" value={l.element} onChange={e => setLine(i, { element: e.target.value, elementGm: ELEMENT_GM[e.target.value] ?? l.elementGm })}>
                         {ELEMENT_TYPES.map(t2 => <option key={t2}>{t2}</option>)}
-                      </select>
+                      </Select>
                     </Field>
                     <Field label="Count × gm each">
                       <div className="flex gap-1">
@@ -214,10 +214,10 @@ const Bills: React.FC<{ kind: BillKind }> = ({ kind }) => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <SearchBox value={search} onChange={setSearch} placeholder="Search party, bill or size…" />
-          <select className="field h-9 w-[220px]" value={party} onChange={e => setParty(e.target.value)}>
+          <Select className="field h-9 w-[220px]" value={party} onChange={e => setParty(e.target.value)}>
             <option value="">All parties</option>
             {parties.map(p => <option key={p}>{p}</option>)}
-          </select>
+          </Select>
           {(search || party) && <Button size="sm" variant="ghost" onClick={() => { setSearch(''); setParty(''); }}>Clear filters</Button>}
         </div>
         {!rows.length ? (
@@ -258,16 +258,16 @@ const Bills: React.FC<{ kind: BillKind }> = ({ kind }) => {
         )}
       </Card>
 
-      <BillForm kind={kind} bill={editing} onClose={() => setEditing(null)} />
+      <Presence value={editing}>{b => <BillForm kind={kind} bill={b} onClose={() => setEditing(null)} />}</Presence>
       <Drawer open={!!stmt} title={`Download ${kind === 'PURCHASE' ? 'purchase' : 'sales'} statement`} onClose={() => setStmt(null)}
         footer={<><Button variant="outline" onClick={() => setStmt(null)}>Cancel</Button><Button icon={<Download size={15} />} onClick={download}>Download PDF</Button></>}>
         {stmt && (
           <div className="space-y-4">
             <Field label="Party">
-              <select className="field" value={stmt.party} onChange={e => setStmt({ ...stmt, party: e.target.value })}>
+              <Select className="field" value={stmt.party} onChange={e => setStmt({ ...stmt, party: e.target.value })}>
                 <option value="">All parties</option>
                 {parties.map(p => <option key={p}>{p}</option>)}
-              </select>
+              </Select>
             </Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="From"><input type="date" className="field" value={stmt.from} onChange={e => setStmt({ ...stmt, from: e.target.value })} /></Field>

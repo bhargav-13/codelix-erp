@@ -3,7 +3,7 @@ import { Plus, Printer, Trash2 } from 'lucide-react';
 import { CUSTOMERS, FINISHES, items, packCalc, packing, sizeLabel, type PackLine, type PackingInvoice } from '../../data/ishita';
 import { iso } from '../../data/hr';
 import { useSettings } from '../../settings';
-import { Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, fmtDate, inr, num, toast } from '../../ui';
+import { Button, Card, Confirm, DataTable, Drawer, Field, PageHeader, SearchBox, Stat, Select, fmtDate, inr, num, toast } from '../../ui';
 
 const sum = (inv: Pick<PackingInvoice, 'lines'>) => inv.lines.map(packCalc).reduce((t, c) => ({
   pcs: t.pcs + c.totalPc, rs: t.rs + c.totalRs, kg: t.kg + c.totalKg, loss: t.loss + c.loss,
@@ -98,9 +98,9 @@ const Packing: React.FC = () => {
             <Field label="Invoice no."><input className="field" value={form.invoiceNo} onChange={e => setForm({ ...form, invoiceNo: e.target.value })} /></Field>
             <Field label="Date"><input type="date" className="field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></Field>
             <Field label="Party">
-              <select className="field" value={form.party} onChange={e => setForm({ ...form, party: e.target.value })}>
+              <Select className="field" value={form.party} onChange={e => setForm({ ...form, party: e.target.value })}>
                 <option value="">Select…</option>{CUSTOMERS.map(c => <option key={c}>{c}</option>)}
-              </select>
+              </Select>
             </Field>
           </div>
           {form.lines.map((l, k) => {
@@ -110,19 +110,19 @@ const Packing: React.FC = () => {
               <div key={k} className="rounded-lg border border-line p-3">
                 <div className="grid grid-cols-4 gap-2">
                   <Field label="Item">
-                    <select className="field" value={l.itemId} onChange={e => setLine(k, lineFor(Number(e.target.value), l.finish))}>
+                    <Select className="field" value={l.itemId} onChange={e => setLine(k, lineFor(Number(e.target.value), l.finish))}>
                       {catalog.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
-                    </select>
+                    </Select>
                   </Field>
                   <Field label="Size">
-                    <select className="field" value={l.size} onChange={e => { const s = it?.sizes.find(x => sizeLabel(x) === e.target.value); setLine(k, { size: e.target.value, acDozWeight: s?.dozWeight ?? l.acDozWeight }); }}>
+                    <Select className="field" value={l.size} onChange={e => { const s = it?.sizes.find(x => sizeLabel(x) === e.target.value); setLine(k, { size: e.target.value, acDozWeight: s?.dozWeight ?? l.acDozWeight }); }}>
                       {it?.sizes.map(s => <option key={sizeLabel(s)}>{sizeLabel(s)}</option>)}
-                    </select>
+                    </Select>
                   </Field>
                   <Field label="Finish">
-                    <select className="field" value={l.finish} onChange={e => setLine(k, { finish: e.target.value, labour: it?.labour[e.target.value] ?? l.labour })}>
+                    <Select className="field" value={l.finish} onChange={e => setLine(k, { finish: e.target.value, labour: it?.labour[e.target.value] ?? l.labour })}>
                       {FINISHES.map(f => <option key={f}>{f}</option>)}
-                    </select>
+                    </Select>
                   </Field>
                   <Field label="Carton no."><input className="field" value={l.cartonNo} onChange={e => setLine(k, { cartonNo: e.target.value })} /></Field>
                   <Field label="Boxes"><input type="number" className="field" value={l.box || ''} onChange={e => setLine(k, { box: Number(e.target.value) || 0 })} /></Field>

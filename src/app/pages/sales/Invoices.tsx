@@ -3,7 +3,7 @@ import { CheckCircle2, Download, RotateCcw, Trash2 } from 'lucide-react';
 import { invoiceApi } from '../../../api/invoice';
 import type { Invoice, InvoiceStatus } from '../../../types';
 import { BillingType } from '../../../types';
-import { Badge, Button, Card, Confirm, DataTable, ErrorNote, PageHeader, SearchBox, Spinner, Stat, Tabs, fmtDate, inr, num, toast, useAsync } from '../../ui';
+import { Badge, Button, Card, Confirm, DataTable, ErrorNote, PageHeader, SearchBox, Spinner, Stat, Tabs, Select, fmtDate, inr, num, toast, useAsync } from '../../ui';
 import { UnitBadge, UnitTabs, downloadBlob, fetchAllPages, floorsFor, orderNo, useUnit, type Floor } from './shared';
 
 type Mode = typeof BillingType[keyof typeof BillingType];
@@ -96,11 +96,11 @@ const Invoices: React.FC = () => {
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-line p-4">
           <UnitTabs value={unit} onChange={setUnit} />
-          <select className="field max-w-[160px]" value={status} onChange={e => setStatus(e.target.value as InvoiceStatus | '')}>
+          <Select className="field max-w-[160px]" value={status} onChange={e => setStatus(e.target.value as InvoiceStatus | '')}>
             <option value="">All statuses</option>
             <option value="PENDING">Pending</option>
             <option value="COMPLETED">Completed</option>
-          </select>
+          </Select>
           <div className="ml-auto w-full max-w-xs"><SearchBox value={search} onChange={setSearch} placeholder="Search party or number" /></div>
         </div>
         {q.loading ? <Spinner /> : q.error ? <ErrorNote error={q.error} onRetry={q.reload} /> : (

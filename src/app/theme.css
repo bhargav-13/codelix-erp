@@ -111,3 +111,35 @@
 @media (prefers-reduced-motion: reduce) {
   .rise, .grow-x, .live-ping, .skeleton, .ticker-track { animation: none !important; }
 }
+
+/* Overlay, menu and page transitions */
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes drawer-in { from { transform: translateX(100%); } }
+@keyframes drawer-out { to { transform: translateX(100%); } }
+@keyframes pop-in { from { opacity: 0; transform: scale(.96) translateY(6px); } }
+@keyframes pop-out { to { opacity: 0; transform: scale(.96) translateY(6px); } }
+@keyframes menu-down { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+@keyframes menu-up { from { opacity: 0; transform: translateY(4px) scale(.98); } }
+@keyframes toast-in { from { opacity: 0; transform: translateX(24px); } }
+@keyframes toast-out { to { opacity: 0; transform: translateX(24px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes slide-right { from { transform: translateX(-100%); } }
+.fade-in { animation: fade-in .2s ease-out both; }
+.fade-out { animation: fade-out .2s ease-in both; }
+.drawer-in { animation: drawer-in .28s cubic-bezier(.2,.8,.2,1) both; }
+.drawer-out { animation: drawer-out .2s cubic-bezier(.4,0,1,1) both; }
+.pop-in { animation: pop-in .2s cubic-bezier(.2,.8,.2,1) both; }
+.pop-out { animation: pop-out .16s ease-in both; }
+.menu-down { transform-origin: top; animation: menu-down .14s cubic-bezier(.2,.8,.2,1) both; }
+.menu-up { transform-origin: bottom; animation: menu-up .14s cubic-bezier(.2,.8,.2,1) both; }
+.toast-in { animation: toast-in .25s cubic-bezier(.2,.8,.2,1) both; }
+.toast-out { animation: toast-out .2s ease-in both; }
+.page-in { animation: page-in .3s cubic-bezier(.2,.7,.2,1) both; }
+.slide-right { animation: slide-right .25s cubic-bezier(.2,.8,.2,1) both; }
+.field-open { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.field:hover:not(:focus):not(:disabled):not(.field-open) { border-color: color-mix(in srgb, var(--ink-3) 55%, var(--line)); }
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .fade-out, .drawer-in, .drawer-out, .pop-in, .pop-out, .menu-down, .menu-up,
+  .toast-in, .toast-out, .page-in, .slide-right { animation-duration: 1ms !important; }
+}
