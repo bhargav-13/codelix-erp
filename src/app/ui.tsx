@@ -180,6 +180,12 @@ export function Presence<T>({ value, children }: { value: T | null | undefined; 
   return <Closing.Provider value={value == null}>{children(kept)}</Closing.Provider>;
 }
 
+/**
+ * Where overlays render: the app root, outside the page, so an animated
+ * (transformed) ancestor can never become their containing block.
+ */
+const overlayRoot = () => document.querySelector('.app-root') ?? document.body;
+
 /** Mount state for an overlay: stays mounted for EXIT_MS after it closes. */
 function useOverlay(open: boolean) {
   const closing = useContext(Closing);
@@ -217,7 +223,7 @@ export const Drawer: React.FC<{
     return () => window.removeEventListener('keydown', onKey);
   }, [visible, onClose]);
   if (!mounted) return null;
-  return (
+  return createPortal(
     <div className={clsx('fixed inset-0 z-50 flex justify-end', !visible && 'pointer-events-none')}>
       <div className={clsx('absolute inset-0 bg-black/30', visible ? 'fade-in' : 'fade-out')} onClick={onClose} />
       <div className={clsx('relative flex h-full w-full flex-col bg-surface shadow-2xl', wide ? 'max-w-2xl' : 'max-w-md', visible ? 'drawer-in' : 'drawer-out')}>
@@ -228,30 +234,45 @@ export const Drawer: React.FC<{
         <div className="flex-1 overflow-y-auto p-5">{shown.children}</div>
         {shown.footer && <div className="flex justify-end gap-2 border-t border-line px-5 py-3">{shown.footer}</div>}
       </div>
-    </div>
+    </div>,
+    overlayRoot(),
+  );
+};
+
+/** Centred dialog box with a dimmed backdrop. */
+export const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.ReactNode; className?: string }> = ({
+  open, onClose, children, className,
+}) => {
+  const { visible, mounted } = useOverlay(open);
+  const shown = useHeld(children, visible);
+  useEffect(() => {
+    if (!visible) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [visible, onClose]);
+  if (!mounted) return null;
+  return createPortal(
+    <div className={clsx('fixed inset-0 z-50 grid place-items-center p-4', !visible && 'pointer-events-none')}>
+      <div className={clsx('absolute inset-0 bg-black/30', visible ? 'fade-in' : 'fade-out')} onClick={onClose} />
+      <div className={clsx('relative w-full rounded-xl bg-surface p-5 shadow-2xl', className ?? 'max-w-sm', visible ? 'pop-in' : 'pop-out')}>{shown}</div>
+    </div>,
+    overlayRoot(),
   );
 };
 
 export const Confirm: React.FC<{
   open: boolean; title: string; message: string; onCancel: () => void; onConfirm: () => void; busy?: boolean;
-}> = ({ open, title, message, onCancel, onConfirm, busy }) => {
-  const { visible, mounted } = useOverlay(open);
-  const shown = useHeld({ title, message }, visible);
-  if (!mounted) return null;
-  return (
-    <div className={clsx('fixed inset-0 z-50 grid place-items-center p-4', !visible && 'pointer-events-none')}>
-      <div className={clsx('absolute inset-0 bg-black/30', visible ? 'fade-in' : 'fade-out')} onClick={onCancel} />
-      <div className={clsx('relative w-full max-w-sm rounded-xl bg-surface p-5 shadow-2xl', visible ? 'pop-in' : 'pop-out')}>
-        <h2 className="text-[16px] font-semibold">{shown.title}</h2>
-        <p className="mt-2 text-ink-2">{shown.message}</p>
-        <div className="mt-5 flex justify-end gap-2">
-          <Button variant="outline" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" onClick={onConfirm} loading={busy}>Delete</Button>
-        </div>
-      </div>
+}> = ({ open, title, message, onCancel, onConfirm, busy }) => (
+  <Modal open={open} onClose={onCancel}>
+    <h2 className="text-[16px] font-semibold">{title}</h2>
+    <p className="mt-2 text-ink-2">{message}</p>
+    <div className="mt-5 flex justify-end gap-2">
+      <Button variant="outline" onClick={onCancel}>Cancel</Button>
+      <Button variant="danger" onClick={onConfirm} loading={busy}>Delete</Button>
     </div>
-  );
-};
+  </Modal>
+);
 
 /** Height-animated show / hide for expandable sections. */
 export const Reveal: React.FC<{ open: boolean; children: React.ReactNode; className?: string }> = ({ open, children, className }) => (
@@ -391,7 +412,6 @@ export const Select: React.FC<{
     }
   };
 
-  const root = typeof document !== 'undefined' ? document.querySelector('.app-root') ?? document.body : null;
   return (
     <>
       <button ref={btn} type="button" title={title} disabled={disabled} aria-haspopup="listbox" aria-expanded={open}
@@ -402,7 +422,7 @@ export const Select: React.FC<{
         <span className={clsx('min-w-0 flex-1 truncate', !selected && 'text-ink-3')}>{selected ? selected.label : placeholder}</span>
         <ChevronDown size={15} className={clsx('shrink-0 text-ink-3 transition-[transform,color] duration-200 group-hover:text-ink-2', open && 'rotate-180 text-accent!')} />
       </button>
-      {open && pos && root && createPortal(
+      {open && pos && createPortal(
         <div ref={menu} onKeyDown={onKey}
           className={clsx('fixed z-[70] flex flex-col overflow-hidden rounded-xl border border-line bg-surface text-[13px] text-ink',
             'shadow-[0_18px_50px_-12px_rgb(15_23_42/.28),0_2px_6px_-2px_rgb(15_23_42/.08)]', pos.up ? 'menu-up' : 'menu-down')}
@@ -446,7 +466,7 @@ export const Select: React.FC<{
             </div>
           )}
         </div>,
-        root,
+        overlayRoot(),
       )}
     </>
   );

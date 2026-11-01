@@ -4,7 +4,7 @@ import {
   RETURN_KIND, availableForChrome, chromeLots, contractorName, contractors, itemName, jobCalc, jobNo, jobs, nextId, packKg, platingParties,
   returnNet, subItems, type Job, type JobPlace, type JobReturn, type JobStatus, type JobUnit, type Pack, type ReturnKind, type Send,
 } from '../../data/production';
-import { Badge, Button, Card, Drawer, Empty, Field, PageHeader, Presence, Reveal, SearchBox, Stat, Tabs, Select, cx, fmtDate, inr, num, toast } from '../../ui';
+import { Badge, Button, Card, Drawer, Empty, Field, Modal, PageHeader, Presence, Reveal, SearchBox, Stat, Tabs, Select, cx, fmtDate, inr, num, toast } from '../../ui';
 import { Rise } from '../../motion';
 import { SelectWithAdd, n } from '../inventory/shared';
 import { today } from '../sales/shared';
@@ -329,9 +329,7 @@ const DeleteJob: React.FC<{ job: Job | null; onClose: () => void }> = ({ job, on
     onClose();
   };
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center p-4">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-md rounded-xl bg-surface p-5 shadow-2xl">
+    <Modal open onClose={onClose} className="max-w-md">
         <h2 className="text-[16px] font-semibold">Delete job work {jobNo(job)}?</h2>
         <p className="mt-2 text-ink-2">{contractorName(job.contractorId)} · {itemName(job.itemId)}, with {job.sends.length} sent lot{job.sends.length > 1 ? 's' : ''} and {job.returns.length} return{job.returns.length === 1 ? '' : 's'}.</p>
         {mine.length > 0 && (
@@ -349,8 +347,7 @@ const DeleteJob: React.FC<{ job: Job | null; onClose: () => void }> = ({ job, on
           <Button variant="outline" onClick={onClose}>Cancel</Button>
           <Button variant="danger" disabled={inStock.length > 0} onClick={confirm}>Delete</Button>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
